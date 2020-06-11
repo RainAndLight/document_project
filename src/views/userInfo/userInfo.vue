@@ -1,0 +1,359 @@
+<template>
+    <div class="box">
+        <el-card v-loading="loading">
+            <bread-crumb slot="header">
+                <template slot="title">企业单位基本信息</template>
+            </bread-crumb>
+            <div class="constitution">
+                <span style="marginLeft:2em"></span
+                >《中华人民共和国统计法》第三条:国家机关、社会团体、企事业组织和个体工商户等统计调查对象，必须依照本法和国家规定，如实提供统计资料，不得虚报、瞒报、拒报、迟报，不得伪造、篡改
+            </div>
+            <el-form ref="form" :model="Form" size="mini" label-width="150px" :inline="true" :label-position="top">
+                <el-form-item label="统一社会信用代码">
+                    <el-input v-model="Form.uscCode"></el-input>
+                </el-form-item>
+                <el-form-item label="组织机构代码">
+                    <el-input v-model="Form.uscCode"></el-input>
+                </el-form-item>
+                <el-form-item label="法定代表人（负责人）">
+                    <el-input v-model="Form.uscCode"></el-input>
+                </el-form-item>
+                <el-form-item label="法人单位名称">
+                    <el-input v-model="Form.uscCode"></el-input>
+                </el-form-item>
+                <el-form-item label="电话号码（传真号码）">
+                    <el-input v-model="Form.uscCode"></el-input>
+                </el-form-item>
+                <el-form-item label="电子信箱（或网址）">
+                    <el-input v-model="Form.uscCode"></el-input>
+                </el-form-item>
+                <el-form-item label="邮政编码，行政区划">
+                    <el-input v-model="Form.uscCode"></el-input>
+                </el-form-item>
+                <el-form-item label="主要业务活动">
+                    <el-input v-model="Form.uscCode" type="textarea" :rows="2"></el-input>
+                </el-form-item>
+                <el-form-item label="行业代码">
+                    <el-input v-model="Form.uscCode"></el-input>
+                </el-form-item>
+                <el-form-item label="开业时间">
+                    <el-date-picker v-model="uscCode" type="month" placeholder="选择时间"> </el-date-picker>
+                </el-form-item>
+                <el-form-item label="企业登记注册类型">
+                    <el-select v-model="value" placeholder="请选择" clearable filterable>
+                        <el-option
+                            v-for="item in enrollOptions"
+                            :key="item.value"
+                            :label="item.value + ' - ' + item.label"
+                            :value="item.value"
+                        >
+                        </el-option>
+                    </el-select>
+                </el-form-item>
+                <!-- 企业登记注册资本 -->
+                <el-form-item label="登记注册资本合计">
+                    <el-input v-model="Form.uscCode">
+                        <template slot="append">万元</template>
+                    </el-input>
+                </el-form-item>
+                <el-form-item label="国家资本">
+                    <el-input v-model="Form.uscCode">
+                        <template slot="append">万元</template>
+                    </el-input>
+                </el-form-item>
+                <el-form-item label="集体资本">
+                    <el-input v-model="Form.uscCode">
+                        <template slot="append">万元</template>
+                    </el-input>
+                </el-form-item>
+                <el-form-item label="法人资本">
+                    <el-input v-model="Form.uscCode">
+                        <template slot="append">万元</template>
+                    </el-input>
+                </el-form-item>
+                <el-form-item label="个人资本">
+                    <el-input v-model="Form.uscCode">
+                        <template slot="append">万元</template>
+                    </el-input>
+                </el-form-item>
+                <el-form-item label="港澳台资本">
+                    <el-input v-model="Form.uscCode">
+                        <template slot="append">万元</template>
+                    </el-input>
+                </el-form-item>
+                <el-form-item label="外商资本">
+                    <el-input v-model="Form.uscCode">
+                        <template slot="append">万元</template>
+                    </el-input>
+                </el-form-item>
+                <!-- 从业人员情况 -->
+                <el-table :data="tableData.list" border size="mini" style="width: 460px;marginTop:10px">
+                    <el-table-column align="center" width="250" label="指标名称" prop="targets"> </el-table-column>
+                    <el-table-column align="center" width="100" label="共计">
+                        <template>
+                            <el-input size="mini"></el-input>
+                        </template>
+                    </el-table-column>
+                    <el-table-column align="center" label="其中：女性">
+                        <template>
+                            <el-input size="mini"></el-input>
+                        </template>
+                    </el-table-column>
+                </el-table>
+                <!-- 基础设施 -->
+                <el-form-item>
+                    <div class="infrastructureItem">
+                        <div>1.自有仓储面积</div>
+                        <el-input v-model="Form.uscCode"> </el-input>
+                        <div>（平方米）</div>
+                    </div>
+                </el-form-item>
+                <el-form-item>
+                    <div class="infrastructureItem">
+                        <div>2.租用仓储面积</div>
+                        <el-input v-model="Form.uscCode"> </el-input>
+                        <div>（平方米）</div>
+                    </div>
+                </el-form-item>
+                <el-form-item>
+                    <div class="infrastructureItem">
+                        <div>3.装卸设备</div>
+                        <el-input v-model="Form.uscCode"> </el-input>
+                        <div>（台）</div>
+                    </div>
+                </el-form-item>
+                <el-form-item>
+                    <div class="infrastructureItem">
+                        <div>4.铁路专用线</div>
+                        <el-input v-model="Form.uscCode"> </el-input>
+                        <div>（条）</div>
+                    </div>
+                </el-form-item>
+                <el-form-item>
+                    <div class="infrastructureItem">
+                        <div>5.互留计算机信息管理系统</div>
+                        <el-input v-model="Form.uscCode"> </el-input>
+                        <div>（套）</div>
+                    </div>
+                </el-form-item>
+                <el-form-item>
+                    <div class="infrastructureItem">
+                        <div>6.运输车辆</div>
+                        <el-input v-model="Form.uscCode"> </el-input>
+                        <div>（辆）</div>
+                        <div>其中：普通货车</div>
+                        <el-input v-model="Form.uscCode"> </el-input>
+                        <div>（辆）</div>
+                    </div>
+                </el-form-item>
+                <el-form-item>
+                    <div class="infrastructureItem">
+                        <div>7.专用货车</div>
+                        <el-input v-model="Form.uscCode"> </el-input>
+                        <div>（辆）</div>
+                        <div>其中：冷藏车车</div>
+                        <el-input v-model="Form.uscCode"> </el-input>
+                        <div>（辆）</div>
+                        <div>危险品专用车辆</div>
+                        <el-input v-model="Form.uscCode"> </el-input>
+                        <div>（辆）</div>
+                    </div>
+                </el-form-item>
+                <el-form-item>
+                    <div class="infrastructureItem">
+                        <div>8.集装箱专用车</div>
+                        <el-input v-model="Form.uscCode"> </el-input>
+                        <div>（辆）</div>
+                    </div>
+                </el-form-item>
+                <div class="footer">
+                    <el-row :gutter="20">
+                        <el-col :span="6">
+                            <span>单位负责人</span><el-input size="mini" v-model="Form.uscCode"> </el-input>
+                        </el-col>
+                        <el-col :span="6"
+                            ><span>填表人</span><el-input size="mini" v-model="Form.uscCode"> </el-input
+                        ></el-col>
+                        <el-col :span="6"
+                            ><span>联系电话</span><el-input size="mini" v-model="Form.uscCode"> </el-input
+                        ></el-col>
+                        <el-col :span="6"
+                            ><span>报出日期</span>
+                            <el-date-picker v-model="value1" size="mini" type="date" placeholder="选择日期" clearable>
+                            </el-date-picker
+                        ></el-col>
+                    </el-row>
+                </div>
+            </el-form>
+        </el-card>
+    </div>
+</template>
+
+<script>
+export default {
+    name: 'userInfo',
+    props: {},
+    data() {
+        return {
+            Form: {
+                uscCode: ''
+            },
+            enrollOptions: [
+                {
+                    value: '110',
+                    label: '国有企业'
+                },
+                {
+                    value: '120',
+                    label: '集体企业'
+                },
+                {
+                    value: '130',
+                    label: '股份合作企业'
+                },
+                {
+                    value: '140',
+                    label: '联营企业'
+                },
+                {
+                    value: '150',
+                    label: '有限责任公司'
+                },
+                {
+                    value: '160',
+                    label: '股份有限公司'
+                },
+                {
+                    value: '170',
+                    label: '私营企业'
+                },
+                {
+                    value: '200',
+                    label: '港、澳、台商投资企业'
+                },
+                {
+                    value: '230',
+                    label: '港、澳、台商独资经营企业'
+                },
+                {
+                    value: '300',
+                    label: '外商投资企业'
+                },
+                {
+                    value: '310',
+                    label: '中外合资企业'
+                },
+                {
+                    value: '330',
+                    label: '外资企业'
+                }
+            ],
+            tableData: {
+                list: [
+                    {
+                        targets: '1.年末从业人员合计（人）'
+                    },
+                    {
+                        targets: '  #物流从业人员合计'
+                    },
+                    {
+                        targets: '2.从业人员劳动报酬（万元）'
+                    },
+                    {
+                        targets: '#管理人员劳动报酬（万元）'
+                    },
+                    {
+                        targets: '3.从业人员文化程序（人）'
+                    },
+                    {
+                        targets: '#研究生及以上学历人员'
+                    },
+                    {
+                        targets: '大学本科学历人员'
+                    },
+                    {
+                        targets: '大学专科学历'
+                    },
+                    {
+                        targets: '高中及以下'
+                    },
+                    {
+                        targets: '4.专业技术职称（人）'
+                    },
+                    {
+                        targets: '#高级技术职称人员'
+                    },
+                    {
+                        targets: '中级技术职称人员'
+                    },
+                    {
+                        targets: '初级技术职称人员'
+                    },
+                    {
+                        targets: '5.专业技术等级（人）'
+                    },
+                    {
+                        targets: '#高级技师'
+                    },
+                    {
+                        targets: '技师'
+                    },
+                    {
+                        targets: '高级工'
+                    },
+                    {
+                        targets: '中级工'
+                    }
+                ]
+            }
+        }
+    },
+    computed: {},
+    created() {},
+    mounted() {},
+    watch: {},
+    methods: {},
+    components: {}
+}
+</script>
+
+<style scoped lang="less">
+.constitution {
+    width: 100%;
+    height: 100px;
+    font-weight: 800;
+    padding-bottom: 20px;
+}
+.infrastructureItem {
+    white-space: pre;
+    display: flex;
+    & /deep/ .el-input__inner {
+        border-radius: 0;
+        width: 50px;
+        border-top-width: 0px;
+        border-left-width: 0px;
+        border-right-width: 0px;
+        border-bottom-width: 1px;
+    }
+}
+
+.footer {
+    width: 100%;
+    border-top: 1px solid #ccc;
+    & span {
+        width: 200px;
+    }
+    & /deep/ .el-input__inner {
+        padding: 0;
+        border-radius: 0;
+        width: 150px;
+        border-top-width: 0px;
+        border-left-width: 0px;
+        border-right-width: 0px;
+        border-bottom-width: 1px;
+    }
+    & /deep/ .el-col {
+        display: flex;
+    }
+}
+</style>
