@@ -1,24 +1,36 @@
-# 90heimatoutiao
+# document_project 设计文档
 
-## Project setup
-```
-yarn install
-```
+结构目录
 
-### Compiles and hot-reloads for development
-```
-yarn serve
-```
 
-### Compiles and minifies for production
-```
-yarn build
-```
 
-### Lints and fixes files
-```
-yarn lint
-```
+## login页面
 
-### Customize configuration
-See [Configuration Reference](https://cli.vuejs.org/config/).
+- 点击登录 ， 后台判断账号密码是否正确，如果正确再判断是否有权限登录
+- 如果没有注册过 ， 提示没该账号信息，请去注册
+- 注册页面 ， 需要提供企业名称 ， 一个企业只能注册一个账号
+- 如果账号没有通过审核进不了系统 
+- 忘记密码——发送消息给管理员账户
+
+
+
+
+
+## 主页
+
+- 申报
+
+  - 申报时间设置（管理员权限）
+  - 物流企业季度表申报
+  - 物流企业年度表申报
+  - 各企业申报状态（管理员权限）
+
+- 基本信息
+
+  - 企业基本情况表
+
+- 各企业基本信息（管理员权限）
+
+  
+
+

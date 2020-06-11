@@ -338,6 +338,7 @@ export default {
 }
 
 .footer {
+    padding-top: 10px;
     width: 100%;
     border-top: 1px solid #ccc;
     & span {
