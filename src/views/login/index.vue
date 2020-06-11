@@ -1,124 +1,121 @@
 <template>
-  <div class="login">
-    <!-- 放置一个el-card组件 -->
-    <el-card class='login-card'>
-      <!-- 放置标题图片 -->
-      <div class='title'>
-        <img src="../../assets/img/logo_index.png" alt="">
-      </div>
-      <!-- 放置表单  el-form model  绑定数据对象 -->
-      <el-form ref="myForm" :model="loginForm" :rules="loginRules">
-        <!-- 表单域 里面  prop要写要检验的字段名  放置 input/select/checkbox 相当于一行-->
-        <el-form-item prop="mobile">
-           <el-input v-model="loginForm.mobile" placeholder="请输入手机号"></el-input>
-        </el-form-item>
-        <!-- 表单域 -->
-        <el-form-item prop="code">
-          <el-input v-model="loginForm.code" style="width:65%" placeholder="验证码"></el-input>
-            <el-button style="float:right" plain>发送验证码</el-button>
-        </el-form-item>
-        <el-form-item prop="check">
-          <!-- 复选框 -->
-          <el-checkbox v-model="loginForm.check">我已阅读并同意用户协议和隐私条款</el-checkbox>
-        </el-form-item>
-        <el-form-item>
-          <el-button @click="submitLogin" type="primary" style="width:100%">登录</el-button>
-        </el-form-item>
-      </el-form>
-    </el-card>
-  </div>
+    <div class="login">
+        <el-card class="login-card">
+            <div slot="header">
+                <i class="el-icon-d-arrow-right"></i>
+                <span class="title" style="marginLeft:10px">欢迎登录</span>
+            </div>
+            <el-form class="card-content" ref="form" :model="loginForm" :rules="loginRules">
+                <el-form-item prop="user">
+                    <el-input
+                        placeholder="请输入用户名"
+                        prefix-icon="el-icon-user-solid"
+                        v-model="loginForm.user"
+                    ></el-input>
+                </el-form-item>
+                <el-form-item prop="password">
+                    <el-input
+                        type="password"
+                        placeholder="请输入密码"
+                        prefix-icon="el-icon-lock"
+                        v-model="loginForm.password"
+                    >
+                    </el-input>
+                </el-form-item>
+                <el-form-item prop="code">
+                    <el-row :gutter="20">
+                        <el-col :span="13">
+                            <el-input placeholder="请输入验证码" prefix-icon="el-icon-message" v-model="loginForm.code">
+                            </el-input>
+                        </el-col>
+                        <el-col :span="10" style="padding:0;height:40px">
+                            <el-image style="width: 100%; height: 40px" :src="url"></el-image>
+                        </el-col>
+                    </el-row>
+                </el-form-item>
+                <el-form-item>
+                    <el-button @click="submitLogin" type="primary" style="width:100%">登录</el-button>
+                </el-form-item>
+            </el-form>
+        </el-card>
+    </div>
 </template>
 
 <script>
+import md5 from 'md5'
 export default {
-  data () {
-    return {
-      loginForm: {
-        mobile: '', // 手机号
-        code: '', // 验证码
-        check: false // 是否勾选 同意被坑
-      },
-      loginRules: {
-        // 验证规则对象 key(字段名):value(规则 => [])
-        mobile: [{ required: true, message: '请输入您的手机号', trigger: 'blur' }, {
-          pattern: /^1[3456789]\d{9}$/, message: '手机号格式不正确', trigger: 'blur'
-        }],
-        code: [{ required: true, message: '请输入你的验证码', trigger: 'blur' }, {
-          pattern: /^\d{6}$/, message: '验证码格式不正确', trigger: 'blur'
-        }],
-        check: [{ validator: function (rule, value, callback) {
-          // 自定义校验函数
-          // rule 规则 没啥用
-          // value 要校验的字段的  值
-          // callback 是一个回调函数
-          if (value) {
-            // 认为已经勾选
-            callback() // 认为当前的规则校验通过了
-          } else {
-            // 认为没有勾选
-            callback(new Error('您应该同意我们的霸王条款,让我们欺负你')) // 如果没有勾选 认为当前校验失败 应该停止
-          }
-        } }]
-
-      }
-    }
-  },
-  methods: {
-    submitLogin () {
-    //  手动校验
-      this.$refs.myForm.validate((isOK) => {
-        if (isOK) {
-          //  说明校验通过  应该调用登录接口
-          // axios  body参数 get参数地址参数 路由参数  查询参数
-          // body参数 axios  data
-          // get参数  axios params
-          this.$axios({
-            url: '/authorizations', // 请求地址 axios 没有指定 类型 默认走get类型
-            method: 'post', // 类型
-            data: this.loginForm // body 参数
-          }).then(result => {
-            // 只接受正确结果
-            // 前端缓存 登录成功返回给我们的令牌
-            window.localStorage.setItem('user-token', result.data.token)
-            this.$router.push('/home') // 跳转到home页
-          })
+    data() {
+        return {
+            url: 'http://img5.imgtn.bdimg.com/it/u=1320441599,4127074888&fm=26&gp=0.jpg',
+            loginForm: {
+                user: 'cml_qd',
+                password: 'admin',
+                code: 'kdqu'
+            },
+            loginRules: {
+                user: [{ required: true, message: '请输入用户名', trigger: 'blur' }],
+                password: [{ required: true, message: '请输入密码', trigger: 'blur' }],
+                code: [{ required: true, message: '请输入验证码', trigger: 'blur' }]
+            }
         }
-      })
+    },
+    methods: {
+        submitLogin() {
+            let _this = this
+            this.$refs.form.validate(isOK => {
+                if (isOK) {
+                    let passwordUpperCase = md5(_this.loginForm.password).toUpperCase() //eslint-disable-line
+                    this.$axios({
+                        url: '/authorizations',
+                        method: 'post',
+                        data: {
+                            mobile: '15110514010',
+                            code: '246810'
+                        }
+                    }).then(result => {
+                        // 前端缓存 登录成功返回给我们的令牌
+                        window.localStorage.setItem('user-token', result.data.token)
+                        this.$router.push('/home')
+                    })
+                }
+            })
+        }
     }
-  }
 }
 </script>
 
-<style lang='less' scoped>
-  .login  {
+<style lang="less" scoped>
+.login {
+    position: relative;
     height: 100vh;
     display: flex;
     justify-content: center;
     align-items: center;
     &:before {
-     background-image: url('../../assets/img/back.jpg');
-     background-size: cover;
-     filter: blur(10px);
-     content: '';
-     width:100%;
-     height: 100%;
-     left:0;
-     top:0;
-     position: absolute;
-
+        background-image: url('../../assets/img/loginBG.jpg');
+        background-size: cover;
+        content: '';
+        width: 100%;
+        height: 100%;
+        left: 0;
+        top: 0;
+        position: absolute;
     }
     .login-card {
-      width: 440px;
-      height: 350px;
-      z-index: 2;
-      background-color: transparent;
-      .title {
-        text-align: center;
-        margin-bottom: 30px;
-        img {
-          height: 45px;
+        position: absolute;
+        right: 100px;
+        top: 20vh;
+        width: 300px;
+        height: 340px;
+        z-index: 2;
+        background-color: rgba(255, 255, 255, 0.7);
+        .title {
+            color: #1c2438;
+            font-weight: 800;
         }
-      }
+        .card-content {
+            // margin-top: 20px;
+        }
     }
-  }
+}
 </style>
