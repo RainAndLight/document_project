@@ -8,7 +8,7 @@
                 <span style="marginLeft:2em"></span
                 >《中华人民共和国统计法》第三条:国家机关、社会团体、企事业组织和个体工商户等统计调查对象，必须依照本法和国家规定，如实提供统计资料，不得虚报、瞒报、拒报、迟报，不得伪造、篡改
             </div>
-            <el-form ref="form" :model="Form" size="mini" label-width="150px" :inline="true" :label-position="top">
+            <el-form ref="form" :model="Form" size="mini" label-width="170px" :inline="true" :label-position="top">
                 <el-form-item label="统一社会信用代码">
                     <el-input v-model="Form.uscCode"></el-input>
                 </el-form-item>
@@ -24,23 +24,35 @@
                 <el-form-item label="电话号码（传真号码）">
                     <el-input v-model="Form.uscCode"></el-input>
                 </el-form-item>
+                <p>通讯地址</p>
+                <hr class="hr" />
+                <el-form-item label="详细地址">
+                    <el-input v-model="Form.uscCode"></el-input>
+                </el-form-item>
                 <el-form-item label="电子信箱（或网址）">
                     <el-input v-model="Form.uscCode"></el-input>
                 </el-form-item>
                 <el-form-item label="邮政编码，行政区划">
                     <el-input v-model="Form.uscCode"></el-input>
                 </el-form-item>
+                <p>行业类别</p>
+                <hr class="hr" />
                 <el-form-item label="主要业务活动">
-                    <el-input v-model="Form.uscCode" type="textarea" :rows="2"></el-input>
+                    <el-input v-model="Form.uscCode" type="textarea" :rows="2" style="width:178px"></el-input>
                 </el-form-item>
                 <el-form-item label="行业代码">
                     <el-input v-model="Form.uscCode"></el-input>
                 </el-form-item>
+                <p>开业时间</p>
+                <hr class="hr" />
                 <el-form-item label="开业时间">
-                    <el-date-picker v-model="uscCode" type="month" placeholder="选择时间"> </el-date-picker>
+                    <el-date-picker v-model="Form.openingTime" type="month" placeholder="选择时间" style="width:178px">
+                    </el-date-picker>
                 </el-form-item>
+                <p>企业登记注册类型</p>
+                <hr class="hr" />
                 <el-form-item label="企业登记注册类型">
-                    <el-select v-model="value" placeholder="请选择" clearable filterable>
+                    <el-select v-model="value" placeholder="请选择" clearable filterable style="width:178px">
                         <el-option
                             v-for="item in enrollOptions"
                             :key="item.value"
@@ -51,6 +63,8 @@
                     </el-select>
                 </el-form-item>
                 <!-- 企业登记注册资本 -->
+                <p>企业登记注册资本</p>
+                <hr class="hr" />
                 <el-form-item label="登记注册资本合计">
                     <el-input v-model="Form.uscCode">
                         <template slot="append">万元</template>
@@ -87,6 +101,8 @@
                     </el-input>
                 </el-form-item>
                 <!-- 从业人员情况 -->
+                <p>从业人员情况</p>
+                <hr class="hr" />
                 <el-table :data="tableData.list" border size="mini" style="width: 460px;marginTop:10px">
                     <el-table-column align="center" width="250" label="指标名称" prop="targets"> </el-table-column>
                     <el-table-column align="center" width="100" label="共计">
@@ -101,6 +117,8 @@
                     </el-table-column>
                 </el-table>
                 <!-- 基础设施 -->
+                <p>基础设施</p>
+                <hr class="hr" />
                 <el-form-item>
                     <div class="infrastructureItem">
                         <div>1.自有仓储面积</div>
@@ -179,12 +197,16 @@
                         ></el-col>
                         <el-col :span="6"
                             ><span>报出日期</span>
-                            <el-date-picker v-model="value1" size="mini" type="date" placeholder="选择日期" clearable>
+                            <el-date-picker v-model="Form.returnTime" size="mini" type="date" clearable>
                             </el-date-picker
                         ></el-col>
                     </el-row>
                 </div>
             </el-form>
+            <div class="footerBtn">
+                <el-button type="success">保存</el-button>
+                <el-button type="primary">提交</el-button>
+            </div>
         </el-card>
     </div>
 </template>
@@ -196,7 +218,9 @@ export default {
     data() {
         return {
             Form: {
-                uscCode: ''
+                uscCode: '',
+                openingTime: '',
+                returnTime: ''
             },
             enrollOptions: [
                 {
@@ -318,6 +342,9 @@ export default {
 </script>
 
 <style scoped lang="less">
+.hr {
+    margin-bottom: 20px;
+}
 .constitution {
     width: 100%;
     height: 100px;
@@ -338,7 +365,8 @@ export default {
 }
 
 .footer {
-    padding-top: 10px;
+    margin-top: 30px;
+    padding-top: 20px;
     width: 100%;
     border-top: 1px solid #ccc;
     & span {
@@ -356,5 +384,11 @@ export default {
     & /deep/ .el-col {
         display: flex;
     }
+}
+.footerBtn {
+    margin-top: 100px;
+    display: flex;
+    justify-content: flex-end;
+    // justify-content: flex-end;
 }
 </style>
