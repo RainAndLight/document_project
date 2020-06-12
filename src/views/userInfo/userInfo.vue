@@ -6,7 +6,7 @@
             </bread-crumb>
             <div class="constitution">
                 <span style="marginLeft:2em"></span
-                >《中华人民共和国统计法》第三条:国家机关、社会团体、企事业组织和个体工商户等统计调查对象，必须依照本法和国家规定，如实提供统计资料，不得虚报、瞒报、拒报、迟报，不得伪造、篡改
+                >《中华人民共和国统计法》第三条：国家机关、社会团体、企事业组织和个体工商户等统计调查对象，必须依照本法和国家规定，如实提供统计资料，不得虚报、瞒报、拒报、迟报，不得伪造、篡改
             </div>
             <el-form ref="form" :model="Form" size="mini" label-width="auto" :inline="true">
                 <el-form-item label="统一社会信用代码">

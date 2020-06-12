@@ -41,6 +41,15 @@ const routes = [{
         }, {
             path: 'userInfo',
             component: () => import('../views/userInfo/userInfo')
+        }, {
+            path: 'declarationOperate',
+            component: () => import('../views/declaration/declarationOperate')
+        }, {
+            path: 'declarationSchedule',
+            component: () => import('../views/declaration/declarationSchedule')
+        }, {
+            path: 'declaration',
+            component: () => import('../views/declaration/declaration')
         }]
     }, {
         path: '/login',
