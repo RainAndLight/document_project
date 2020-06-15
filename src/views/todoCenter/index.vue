@@ -90,7 +90,14 @@ export default {
         submit() {
             if (this.selection.length > 0) {
                 if (this.selection.length < 2) {
-                    this.$router.push({ path: '/home/declaration', query: { orderNo: this.selection[0].orderNo } })
+                    this.$router.push({
+                        path: '/home/todoCenter/declaration',
+                        query: {
+                            orderNo: this.selection[0].orderNo,
+                            declarationType: this.selection[0].declarationType
+                        },
+                        params: { op: 'refresh' }
+                    })
                 }
             } else {
                 this.$message({
@@ -98,7 +105,8 @@ export default {
                     type: 'warning'
                 })
             }
-        }
+        },
+        look() {}
     },
     components: {}
 }

@@ -1,7 +1,11 @@
 <template>
     <div>
         <!-- <el-calendar class="main"></el-calendar> -->
-        该写点什么好呢
+        <div class="content">
+            <p>
+                您好，管理员，欢迎使用物流企业申报系统
+            </p>
+        </div>
     </div>
 </template>
 
@@ -27,5 +31,13 @@ export default {
 
 .el-carousel__item:nth-child(2n + 1) {
     background-color: #d3dce6;
+}
+.content {
+    display: flex;
+    font-size: 24px;
+    font-weight: 700;
+    justify-content: center;
+    // align-items: center;
+    height: 80vh;
 }
 </style>

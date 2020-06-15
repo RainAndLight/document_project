@@ -3,7 +3,7 @@ import VueRouter from 'vue-router'
 import Home from '../views/home'
 import Login from '../views/login'
 import Home2 from '../views/home/home.vue'
-// import TodoCenter from '../views/todoCenter'
+import TodoCenter from '../views/todoCenter'
 Vue.use(VueRouter)
 
 const routes = [{
@@ -53,7 +53,21 @@ const routes = [{
             component: () => import('../views/declaration/declaration')
         }, {
             path: 'todoCenter',
+            // name: 'todoCenter',
+            // component: TodoCenter,
+            // children: [{
+            //         path: '',
+            //         component: TodoCenter
+            //     },
+            //     {
+            //         path: 'declaration',
+            //         component: () => import('../views/todoCenter/declaration')
+            //     }
+            // ]
             component: () => import('../views/todoCenter')
+        }, {
+            path: 'todoCenter/declaration',
+            component: () => import('../views/todoCenter/declaration')
         }]
     }, {
         path: '/login',

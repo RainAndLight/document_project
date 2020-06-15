@@ -246,8 +246,8 @@
                 </div>
             </el-form>
             <div class="footerBtn">
-                <el-button type="success" @click="save">暂存</el-button>
-                <el-button type="success" @click="returnExcel">导出Excel</el-button>
+                <!-- <el-button type="success" @click="save">暂存</el-button>
+                <el-button type="success" @click="returnExcel">导出Excel</el-button> -->
                 <el-button type="primary">提交</el-button>
             </div>
         </el-card>
