@@ -65,13 +65,17 @@
             </el-submenu>
             <el-submenu index="2">
                 <template slot="title">
-                    <i class="el-icon-edit-outline"></i>
+                    <i class="el-icon-document"></i>
                     <span>申报</span>
                 </template>
                 <el-menu-item index="/home/declarationOperate">操作</el-menu-item>
                 <el-menu-item index="/home/declarationSchedule">申报进度</el-menu-item>
                 <el-menu-item index="/home/declaration">申报</el-menu-item>
             </el-submenu>
+            <el-menu-item index="/home/todoCenter">
+                <i class="el-icon-edit-outline"></i>
+                <span>待办</span></el-menu-item
+            >
             <!-- <el-menu-item index="/home/account">
                 <i class="el-icon-s-custom"></i>
                 <span>账户信息</span>

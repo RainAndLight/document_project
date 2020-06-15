@@ -1,0 +1,115 @@
+<template>
+    <div>
+        <el-card class="card">
+            <bread-crumb slot="header">
+                <template slot="title">待办</template>
+            </bread-crumb>
+            <div class="header">
+                <el-button type="primary" size="mini" @click="submit">申报</el-button>
+                <el-button type="primary" size="mini" @click="look">查看</el-button>
+            </div>
+            <el-table
+                @selection-change="tableSelectionChange"
+                :data="tableData.list"
+                border
+                size="mini"
+                style="width:% ;marginTop:10px"
+            >
+                <el-table-column type="index" width="50"> </el-table-column>
+                <el-table-column type="selection" width="55"> </el-table-column>
+                <el-table-column align="center" width="100" label="流水号" prop="orderNo"></el-table-column>
+                <el-table-column align="center" width="100" label="发起申报人" prop="originPerson"></el-table-column>
+                <el-table-column align="center" width="100" label="申报类型" prop="declarationType"></el-table-column>
+                <el-table-column
+                    align="center"
+                    width="200"
+                    label="申报起止日期"
+                    prop="declarationDate"
+                ></el-table-column>
+                <el-table-column align="center" width="150" label="申报状态" prop="declarationStatus">
+                    <template slot-scope="scoped">
+                        <el-tag v-show="scoped.row.declarationStatus === 0" type="info">未申报</el-tag>
+                        <el-tag v-show="scoped.row.declarationStatus === 1">已开始申报</el-tag>
+                        <el-tag v-show="scoped.row.declarationStatus === 2" type="success">已提交申报</el-tag>
+                        <el-tag v-show="scoped.row.declarationStatus === 3" type="danger">申报驳回</el-tag>
+                    </template>
+                </el-table-column>
+            </el-table>
+        </el-card>
+    </div>
+</template>
+
+<script>
+export default {
+    name: 'todoCenter',
+    props: {},
+    data() {
+        return {
+            selection: [],
+            tableData: {
+                list: [
+                    {
+                        originPerson: 'admin',
+                        orderNo: '001',
+                        declarationType: 'month',
+                        declarationDate: '2020-6-1 至 2020-9-1',
+                        declarationStatus: 0
+                    },
+                    {
+                        originPerson: 'admin',
+                        orderNo: '002',
+                        declarationType: 'year',
+                        declarationDate: '2020-6-1 至 2020-9-1',
+                        declarationStatus: 1
+                    },
+                    {
+                        originPerson: 'admin',
+                        orderNo: '003',
+                        declarationType: 'month',
+                        declarationDate: '2020-6-1 至 2020-9-1',
+                        declarationStatus: 2
+                    },
+                    {
+                        originPerson: 'admin',
+                        orderNo: '004',
+                        declarationType: 'month',
+                        declarationDate: '2020-6-1 至 2020-9-1',
+                        declarationStatus: 3
+                    }
+                ]
+            }
+        }
+    },
+    created() {},
+    methods: {
+        tableSelectionChange(value) {
+            console.log(value)
+
+            this.selection = value
+        },
+        submit() {
+            if (this.selection.length > 0) {
+                if (this.selection.length < 2) {
+                    this.$router.push({ path: '/home/declaration', query: { orderNo: this.selection[0].orderNo } })
+                }
+            } else {
+                this.$message({
+                    message: '请选择一条数据数据申报',
+                    type: 'warning'
+                })
+            }
+        }
+    },
+    components: {}
+}
+</script>
+
+<style scoped lang="less">
+.card {
+    height: 85vh;
+    .header {
+        display: flex;
+        justify-content: flex-end;
+    }
+}
+</style>

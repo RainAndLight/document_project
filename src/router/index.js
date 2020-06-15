@@ -3,6 +3,7 @@ import VueRouter from 'vue-router'
 import Home from '../views/home'
 import Login from '../views/login'
 import Home2 from '../views/home/home.vue'
+// import TodoCenter from '../views/todoCenter'
 Vue.use(VueRouter)
 
 const routes = [{
@@ -50,6 +51,9 @@ const routes = [{
         }, {
             path: 'declaration',
             component: () => import('../views/declaration/declaration')
+        }, {
+            path: 'todoCenter',
+            component: () => import('../views/todoCenter')
         }]
     }, {
         path: '/login',

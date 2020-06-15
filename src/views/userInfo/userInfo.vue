@@ -9,6 +9,8 @@
                 >《中华人民共和国统计法》第三条：国家机关、社会团体、企事业组织和个体工商户等统计调查对象，必须依照本法和国家规定，如实提供统计资料，不得虚报、瞒报、拒报、迟报，不得伪造、篡改
             </div>
             <el-form ref="form" :model="Form" size="mini" label-width="auto" :inline="true">
+                <p>基本信息</p>
+                <hr class="hr" />
                 <el-form-item label="统一社会信用代码">
                     <el-input v-model="Form.uscCode" clearable :maxlength="18"></el-input>
                 </el-form-item>
