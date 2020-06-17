@@ -97,9 +97,8 @@ export default {
         content: '';
         width: 100%;
         height: 100%;
-        left: 0;
-        top: 0;
         position: absolute;
+        background-position: bottom;
     }
     .login-card {
         position: absolute;
@@ -112,9 +111,6 @@ export default {
         .title {
             color: #1c2438;
             font-weight: 800;
-        }
-        .card-content {
-            // margin-top: 20px;
         }
     }
 }
