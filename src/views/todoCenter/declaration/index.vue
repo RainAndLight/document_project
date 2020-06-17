@@ -11,7 +11,7 @@
             <declarationYear v-if="selectType === 'year'"></declarationYear>
             <div class="footerBtn">
                 <el-button type="success">暂存</el-button>
-                <el-button type="primary">提交</el-button>
+                <el-button type="primary" @click="submit">提交</el-button>
             </div>
         </el-card>
     </div>
@@ -38,6 +38,17 @@ export default {
     methods: {
         selectChange(value) {
             this.flag = value
+        },
+        submit() {
+            this.$message({
+                type: 'success',
+                message: '提交成功，在审核完成之前您可以随时在待办列表中修改申报'
+            })
+            this.$router.push({
+                path: '/home/todoCenter',
+                query: {},
+                params: { op: 'refresh' }
+            })
         }
     },
     components: {

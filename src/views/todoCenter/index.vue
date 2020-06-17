@@ -13,7 +13,8 @@
                 :data="tableData.list"
                 border
                 size="mini"
-                style="width:% ;marginTop:10px"
+                height="calc(100vh - 220px)"
+                style="width: 100%;marginTop:10px "
             >
                 <el-table-column type="index" width="50"> </el-table-column>
                 <el-table-column type="selection" width="55"> </el-table-column>
@@ -29,9 +30,11 @@
                 <el-table-column align="center" width="150" label="申报状态" prop="declarationStatus">
                     <template slot-scope="scoped">
                         <el-tag v-show="scoped.row.declarationStatus === 0" type="info">未申报</el-tag>
-                        <el-tag v-show="scoped.row.declarationStatus === 1">已开始申报</el-tag>
-                        <el-tag v-show="scoped.row.declarationStatus === 2" type="success">已提交申报</el-tag>
-                        <el-tag v-show="scoped.row.declarationStatus === 3" type="danger">申报驳回</el-tag>
+                        <el-tag v-show="scoped.row.declarationStatus === 1">申报中</el-tag>
+                        <el-tag v-show="scoped.row.declarationStatus === 2">申报已提交</el-tag>
+                        <el-tag v-show="scoped.row.declarationStatus === 3" type="success">审核完成</el-tag>
+                        <el-tag v-show="scoped.row.declarationStatus === 4" type="danger">申报驳回</el-tag>
+                        <el-tag v-show="scoped.row.declarationStatus === 5" type="danger">申报超时</el-tag>
                     </template>
                 </el-table-column>
             </el-table>
@@ -75,6 +78,20 @@ export default {
                         declarationType: 'month',
                         declarationDate: '2020-6-1 至 2020-9-1',
                         declarationStatus: 3
+                    },
+                    {
+                        originPerson: 'admin',
+                        orderNo: '005',
+                        declarationType: 'month',
+                        declarationDate: '2020-6-1 至 2020-9-1',
+                        declarationStatus: 4
+                    },
+                    {
+                        originPerson: 'admin',
+                        orderNo: '005',
+                        declarationType: 'month',
+                        declarationDate: '2020-6-1 至 2020-9-1',
+                        declarationStatus: 5
                     }
                 ]
             }
@@ -88,17 +105,22 @@ export default {
             this.selection = value
         },
         submit() {
-            if (this.selection.length > 0) {
-                if (this.selection.length < 2) {
-                    this.$router.push({
-                        path: '/home/todoCenter/declaration',
-                        query: {
-                            orderNo: this.selection[0].orderNo,
-                            declarationType: this.selection[0].declarationType
-                        },
-                        params: { op: 'refresh' }
+            if (this.selection.length > 0 && this.selection.length < 2) {
+                if (this.selection[0].declarationStatus === 3) {
+                    this.$message({
+                        message: '审核完成不可修改',
+                        type: 'warning'
                     })
+                    return
                 }
+                this.$router.push({
+                    path: '/home/todoCenter/declaration',
+                    query: {
+                        orderNo: this.selection[0].orderNo,
+                        declarationType: this.selection[0].declarationType
+                    },
+                    params: { op: 'refresh' }
+                })
             } else {
                 this.$message({
                     message: '请选择一条数据数据申报',
@@ -106,7 +128,23 @@ export default {
                 })
             }
         },
-        look() {}
+        look() {
+            if (this.selection.length > 0 && this.selection.length < 2) {
+                this.$router.push({
+                    path: '/home/todoCenter/declaration',
+                    query: {
+                        orderNo: this.selection[0].orderNo,
+                        declarationType: this.selection[0].declarationType
+                    },
+                    params: { op: 'refresh' }
+                })
+            } else {
+                this.$message({
+                    message: '请选择一条数据数据查看',
+                    type: 'warning'
+                })
+            }
+        }
     },
     components: {}
 }
@@ -114,7 +152,8 @@ export default {
 
 <style scoped lang="less">
 .card {
-    height: 85vh;
+    // height: 85vh;
+    position: relative;
     .header {
         display: flex;
         justify-content: flex-end;

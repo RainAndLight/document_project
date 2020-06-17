@@ -4,7 +4,7 @@
         <!-- 先定义一行 -->
         <el-col class="left" :span="12">
             <i @click="collapseOrOpen" :class="{ 'el-icon-s-unfold': collapse, 'el-icon-s-fold': !collapse }"></i>
-            <span>中创物流股份有限公司</span>
+            <span>物流企业申报系统</span>
         </el-col>
         <el-col class="right" :span="12">
             <el-row type="flex" justify="end" align="middle">
