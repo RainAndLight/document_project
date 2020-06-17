@@ -4,29 +4,31 @@
             <bread-crumb slot="header">
                 <template slot="title">申报 > 操作</template>
             </bread-crumb>
-            <div class="header">
-                <el-button type="primary" @click="modalIsShow = true">设置申报起止时间</el-button>
+            <div style="height:calc(80vh - 50px);overflow:auto">
+                <div class="header">
+                    <el-button size="mini" type="primary" @click="modalIsShow = true">设置申报起止时间</el-button>
+                </div>
+                <el-table :data="tableData.list" border size="mini" style="width:100% ;marginTop:10px">
+                    <el-table-column type="index" width="50"> </el-table-column>
+                    <el-table-column
+                        v-for="(item, index) in tableData.columnList"
+                        :key="index"
+                        :align="item.center || 'center'"
+                        :width="item.width || '100'"
+                        :label="item.title"
+                        :prop="item.prop"
+                    >
+                    </el-table-column>
+                    <el-table-column label="操作" align="center">
+                        <template slot-scope="scope">
+                            <el-button size="mini" @click="handleEdit(scope.$index, scope.row)">编辑</el-button>
+                            <el-button size="mini" type="danger" @click="handleDelete(scope.$index, scope.row)"
+                                >删除</el-button
+                            >
+                        </template>
+                    </el-table-column>
+                </el-table>
             </div>
-            <el-table :data="tableData.list" border size="mini" style="width:100% ;marginTop:10px">
-                <el-table-column type="index" width="50"> </el-table-column>
-                <el-table-column
-                    v-for="(item, index) in tableData.columnList"
-                    :key="index"
-                    :align="item.center || 'center'"
-                    :width="item.width || '100'"
-                    :label="item.title"
-                    :prop="item.prop"
-                >
-                </el-table-column>
-                <el-table-column label="操作" align="center">
-                    <template slot-scope="scope">
-                        <el-button size="mini" @click="handleEdit(scope.$index, scope.row)">编辑</el-button>
-                        <el-button size="mini" type="danger" @click="handleDelete(scope.$index, scope.row)"
-                            >删除</el-button
-                        >
-                    </template>
-                </el-table-column>
-            </el-table>
         </el-card>
         <el-dialog title="设置申报起止时间" :visible.sync="modalIsShow">
             <el-form ref="form" :model="form" label-width="120px" class="modal">

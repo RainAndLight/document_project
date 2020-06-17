@@ -4,21 +4,23 @@
             <template slot="title">账户信息</template>
         </bread-crumb>
         <!-- 表单 => 表单容器 -->
-        <el-form ref="myForm" :model="formData" :rules="rules" style="margin-left:100px" label-width="100px">
-            <el-form-item prop="companyName" label="公司名称">
-                <el-input v-model="formData.companyName" style="width:40%"></el-input>
-            </el-form-item>
-            <el-form-item prop="companyAccount" label="账号">
-                <el-input v-model="formData.companyAccount" style="width:40%"></el-input>
-            </el-form-item>
-            <el-form-item prop="companyPassword" label="密码">
-                <el-input v-model="formData.companyPassword" show-password style="width:40%"></el-input>
-            </el-form-item>
-        </el-form>
-        <!-- 上传组件 -->
-        <el-upload :http-request="uploadImg" class="head-upload" action="" :show-file-list="false">
-            <img :src="formData.photo ? formData.photo : defaultImg" alt="" />
-        </el-upload>
+        <div style="height:calc(80vh - 50px);overflow:auto">
+            <el-form ref="myForm" :model="formData" :rules="rules" style="margin-left:100px" label-width="100px">
+                <el-form-item prop="companyName" label="公司名称">
+                    <el-input v-model="formData.companyName" style="width:40%"></el-input>
+                </el-form-item>
+                <el-form-item prop="companyAccount" label="账号">
+                    <el-input v-model="formData.companyAccount" style="width:40%"></el-input>
+                </el-form-item>
+                <el-form-item prop="companyPassword" label="密码">
+                    <el-input v-model="formData.companyPassword" show-password style="width:40%"></el-input>
+                </el-form-item>
+            </el-form>
+            <!-- 上传组件 -->
+            <el-upload :http-request="uploadImg" class="head-upload" action="" :show-file-list="false">
+                <img :src="formData.photo ? formData.photo : defaultImg" alt="" />
+            </el-upload>
+        </div>
     </el-card>
 </template>
 

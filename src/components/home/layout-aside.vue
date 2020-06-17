@@ -70,7 +70,15 @@
                 </template>
                 <el-menu-item index="/home/declarationOperate">操作</el-menu-item>
                 <el-menu-item index="/home/declarationSchedule">申报进度</el-menu-item>
-                <el-menu-item index="/home/declaration">申报</el-menu-item>
+                <!-- <el-menu-item index="/home/declaration">申报</el-menu-item> -->
+            </el-submenu>
+            <el-submenu index="3">
+                <template slot="title">
+                    <i class="el-icon-user"></i>
+                    <span>账号管理</span>
+                </template>
+                <el-menu-item index="/home/user/userAudit">账号审核</el-menu-item>
+                <el-menu-item index="/home/user/userManage">账号列表</el-menu-item>
             </el-submenu>
             <el-menu-item index="/home/todoCenter">
                 <i class="el-icon-edit-outline"></i>
