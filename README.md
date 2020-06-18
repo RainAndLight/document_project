@@ -63,3 +63,43 @@
 
 ![1591955934921](README.assets/1591955934921.png)
 
+
+
+
+
+
+
+``` js
+let util = {}
+
+util.tableRowFormat = function (row, option) {
+    if (option.type !== undefined) {
+        if (option.type === 'date') {
+            return row[option.key] ? util.timestampToDate(row[option.key]) : '-'
+        } else if (option.type === 'datemonth') {
+            return row[option.key] ? util.timestampToMonthDate(row[option.key]) : '-'
+        } else if (option.type === 'datetime') {
+            return row[option.key] ? util.timestampToDateTime(row[option.key]) : '-'
+        } else if (option.type === 'format') {
+            return option.format[row[option.key]]
+        } else if (option.type === 'func') {
+            return option.func(row, option.key)
+        } else if (option.type === 'numCommas') {
+            return this.formatNumberCommas(row[option.key])
+        } else if (option.type === 'percent') {
+            if (row[option.key] != null && row[option.key] !== '') {
+                return row[option.key] + '%'
+            } else {
+                return ''
+            }
+        } else {
+            return row[option.key]
+        }
+    } else {
+        return row[option.key]
+    }
+}
+
+export default util
+```
+

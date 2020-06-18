@@ -1,20 +1,17 @@
 let util = {}
-util.tableRowFormat = function (row, option) {
-    if (option.type !== undefined) {
-        if (option.type === 'datetime') {
-            return row[option.key] ? util.formatDateTime(row[option.key]) : '-'
-        }
-        // else if (option.type === 'format') {
-        //     return option.format[row[option.key]]
-        // } else if (option.type === 'func') {
-        //     return option.func(row, option.key)
-        // }
+
+util.tableRowFormat = function (row, item) {
+    if (item.type === 'format') {
+        return item.format[row[item.prop]]
+    } else if (item.type === 'dateTime') {
+        return row[item.prop] ? util.timestampToDateTime(row[item.prop]) : '-'
+    } else if (item.type === 'func') {
+        return item.func(row, item.prop)
     } else {
-        return row[option.key]
+        return row[item.prop]
     }
 }
-
-util.formatDateTime = function (value) {
+util.timestampToDateTime = function (value) {
     function add0(m) {
         return m < 10 ? '0' + m : m
     }

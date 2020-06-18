@@ -35,7 +35,7 @@
                         style="width:100%;margin-top:10px"
                     >
                         <el-table-column type="index" width="50"> </el-table-column>
-                        <el-table-column type="selection" width="55"> </el-table-column>
+                        <el-table-column type="selection" width="50"> </el-table-column>
                         <el-table-column
                             v-for="(item, index) in tableData.columnList"
                             :key="index"
@@ -47,16 +47,16 @@
                             <template slot-scope="scope">
                                 <template v-if="item.prop === 'declartionStatus'">
                                     <el-tag v-if="scope.row.declartionStatus === '0'" type="info">
-                                        {{ tableRowFormat(scope.row, item) }}
+                                        {{ $util.tableRowFormat(scope.row, item) }}
                                     </el-tag>
                                     <el-tag v-if="scope.row.declartionStatus === '1'" type="success">
-                                        {{ tableRowFormat(scope.row, item) }}
+                                        {{ $util.tableRowFormat(scope.row, item) }}
                                     </el-tag>
                                     <el-tag v-if="scope.row.declartionStatus === '2'" type="danger">
-                                        {{ tableRowFormat(scope.row, item) }}
+                                        {{ $util.tableRowFormat(scope.row, item) }}
                                     </el-tag>
                                 </template>
-                                <template v-else>{{ tableRowFormat(scope.row, item) }}</template>
+                                <template v-else>{{ $util.tableRowFormat(scope.row, item) }}</template>
                             </template>
                         </el-table-column>
                     </el-table>
@@ -118,7 +118,8 @@ export default {
                     {
                         title: '申报起止日期',
                         prop: 'declartionStartEndTime',
-                        width: '200'
+                        width: '200',
+                        type: 'dateTime'
                     }
                 ],
                 list: [
@@ -126,25 +127,25 @@ export default {
                         company: '中创物流',
                         declartionType: '季度',
                         declartionStatus: '0',
-                        declartionStartEndTime: '2020-6-1 —— 2020-6-10'
+                        declartionStartEndTime: 'Thu Jun 18 2020 16:00:55 GMT+0800 (中国标准时间)'
                     },
                     {
                         company: '申通物流',
                         declartionType: '季度',
                         declartionStatus: '1',
-                        declartionStartEndTime: '2020-6-1 —— 2020-6-10'
+                        declartionStartEndTime: 'Thu Jun 18 2020 16:00:55 GMT+0800 (中国标准时间)'
                     },
                     {
                         company: '京东物流',
                         declartionType: '季度',
                         declartionStatus: '2',
-                        declartionStartEndTime: '2020-6-1 —— 2020-6-10'
+                        declartionStartEndTime: 'Thu Jun 18 2020 16:00:55 GMT+0800 (中国标准时间)'
                     },
                     {
                         company: '韵达物流',
                         declartionType: '季度',
                         declartionStatus: '1',
-                        declartionStartEndTime: '2020-6-1 —— 2020-6-10'
+                        declartionStartEndTime: 'Thu Jun 18 2020 16:00:55 GMT+0800 (中国标准时间)'
                     }
                 ]
             }
@@ -155,13 +156,13 @@ export default {
     mounted() {},
     watch: {},
     methods: {
-        tableRowFormat(row, item) {
-            if (item.type === 'format') {
-                return item.format[row[item.prop]]
-            } else {
-                return row[item.prop]
-            }
-        },
+        // tableRowFormat(row, item) {
+        //     if (item.type === 'format') {
+        //         return item.format[row[item.prop]]
+        //     } else {
+        //         return row[item.prop]
+        //     }
+        // },
         handleSizeChange() {},
         //   async getData () {
         //   this.loading = true // 打开进度条
