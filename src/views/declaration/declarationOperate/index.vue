@@ -63,6 +63,10 @@
                     >
                     </el-date-picker>
                 </el-form-item>
+                <el-form-item label="申报填写时间">
+                    <el-date-picker v-model="form.declartionStartTime" type="date" placeholder="选择日期">
+                    </el-date-picker>
+                </el-form-item>
             </el-form>
             <div slot="footer" class="dialog-footer">
                 <el-button @click="modalIsShow = false">取 消</el-button>

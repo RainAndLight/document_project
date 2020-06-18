@@ -19,11 +19,11 @@
                         style="width:193px;margin-right:10px"
                     >
                         <el-option clearable value="0" label="未申报"></el-option>
-                        <el-option clearable value="1" label="申报中"></el-option>
-                        <el-option clearable value="2" label="已经保存"></el-option>
-                        <el-option clearable value="3" label="已提交"></el-option>
+                        <el-option clearable value="1" label="已提交"></el-option>
+                        <el-option clearable value="2" label="超时"></el-option>
                     </el-select>
-                    <el-button type="primary" size="mini" click="export">导出为Excel</el-button>
+                    <el-button type="primary" size="mini" @click="exportExcel">导出为Excel</el-button>
+                    <el-button type="primary" size="mini" @click="exportAllExcel">合并导出为Excel</el-button>
                 </div>
                 <div>
                     <el-table
@@ -44,6 +44,20 @@
                             :label="item.title"
                             :prop="item.prop"
                         >
+                            <template slot-scope="scope">
+                                <template v-if="item.prop === 'declartionStatus'">
+                                    <el-tag v-if="scope.row.declartionStatus === '0'" type="info">
+                                        {{ tableRowFormat(scope.row, item) }}
+                                    </el-tag>
+                                    <el-tag v-if="scope.row.declartionStatus === '1'" type="success">
+                                        {{ tableRowFormat(scope.row, item) }}
+                                    </el-tag>
+                                    <el-tag v-if="scope.row.declartionStatus === '2'" type="danger">
+                                        {{ tableRowFormat(scope.row, item) }}
+                                    </el-tag>
+                                </template>
+                                <template v-else>{{ tableRowFormat(scope.row, item) }}</template>
+                            </template>
                         </el-table-column>
                     </el-table>
                 </div>
@@ -93,7 +107,13 @@ export default {
                     },
                     {
                         title: '申报状态',
-                        prop: 'declartionStatus'
+                        prop: 'declartionStatus',
+                        type: 'format',
+                        format: {
+                            '0': '未申报',
+                            '1': '已提交',
+                            '2': '超时'
+                        }
                     },
                     {
                         title: '申报起止日期',
@@ -105,19 +125,25 @@ export default {
                     {
                         company: '中创物流',
                         declartionType: '季度',
-                        declartionStatus: '未申报',
+                        declartionStatus: '0',
                         declartionStartEndTime: '2020-6-1 —— 2020-6-10'
                     },
                     {
                         company: '申通物流',
                         declartionType: '季度',
-                        declartionStatus: '申报中',
+                        declartionStatus: '1',
                         declartionStartEndTime: '2020-6-1 —— 2020-6-10'
                     },
                     {
                         company: '京东物流',
-                        declartionType: '年度',
-                        declartionStatus: '超时',
+                        declartionType: '季度',
+                        declartionStatus: '2',
+                        declartionStartEndTime: '2020-6-1 —— 2020-6-10'
+                    },
+                    {
+                        company: '韵达物流',
+                        declartionType: '季度',
+                        declartionStatus: '1',
                         declartionStartEndTime: '2020-6-1 —— 2020-6-10'
                     }
                 ]
@@ -129,6 +155,14 @@ export default {
     mounted() {},
     watch: {},
     methods: {
+        tableRowFormat(row, item) {
+            if (item.type === 'format') {
+                return item.format[row[item.prop]]
+            } else {
+                return row[item.prop]
+            }
+        },
+        handleSizeChange() {},
         //   async getData () {
         //   this.loading = true // 打开进度条
         //   let result = await this.$axios({
@@ -146,7 +180,8 @@ export default {
         look() {
             this.$refs.tableModal.modalIsShow()
         },
-        export() {},
+        exportExcel() {},
+        exportAllExcel() {},
         timeSelectChange() {},
         statusSelectChange() {},
         tableSelectionChange() {}

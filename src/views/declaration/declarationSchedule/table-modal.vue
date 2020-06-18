@@ -18,6 +18,7 @@
                 <el-table-column align="center" width="100" label="流水号" prop="orderNo"></el-table-column>
                 <!-- <el-table-column align="center" width="100" label="发起申报人" prop="originPerson"></el-table-column> -->
                 <el-table-column align="center" label="申报类型" prop="declarationType"></el-table-column>
+                <el-table-column align="center" width="150" label="开始时间" prop="startTime"></el-table-column>
                 <el-table-column
                     align="center"
                     width="200"
@@ -51,21 +52,24 @@ export default {
                         orderNo: '001',
                         declarationType: 'month',
                         declarationDate: '2020-6-1 至 2020-9-1',
-                        declarationStatus: 0
+                        declarationStatus: 0,
+                        startTime: '2020-6-18 00:00:00'
                     },
                     {
                         originPerson: 'admin',
                         orderNo: '002',
                         declarationType: 'year',
                         declarationDate: '2020-6-1 至 2020-9-1',
-                        declarationStatus: 1
+                        declarationStatus: 1,
+                        startTime: '2020-6-18 00:00:00'
                     },
                     {
                         originPerson: 'admin',
                         orderNo: '003',
                         declarationType: 'month',
                         declarationDate: '2020-6-1 至 2020-9-1',
-                        declarationStatus: 2
+                        declarationStatus: 2,
+                        startTime: '2020-6-18 00:00:00'
                     }
                 ]
             }
