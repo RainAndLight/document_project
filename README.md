@@ -65,41 +65,28 @@
 
 
 
+vue.config.js 配置
+
+![1592556368741](README.assets/1592556368741.png)
+
+
+
+简单的axios 基本设置
+
+![1592557222761](README.assets/1592557222761.png)
 
 
 
 
-``` js
-let util = {}
 
-util.tableRowFormat = function (row, option) {
-    if (option.type !== undefined) {
-        if (option.type === 'date') {
-            return row[option.key] ? util.timestampToDate(row[option.key]) : '-'
-        } else if (option.type === 'datemonth') {
-            return row[option.key] ? util.timestampToMonthDate(row[option.key]) : '-'
-        } else if (option.type === 'datetime') {
-            return row[option.key] ? util.timestampToDateTime(row[option.key]) : '-'
-        } else if (option.type === 'format') {
-            return option.format[row[option.key]]
-        } else if (option.type === 'func') {
-            return option.func(row, option.key)
-        } else if (option.type === 'numCommas') {
-            return this.formatNumberCommas(row[option.key])
-        } else if (option.type === 'percent') {
-            if (row[option.key] != null && row[option.key] !== '') {
-                return row[option.key] + '%'
-            } else {
-                return ''
-            }
-        } else {
-            return row[option.key]
-        }
-    } else {
-        return row[option.key]
-    }
-}
+读取文件的方法
 
-export default util
-```
+![1592558136387](README.assets/1592558136387.png)
 
+
+
+
+
+解析excel
+
+![1592559752347](README.assets/1592559752347.png)
