@@ -2,7 +2,7 @@
     <div>
         <el-card>
             <bread-crumb slot="header">
-                <template slot="title">账号审核</template>
+                <template slot="title">账号列表</template>
             </bread-crumb>
             <div style="height:calc(80vh - 50px);overflow:auto">
                 <el-table
@@ -27,7 +27,13 @@
                         :width="item.width || '200'"
                     >
                     </el-table-column>
-                    <el-table-column label="操作" align="center">
+                    <el-table-column label="企业单位基本情况" align="center" width="200px">
+                        <template slot-scope="scope">
+                            <el-button type="text" size="small" @click="look(scope.row)">查看</el-button>
+                            <el-button type="text" size="small" @click="lookHistory(scope.row)">修改历史</el-button>
+                        </template>
+                    </el-table-column>
+                    <el-table-column label="操作" align="center" width="200px">
                         <template slot-scope="scope">
                             <el-button type="text" size="small" @click="edit(scope.row)">编辑</el-button>
                             <el-button type="text" size="small" @click="del(scope.row)">删除</el-button>
@@ -53,10 +59,12 @@
                 </el-dialog>
             </div>
         </el-card>
+        <userInfoTimeLine ref="userInfoTimeLine"></userInfoTimeLine>
     </div>
 </template>
 
 <script>
+import userInfoTimeLine from './user-info-timeLine'
 export default {
     name: 'userManage',
     props: {},
@@ -94,6 +102,18 @@ export default {
                         user: 'admin',
                         password: '123456',
                         applyTime: '2020-6-17 15:42:05 '
+                    },
+                    {
+                        company: '京东物流有限公司',
+                        user: 'jdadmin',
+                        password: '123456',
+                        applyTime: '2020-6-17 15:42:05 '
+                    },
+                    {
+                        company: '顺丰物流有限公司',
+                        user: 'sfadmin',
+                        password: '123456',
+                        applyTime: '2020-6-17 15:42:05 '
                     }
                 ]
             }
@@ -113,9 +133,21 @@ export default {
             }
             this.form = obj
         },
-        del(row) {}
+        del(row) {},
+        lookHistory(row) {
+            this.$refs.userInfoTimeLine.modalIsShow()
+        },
+        look() {
+            this.$router.push({
+                path: '/home/user/userManage/userinfo',
+                query: {},
+                params: { op: 'refresh' }
+            })
+        }
     },
-    components: {}
+    components: {
+        userInfoTimeLine
+    }
 }
 </script>
 

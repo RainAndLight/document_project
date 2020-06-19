@@ -77,6 +77,10 @@ const routes = [{
             {
                 path: 'user/userManage',
                 component: () => import('@/views/user/userManage')
+            },
+            {
+                path: 'user/userManage/userinfo',
+                component: () => import('@/views/user/user-info')
             }
         ]
     }, {

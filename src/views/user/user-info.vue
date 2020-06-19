@@ -1,14 +1,13 @@
 <template>
-    <div class="box">
+    <div>
         <el-card>
-            <bread-crumb slot="header">
-                <template slot="title">企业单位基本信息</template>
-            </bread-crumb>
-            <div class="constitution">
-                <span style="marginLeft:2em"></span
-                >《中华人民共和国统计法》第三条：国家机关、社会团体、企事业组织和个体工商户等统计调查对象，必须依照本法和国家规定，如实提供统计资料，不得虚报、瞒报、拒报、迟报，不得伪造、篡改
-            </div>
-            <el-form ref="form" :model="Form" size="mini" label-width="auto" :inline="true">
+            <el-breadcrumb separator-class="el-icon-arrow-right">
+                <el-breadcrumb-item :to="{ path: '/' }">首页</el-breadcrumb-item>
+                <el-breadcrumb-item :to="{ path: '/home/user/userManage' }">账号管理</el-breadcrumb-item>
+                <el-breadcrumb-item>企业单位基本情况表</el-breadcrumb-item>
+                <!-- <template slot="title">待办</template> -->
+            </el-breadcrumb>
+            <el-form class="form" ref="form" :model="Form" size="mini" label-width="auto" :inline="true">
                 <p>基本信息</p>
                 <hr class="hr" />
                 <el-form-item label="统一社会信用代码">
@@ -245,18 +244,13 @@
                     </el-row>
                 </div>
             </el-form>
-            <div class="footerBtn">
-                <el-button type="success" @click="save">暂存</el-button>
-                <!-- <el-button type="success" @click="returnExcel">导出Excel</el-button> -->
-                <el-button type="primary">提交</el-button>
-            </div>
         </el-card>
     </div>
 </template>
 
 <script>
 export default {
-    name: 'userInfo',
+    name: 'user-userInfo',
     props: {},
     data() {
         return {
@@ -456,17 +450,6 @@ export default {
                 this.Form = JSON.parse(data).Form
                 this.tableData = JSON.parse(data).tableData
             }
-        },
-        save() {
-            let obj = {
-                Form: this.Form,
-                tableData: this.tableData
-            }
-            window.localStorage.setItem('company-information', JSON.stringify(obj))
-            this.$message({
-                message: '保存成功',
-                type: 'success'
-            })
         }
     },
     components: {}
@@ -474,6 +457,9 @@ export default {
 </script>
 
 <style scoped lang="less">
+.form {
+    margin-top: 40px;
+}
 .hr {
     margin-bottom: 20px;
 }

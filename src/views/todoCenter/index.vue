@@ -41,11 +41,11 @@
                     <el-table-column align="center" width="150" label="申报状态" prop="declarationStatus">
                         <template slot-scope="scoped">
                             <el-tag v-show="scoped.row.declarationStatus === 0" type="info">未申报</el-tag>
-                            <el-tag v-show="scoped.row.declarationStatus === 1">申报中</el-tag>
-                            <el-tag v-show="scoped.row.declarationStatus === 2">申报已提交</el-tag>
-                            <el-tag v-show="scoped.row.declarationStatus === 3" type="success">审核完成</el-tag>
-                            <el-tag v-show="scoped.row.declarationStatus === 4" type="danger">申报驳回</el-tag>
-                            <el-tag v-show="scoped.row.declarationStatus === 5" type="danger">申报超时</el-tag>
+                            <!-- <el-tag v-show="scoped.row.declarationStatus === 1">申报中</el-tag> -->
+                            <el-tag v-show="scoped.row.declarationStatus === 1">申报已提交</el-tag>
+                            <el-tag v-show="scoped.row.declarationStatus === 2" type="success">审核完成</el-tag>
+                            <el-tag v-show="scoped.row.declarationStatus === 3" type="danger">申报驳回</el-tag>
+                            <el-tag v-show="scoped.row.declarationStatus === 4" type="danger">申报超时</el-tag>
                         </template>
                     </el-table-column>
                 </el-table>
@@ -97,13 +97,6 @@ export default {
                         declarationType: 'month',
                         declarationDate: '2020-6-1 至 2020-9-1',
                         declarationStatus: 4
-                    },
-                    {
-                        originPerson: 'admin',
-                        orderNo: '005',
-                        declarationType: 'month',
-                        declarationDate: '2020-6-1 至 2020-9-1',
-                        declarationStatus: 5
                     }
                 ]
             }

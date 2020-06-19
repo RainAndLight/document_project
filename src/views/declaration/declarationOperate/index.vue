@@ -31,14 +31,14 @@
             </div>
         </el-card>
         <el-dialog title="设置申报起止时间" :visible.sync="modalIsShow">
-            <el-form ref="form" :model="form" label-width="120px" class="modal">
-                <el-form-item label="选择申报类型">
+            <el-form ref="form" :model="form" label-width="120px" class="modal" :rules="rules">
+                <el-form-item label="选择申报类型" prop="declartionType">
                     <el-select v-model="form.declartionType" placeholder="请选择申报类型">
                         <el-option label="季度" value="month"></el-option>
                         <el-option label="年度" value="year"></el-option>
                     </el-select>
                 </el-form-item>
-                <el-form-item label="申报内容时间">
+                <el-form-item label="申报内容时间" prop="declartionStartEndTime">
                     <el-date-picker
                         v-model="form.declartionStartEndTime"
                         type="daterange"
@@ -51,7 +51,7 @@
                     >
                     </el-date-picker>
                 </el-form-item>
-                <el-form-item label="申报填写时间">
+                <el-form-item label="申报填写时间" prop="declartionWriteTime">
                     <el-date-picker
                         v-model="form.declartionWriteTime"
                         type="daterange"
@@ -63,14 +63,14 @@
                     >
                     </el-date-picker>
                 </el-form-item>
-                <el-form-item label="申报填写时间">
+                <!-- <el-form-item label="申报填写时间">
                     <el-date-picker v-model="form.declartionStartTime" type="date" placeholder="选择日期">
                     </el-date-picker>
-                </el-form-item>
+                </el-form-item> -->
             </el-form>
             <div slot="footer" class="dialog-footer">
                 <el-button @click="modalIsShow = false">取 消</el-button>
-                <el-button type="primary" @click="modalIsShow = false">设 定</el-button>
+                <el-button type="primary" @click="confirm">设 定</el-button>
             </div>
         </el-dialog>
     </div>
@@ -93,6 +93,11 @@ export default {
                     // 'Fri Jun 05 2020 00:00:00 GMT+0800 (中国标准时间)',
                     // 'Fri Jun 12 2020 00:00:00 GMT+0800 (中国标准时间)'
                 ]
+            },
+            rules: {
+                declartionType: [{ required: true, message: '请选择申报类型', trigger: 'blur' }],
+                declartionStartEndTime: [{ required: true, message: '请选择申报内容时间', trigger: 'blur' }],
+                declartionWriteTime: [{ required: true, message: '请选择申报填写时间', trigger: 'blur' }]
             },
             tableData: {
                 columnList: [
@@ -165,6 +170,18 @@ export default {
     mounted() {},
     watch: {},
     methods: {
+        confirm() {
+            this.$refs.form.validate(valid => {
+                if (valid) {
+                    // this.getData()
+                    this.$message({
+                        type: 'success',
+                        message: '设定成功'
+                    })
+                    this.modalIsShow = false
+                }
+            })
+        },
         handleEdit(index, row) {
             console.log(row, 'row')
 
