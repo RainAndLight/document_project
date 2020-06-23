@@ -1,5 +1,6 @@
 <template>
     <div class="box">
+        <el-backtop :bottom="100"></el-backtop>
         <el-card>
             <bread-crumb slot="header">
                 <template slot="title">企业单位基本信息</template>

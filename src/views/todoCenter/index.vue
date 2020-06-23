@@ -111,7 +111,7 @@ export default {
         },
         submit() {
             if (this.selection.length > 0 && this.selection.length < 2) {
-                if (this.selection[0].declarationStatus === 3) {
+                if (this.selection[0].declarationStatus === 2) {
                     this.$message({
                         message: '审核完成不可修改',
                         type: 'warning'
@@ -122,7 +122,8 @@ export default {
                     path: '/home/todoCenter/declaration',
                     query: {
                         orderNo: this.selection[0].orderNo,
-                        declarationType: this.selection[0].declarationType
+                        declarationType: this.selection[0].declarationType,
+                        entrance: 'declaration'
                     },
                     params: { op: 'refresh' }
                 })
@@ -139,7 +140,8 @@ export default {
                     path: '/home/todoCenter/declaration',
                     query: {
                         orderNo: this.selection[0].orderNo,
-                        declarationType: this.selection[0].declarationType
+                        declarationType: this.selection[0].declarationType,
+                        entrance: 'look'
                     },
                     params: { op: 'refresh' }
                 })

@@ -8,53 +8,23 @@
             text-color="#adafb5"
             active-text-color="#ffd04b"
         >
-            <!-- 没有折叠选项 -->
+            <!-- <el-menu-item v-for="item in routes" :key="item.index" :index="item.index">
+                <template slot="title" v-if="item.children">
+                    <i :class="item.icon"></i>
+                    <span>{{ item.title }}</span>
+                </template>
+                <span v-else>
+                    <i :class="item.icon"></i>
+                    <span>{{ item.title }}</span>
+                </span>
+                <el-menu-item v-for="x in item.children" :key="x.index" :index="x.index">
+                    {{ x.title }}
+                </el-menu-item>
+            </el-menu-item> -->
             <el-menu-item index="/home">
                 <i class="el-icon-s-home"></i>
-                <span>首页</span></el-menu-item
-            >
-            <!-- 二级折叠菜单 -->
-            <!-- <el-submenu index="1"> -->
-            <!-- 具名插槽 -->
-            <!-- <template slot="title">
-                    <i class="el-icon-document-copy"></i>
-                    <span>内容管理</span>
-                </template> -->
-            <!-- 匿名插槽 -->
-            <!-- <el-menu-item index="/home/publish">发布文章</el-menu-item>
-                <el-menu-item index="/home/articles">文章列表</el-menu-item>
-                <el-menu-item index="/home/comment">评论管理</el-menu-item>
-                <el-menu-item index="/home/material">素材管理</el-menu-item>
-            </el-submenu>
-            <el-submenu index="2"> -->
-            <!-- 具名插槽 -->
-            <!-- <template slot="title">
-                    <i class="el-icon-female"></i>
-                    <span>粉丝管理</span>
-                </template> -->
-            <!-- 匿名插槽 -->
-            <!-- <el-menu-item index="/home/picture">图文数据</el-menu-item>
-                <el-menu-item index="/home/fansinfo">粉丝概况</el-menu-item>
-                <el-menu-item index="/home/fanspicture">粉丝画像</el-menu-item>
-                <el-menu-item index="/home/fanslist">粉丝列表</el-menu-item>
-            </el-submenu> -->
-
-            <!--
-
-            <el-submenu index="1">
-
-            <template slot="title">
-                    <i class="el-icon-document-copy"></i>
-                    <span>内容管理</span>
-            </template>
-
-                <el-menu-item index="/home/publish">发布文章</el-menu-item>
-                <el-menu-item index="/home/articles">文章列表</el-menu-item>
-                <el-menu-item index="/home/comment">评论管理</el-menu-item>
-                <el-menu-item index="/home/material">素材管理</el-menu-item>
-            </el-submenu>
-
-             -->
+                <span>首页</span>
+            </el-menu-item>
             <el-submenu index="1">
                 <template slot="title">
                     <i class="el-icon-s-custom"></i>
@@ -70,7 +40,6 @@
                 </template>
                 <el-menu-item index="/home/declarationOperate">操作</el-menu-item>
                 <el-menu-item index="/home/declarationSchedule">申报进度</el-menu-item>
-                <!-- <el-menu-item index="/home/declaration">申报</el-menu-item> -->
             </el-submenu>
             <el-submenu index="3">
                 <template slot="title">
@@ -82,12 +51,8 @@
             </el-submenu>
             <el-menu-item index="/home/todoCenter">
                 <i class="el-icon-edit-outline"></i>
-                <span>待办</span></el-menu-item
-            >
-            <!-- <el-menu-item index="/home/account">
-                <i class="el-icon-s-custom"></i>
-                <span>账户信息</span>
-            </el-menu-item> -->
+                <span>待办</span>
+            </el-menu-item>
         </el-menu>
     </div>
 </template>
@@ -98,8 +63,110 @@ export default {
     data() {
         return {
             bigImg: require('../../assets/img/logo_admin.png'),
-            smallImg: require('../../assets/img/toutiao.png')
+            smallImg: require('../../assets/img/toutiao.png'),
+            routes: [
+                {
+                    index: '/home',
+                    title: '首页',
+                    icon: 'el-icon-s-home'
+                },
+                {
+                    index: 1,
+                    title: '企业信息',
+                    icon: 'el-icon-s-custom',
+                    children: [
+                        {
+                            index: '/home/account',
+                            title: '账户信息'
+                        },
+                        {
+                            index: '/home/userInfo',
+                            title: '企业单位基本情况'
+                        }
+                    ]
+                },
+                {
+                    index: 2,
+                    title: '申报',
+                    icon: 'el-icon-document',
+                    children: [
+                        {
+                            index: '/home/declarationOperate',
+                            title: '操作'
+                        },
+                        {
+                            index: '/home/declarationSchedule',
+                            title: '申报进度'
+                        }
+                    ]
+                },
+                {
+                    index: 3,
+                    title: '账号管理',
+                    icon: 'el-icon-user',
+                    children: [
+                        {
+                            index: '/home/user/userAudit',
+                            title: '账号审核'
+                        },
+                        {
+                            index: '/home/user/userManage',
+                            title: '账号列表'
+                        }
+                    ]
+                },
+                {
+                    index: '/home/todoCenter',
+                    title: '待办',
+                    icon: 'el-icon-edit-outline'
+                }
+            ]
         }
+    },
+    methods: {
+        getLevel() {
+            const level = sessionStorage.getItem('level')
+            if (level === '0') {
+                this.routes.forEach(item => {
+                    if (item.title === '申报') {
+                        item.hidden = true
+                        // item.children.forEach(item => {
+                        //     if (item.title == '车机解绑') {
+                        //         item.hidden = true
+                        //     }
+                        // })
+                        item.children.forEach(item => {
+                            item.hidden = true
+                        })
+                    }
+                    if (item.title === '账号管理') {
+                        item.hidden = true
+                        item.children.forEach(item => {
+                            item.hidden = true
+                        })
+                    }
+                })
+            } else if (level === '1') {
+                this.routes.forEach(item => {
+                    item.hidden = true
+                    // item.children.forEach(item => {
+                    //     item.hidden = true
+                    // })
+                    if (item.title === '企业信息') {
+                        item.hidden = true
+                        item.children.forEach(item => {
+                            item.hidden = true
+                        })
+                    }
+                    if (item.title === '待办') {
+                        item.hidden = true
+                    }
+                })
+            }
+        }
+    },
+    created() {
+        // this.getLevel()
     }
 }
 </script>

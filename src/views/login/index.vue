@@ -1,11 +1,34 @@
 <template>
     <div class="login">
-        <el-card class="login-card">
+        <el-card class="login-card" v-if="flag === 'login'">
             <div slot="header">
                 <i class="el-icon-d-arrow-right"></i>
                 <span class="title" style="marginLeft:10px">欢迎登录</span>
             </div>
             <el-form class="card-content" ref="form" :model="loginForm" :rules="loginRules">
+                <el-form-item prop="company">
+                    <!-- <el-input
+                        placeholder="请输入公司名"
+                        prefix-icon="el-icon-s-home"
+                        v-model="loginForm.company"
+                    ></el-input> -->
+                    <!-- <el-select
+                        clearable
+                        v-model="loginForm.company"
+                        placeholder="请选择公司"
+                        filterable
+                        style="width:100%"
+                    >
+                        <el-option
+                            clearable
+                            v-for="item in companyOptions"
+                            :key="item.value"
+                            :label="item.label"
+                            :value="item.value"
+                        >
+                        </el-option>
+                    </el-select> -->
+                </el-form-item>
                 <el-form-item prop="user">
                     <el-input
                         placeholder="请输入用户名"
@@ -33,26 +56,59 @@
                         </el-col>
                     </el-row>
                 </el-form-item>
+                <div class="register_btn">
+                    <el-link type="primary" @click="register_btn">还没有账号?点击注册</el-link>
+                </div>
                 <el-form-item>
                     <el-button @click="submitLogin" type="primary" style="width:100%">登录</el-button>
                 </el-form-item>
             </el-form>
         </el-card>
+        <register ref="register" v-if="flag === 'register'"></register>
     </div>
 </template>
 
 <script>
 import md5 from 'md5'
+import register from './register'
 export default {
+    components: {
+        register
+    },
     data() {
         return {
+            flag: 'login',
+            companyOptions: [
+                {
+                    label: '琴岛盈智科技有限公司',
+                    value: '001'
+                },
+                {
+                    label: '青岛运必达物流有限公司',
+                    value: '002'
+                },
+                {
+                    label: '京东物流有限公司',
+                    value: '003'
+                },
+                {
+                    label: '中创股份有限公司',
+                    value: '004'
+                },
+                {
+                    label: '中国邮政青岛分部物流股份有限公司',
+                    value: '005'
+                }
+            ],
             url: 'http://img5.imgtn.bdimg.com/it/u=1320441599,4127074888&fm=26&gp=0.jpg',
             loginForm: {
+                company: '中创物流股份有限公司',
                 user: 'cml_qd',
                 password: 'admin',
                 code: 'kdqu'
             },
             loginRules: {
+                company: [{ required: true, message: '请输入公司名', trigger: 'change' }],
                 user: [{ required: true, message: '请输入用户名', trigger: 'blur' }],
                 password: [{ required: true, message: '请输入密码', trigger: 'blur' }],
                 code: [{ required: true, message: '请输入验证码', trigger: 'blur' }]
@@ -73,12 +129,20 @@ export default {
                             code: '246810'
                         }
                     }).then(result => {
+                        if (this.loginForm.company === 'admin') {
+                            window.sessionStorage.setItem('level', '1')
+                        } else {
+                            window.sessionStorage.setItem('level', '0')
+                        }
                         // 前端缓存 登录成功返回给我们的令牌
                         window.localStorage.setItem('user-token', result.data.token)
                         this.$router.push('/home')
                     })
                 }
             })
+        },
+        register_btn() {
+            this.flag = 'register'
         }
     }
 }
@@ -105,12 +169,18 @@ export default {
         right: 100px;
         top: 20vh;
         width: 300px;
-        height: 340px;
+        height: 385px;
         z-index: 2;
         background-color: rgba(255, 255, 255, 0.7);
         .title {
             color: #1c2438;
             font-weight: 800;
+        }
+        .register_btn {
+            width: 100%;
+            height: 30px;
+            text-align: center;
+            font-size: 16px;
         }
     }
 }
