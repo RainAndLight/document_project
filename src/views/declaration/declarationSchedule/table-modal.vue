@@ -11,7 +11,7 @@
             :data="tableData.list"
             border
             size="mini"
-            height="60vh"
+            height="57vh"
             style="width: 100% "
         >
             <!-- <el-table-column type="selection" width="55"> </el-table-column> -->

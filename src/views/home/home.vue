@@ -2,11 +2,25 @@
     <div>
         <el-button @click="btn">测试导出</el-button>
         <el-button @click="btn2">测试导出2</el-button>
-        <div class="content">
+        <!-- <div class="content">
             <p>
                 您好，管理员，欢迎使用物流企业申报系统
             </p>
-        </div>
+        </div> -->
+        <el-calendar>
+            <!-- 这里使用的是 2.5 slot 语法，对于新项目请使用 2.6 slot 语法-->
+            <template slot="dateCell" slot-scope="{ date, data }">
+                <p :class="data.isSelected ? 'is-selected' : ''">
+                    {{
+                        data.day
+                            .split('-')
+                            .slice(1)
+                            .join('-')
+                    }}
+                    {{ data.isSelected ? '✔️' : '' }}
+                </p>
+            </template>
+        </el-calendar>
     </div>
 </template>
 
@@ -18,6 +32,7 @@ import XLSX from 'xlsx'
 export default {
     data() {
         return {
+            value: new Date(),
             excelData: [
                 {
                     targetName: '货物购进总额',
