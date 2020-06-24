@@ -33,7 +33,11 @@
                     </el-select>
                 </el-form-item>
                 <el-form-item prop="user" label="用户名">
-                    <el-tooltip content="一个企业仅允许一个用户，如有问题请联系管理员" placement="top" effect="light">
+                    <el-tooltip
+                        content="一个企业仅允许注册一个用户，如有问题请联系管理员"
+                        placement="top"
+                        effect="light"
+                    >
                         <el-input
                             clearable
                             placeholder="请输入用户名"
