@@ -34,6 +34,17 @@
                 </template>
             </el-table-column>
         </el-table>
+        <el-pagination
+            style="position: relative;bottom: 5px;marginTop:10px"
+            @size-change="handleSizeChange"
+            :page-sizes="[10, 20, 50]"
+            layout="total, sizes, prev, pager, next, jumper"
+            :current-page="page.currentPage"
+            :page-size="page.pageSize"
+            :total="page.total"
+            @current-change="changePage"
+        >
+        </el-pagination>
         <!-- </el-dialog> -->
     </div>
 </template>
@@ -76,11 +87,18 @@ export default {
                         startTime: '2020-6-18 00:00:00'
                     }
                 ]
+            },
+            page: {
+                total: 0,
+                pageSize: 10, // 默认每页条数为10
+                currentPage: 1 // 默认页码为1
             }
         }
     },
     created() {},
     methods: {
+        handleSizeChange() {},
+        changePage() {},
         modalIsShow() {
             this.dialogTableVisible = true
         },

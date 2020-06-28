@@ -8,6 +8,35 @@
             text-color="#adafb5"
             active-text-color="#ffd04b"
         >
+            <el-menu
+                :collapse="collapse"
+                router
+                background-color="#353b4e"
+                text-color="#adafb5"
+                active-text-color="#ffd04b"
+            >
+                <template v-for="(item, index) in routes">
+                    <component
+                        class="menu-item"
+                        v-if="!item.hidden"
+                        :key="index"
+                        :index="item.index"
+                        :is="item.children && item.children.length > 0 ? 'el-submenu' : 'el-menu-item'"
+                    >
+                        <template slot="title">
+                            <i :class="item.icon"></i>
+                            <span>{{ item.title }}</span>
+                        </template>
+                        <template v-if="item.children && item.children.length > 0">
+                            <el-menu-item class="menu-item" v-for="(v, i) in item.children" :key="i" :index="v.index">
+                                <i :class="v.icon"></i>
+                                <span slot="title">{{ v.title }}</span>
+                            </el-menu-item>
+                        </template>
+                    </component>
+                </template>
+            </el-menu>
+
             <!-- <el-menu-item v-for="item in routes" :key="item.index" :index="item.index">
                 <template slot="title" v-if="item.children">
                     <i :class="item.icon"></i>
@@ -21,7 +50,8 @@
                     {{ x.title }}
                 </el-menu-item>
             </el-menu-item> -->
-            <el-menu-item index="/home">
+
+            <!-- <el-menu-item index="/home">
                 <i class="el-icon-s-home"></i>
                 <span>首页</span>
             </el-menu-item>
@@ -52,13 +82,14 @@
             <el-menu-item index="/home/todoCenter">
                 <i class="el-icon-edit-outline"></i>
                 <span>待办</span>
-            </el-menu-item>
+            </el-menu-item> -->
         </el-menu>
     </div>
 </template>
 
 <script>
 export default {
+    name: 'menu',
     props: ['collapse'],
     data() {
         return {
@@ -68,12 +99,14 @@ export default {
                 {
                     index: '/home',
                     title: '首页',
-                    icon: 'el-icon-s-home'
+                    icon: 'el-icon-s-home',
+                    hidden: false
                 },
                 {
-                    index: 1,
+                    index: '1',
                     title: '企业信息',
                     icon: 'el-icon-s-custom',
+                    hidden: false,
                     children: [
                         {
                             index: '/home/account',
@@ -86,8 +119,9 @@ export default {
                     ]
                 },
                 {
-                    index: 2,
+                    index: '2',
                     title: '申报',
+                    hidden: false,
                     icon: 'el-icon-document',
                     children: [
                         {
@@ -101,9 +135,10 @@ export default {
                     ]
                 },
                 {
-                    index: 3,
+                    index: '3',
                     title: '账号管理',
                     icon: 'el-icon-user',
+                    hidden: false,
                     children: [
                         {
                             index: '/home/user/userAudit',
@@ -118,7 +153,8 @@ export default {
                 {
                     index: '/home/todoCenter',
                     title: '待办',
-                    icon: 'el-icon-edit-outline'
+                    icon: 'el-icon-edit-outline',
+                    hidden: false
                 }
             ]
         }
@@ -130,33 +166,16 @@ export default {
                 this.routes.forEach(item => {
                     if (item.title === '申报') {
                         item.hidden = true
-                        // item.children.forEach(item => {
-                        //     if (item.title == '车机解绑') {
-                        //         item.hidden = true
-                        //     }
-                        // })
-                        item.children.forEach(item => {
-                            item.hidden = true
-                        })
                     }
                     if (item.title === '账号管理') {
                         item.hidden = true
-                        item.children.forEach(item => {
-                            item.hidden = true
-                        })
                     }
                 })
-            } else if (level === '1') {
+            }
+            if (level === '1') {
                 this.routes.forEach(item => {
-                    item.hidden = true
-                    // item.children.forEach(item => {
-                    //     item.hidden = true
-                    // })
                     if (item.title === '企业信息') {
                         item.hidden = true
-                        item.children.forEach(item => {
-                            item.hidden = true
-                        })
                     }
                     if (item.title === '待办') {
                         item.hidden = true
@@ -166,7 +185,7 @@ export default {
         }
     },
     created() {
-        // this.getLevel()
+        this.getLevel()
     }
 }
 </script>

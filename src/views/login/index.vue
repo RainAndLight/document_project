@@ -6,29 +6,6 @@
                 <span class="title" style="marginLeft:10px">欢迎登录</span>
             </div>
             <el-form class="card-content" ref="form" :model="loginForm" :rules="loginRules">
-                <el-form-item prop="company">
-                    <!-- <el-input
-                        placeholder="请输入公司名"
-                        prefix-icon="el-icon-s-home"
-                        v-model="loginForm.company"
-                    ></el-input> -->
-                    <!-- <el-select
-                        clearable
-                        v-model="loginForm.company"
-                        placeholder="请选择公司"
-                        filterable
-                        style="width:100%"
-                    >
-                        <el-option
-                            clearable
-                            v-for="item in companyOptions"
-                            :key="item.value"
-                            :label="item.label"
-                            :value="item.value"
-                        >
-                        </el-option>
-                    </el-select> -->
-                </el-form-item>
                 <el-form-item prop="user">
                     <el-input
                         placeholder="请输入用户名"
@@ -71,6 +48,7 @@
 <script>
 import md5 from 'md5'
 import register from './register'
+// import api from '@/api/login'
 export default {
     components: {
         register
@@ -105,7 +83,8 @@ export default {
                 company: '中创物流股份有限公司',
                 user: 'cml_qd',
                 password: 'admin',
-                code: 'kdqu'
+                code: 'kdqu',
+                captchaIdentity: ''
             },
             loginRules: {
                 company: [{ required: true, message: '请输入公司名', trigger: 'change' }],
@@ -116,7 +95,52 @@ export default {
         }
     },
     methods: {
+        getKey() {
+            // api.getImgSrc().then(({ data }) => {
+            //     this.imgSrc = data.captchaBase64
+            //     this.form.captchaIdentity = data.captchaIdentity
+            // })
+        },
         submitLogin() {
+            /* let _this = this
+            this.$refs.form.validate(isOK => {
+                if (isOK) {
+                    let passwordUpperCase = md5(_this.loginForm.password).toUpperCase()
+                    let params = {
+                        user:_this.loginForm.user,
+                        password:passwordUpperCase,
+                        code:_this.loginForm.code,
+                        captchaIdentity:_this.loginForm.captchaIdentity
+                    }
+                    api.getData(params).then(({data}) => {
+                        if (result.data.returnCode === 200) {
+                            window.localStorage.setItem('user-token', data.returnData.token)
+                            if (data.status === '0') {
+                                window.sessionStorage.setItem('level', '0')
+                            } else {
+                                window.sessionStorage.setItem('level', '1')
+                            }
+                            this.$router.push('/home')
+                            this.$message({
+                                type:'success',
+                                mesaages:'登录成功'
+                            })
+                        }else {
+                            if(result.data.returnCode === 401){
+                                this.form.code = '';
+                                this.getKey();
+                            }
+                            if (result.data.returnMsg && result.data.returnMsg !== '验证码错误') {
+                                this.$message({
+                                    type:'error',message:result.data.returnMsg
+                                });
+                            }
+                        }
+                    }).catch(res => {
+                        console.log(res)
+                    })
+                }
+            } */
             let _this = this
             this.$refs.form.validate(isOK => {
                 if (isOK) {

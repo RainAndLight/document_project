@@ -4,8 +4,6 @@
             <div slot="header">
                 <el-page-header @back="goBack" content="注册"> </el-page-header>
             </div>
-            <!-- <i class="el-icon-d-arrow-right"></i> -->
-            <!-- <span class="title" style="marginLeft:10px">注册</span> -->
             <el-form
                 class="card-content"
                 status-icon
@@ -47,12 +45,6 @@
                     </el-tooltip>
                 </el-form-item>
                 <el-form-item prop="password" label="密码">
-                    <!-- <el-tooltip
-                        content="6-16位字符，同时包括数字、大小写字母和特殊字符四种组合； 特殊字符需在“~ @ # $ % * _ - + = : , .
-                        ?”范围内选择。"
-                        placement="top"
-                        effect="light"
-                    > -->
                     <el-input
                         clearable
                         show-password
@@ -91,13 +83,14 @@
                         </el-col>
                     </el-row>
                 </el-form-item>
-                <el-button @click="submitLogin" type="primary" style="width:100%;margin-top:20px">注册</el-button>
+                <el-button @click="register" type="primary" style="width:100%;margin-top:20px">注册</el-button>
             </el-form>
         </el-card>
     </div>
 </template>
 
 <script>
+// import api from '@/api/login'
 export default {
     name: 'register',
     props: {},
@@ -192,10 +185,21 @@ export default {
         goBack() {
             this.$parent.flag = 'login'
         },
-        submitLogin() {
+        register() {
             let _this = this
             this.$refs.form.validate(isOK => {
                 if (isOK) {
+                    /* let passwordUpperCase = md5(_this.loginForm.password).toUpperCase()
+                    let params = {
+                        company:_this.loginForm.company,
+                        user:_this.loginForm.user,
+                        password:passwordUpperCase,
+                        code:_this.loginForm.code,
+                        captchaIdentity:_this.loginForm.captchaIdentity
+                    }
+                    api.register(data).then(({data})=>{
+                    })
+                     */
                     this.$message({
                         type: 'success',
                         message: '注册成功'
