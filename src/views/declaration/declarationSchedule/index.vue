@@ -6,15 +6,15 @@
             </bread-crumb>
             <div style="height:calc(80vh - 50px);over:hidden">
                 <!-- <el-row> -->
-                <split-pane @resize="resize" :min-percent="0" :default-percent="50" split="vertical">
+                <split-pane @resize="resize" :min-percent="0" :default-percent="50" split="vertical" ref="splitPane">
                     <template slot="paneL">
                         <el-card>
                             <el-tabs v-model="activeName" @tab-click="handleClick" stretch>
                                 <el-tab-pane label="季度" name="quarter">
-                                    <tableModal ref="tableModal"></tableModal>
+                                    <tableModalQuarter ref="tableModal" @setWidth="setWidth"></tableModalQuarter>
                                 </el-tab-pane>
                                 <el-tab-pane label="年度" name="year">
-                                    <tableModal ref="tableModal"></tableModal>
+                                    <tableModalYear ref="tableModal" @setWidth="setWidth"></tableModalYear>
                                 </el-tab-pane>
                             </el-tabs>
                         </el-card>
@@ -48,7 +48,6 @@
                                 style="width:100%;margin-top:14px"
                             >
                                 <el-table-column type="index" width="50"> </el-table-column>
-                                <!-- <el-table-column type="selection" width="50"> </el-table-column> -->
                                 <el-table-column
                                     v-for="(item, index) in tableData.columnList"
                                     :key="index"
@@ -92,96 +91,16 @@
                         </el-card>
                     </template>
                 </split-pane>
-                <!-- <el-col :span="8" class="left">
-                        <el-tabs v-model="activeName" @tab-click="handleClick" stretch>
-                            <el-tab-pane label="季度" name="quarter">
-                                <tableModal ref="tableModal"></tableModal>
-                            </el-tab-pane>
-                            <el-tab-pane label="年度" name="year">
-                                <tableModal ref="tableModal"></tableModal>
-                            </el-tab-pane>
-                        </el-tabs>
-                    </el-col>
-                    <el-col :span="1">
-                        <div class="middle"></div>
-                    </el-col>
-                    <el-col :span="15" class="right">
-                        <el-select
-                            @change="statusSelectChange"
-                            clearable
-                            size="mini"
-                            v-model="form.status"
-                            placeholder="状态筛选"
-                            filterable
-                            style="width:193px"
-                        >
-                            <el-option clearable value="0" label="未申报"></el-option>
-                            <el-option clearable value="1" label="已提交"></el-option>
-                            <el-option clearable value="2" label="超时"></el-option>
-                        </el-select>
-                        <el-button style="margin-left:10px" type="primary" size="mini" @click="exportAllExcel"
-                            >合并导出为Excel</el-button
-                        >
-                        <el-table
-                            height="58vh"
-                            @selection-change="tableSelectionChange"
-                            :data="tableData.list"
-                            border
-                            size="mini"
-                            style="width:100%;margin-top:10px"
-                        >
-                            <el-table-column type="index" width="50"> </el-table-column>
-                            <el-table-column
-                                v-for="(item, index) in tableData.columnList"
-                                :key="index"
-                                :align="item.center || 'center'"
-                                :width="item.width"
-                                :label="item.title"
-                                :prop="item.prop"
-                            >
-                                <template slot-scope="scope">
-                                    <template v-if="item.prop === 'declartionStatus'">
-                                        <el-tag v-if="scope.row.declartionStatus === '0'" type="info">
-                                            {{ $util.tableRowFormat(scope.row, item) }}
-                                        </el-tag>
-                                        <el-tag v-if="scope.row.declartionStatus === '1'" type="success">
-                                            {{ $util.tableRowFormat(scope.row, item) }}
-                                        </el-tag>
-                                        <el-tag v-if="scope.row.declartionStatus === '2'" type="danger">
-                                            {{ $util.tableRowFormat(scope.row, item) }}
-                                        </el-tag>
-                                    </template>
-                                    <template v-else-if="item.prop === 'returnExcel'">
-                                        <el-button type="primary" size="mini" @click="exportExcel(scope.row)"
-                                            >导出为Excel</el-button
-                                        >
-                                    </template>
-                                    <template v-else>{{ $util.tableRowFormat(scope.row, item) }}</template>
-                                </template>
-                            </el-table-column>
-                        </el-table>
-                        <el-pagination
-                            style="position: relative;bottom: 5px;marginTop:10px"
-                            @size-change="handleSizeChange"
-                            :page-sizes="[10, 20, 50]"
-                            layout="total, sizes, prev, pager, next, jumper"
-                            :current-page="page.currentPage"
-                            :page-size="page.pageSize"
-                            :total="page.total"
-                            @current-change="changePage"
-                        >
-                        </el-pagination>
-                    </el-col> -->
-                <!-- </el-row> -->
             </div>
         </el-card>
-        <!-- <tableModal ref="tableModal"></tableModal> -->
     </div>
 </template>
 
 <script>
-import tableModal from './table-modal'
+import tableModalQuarter from './table-modal-quarter'
+import tableModalYear from './table-modal-year'
 import splitPane from 'vue-splitpane'
+
 export default {
     name: '',
     props: {},
@@ -264,6 +183,9 @@ export default {
     mounted() {},
     watch: {},
     methods: {
+        setWidth() {
+            this.$refs.splitPane.percent = 0
+        },
         resize() {
             console.log('resize')
         },
@@ -299,7 +221,7 @@ export default {
         tableSelectionChange() {},
         handleClick() {}
     },
-    components: { tableModal, splitPane },
+    components: { tableModalQuarter, tableModalYear, splitPane },
     filters: {
         // filterStatus(value) {
         //     //  文章状态 0-草稿，1-待审核，2-审核通过，3-审核失败，4-已删除

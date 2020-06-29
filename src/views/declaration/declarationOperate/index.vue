@@ -18,11 +18,34 @@
                         :label="item.title"
                         :prop="item.prop"
                     >
+                        <template slot-scope="scope">
+                            <template v-if="item.prop === 'declartionStatus'">
+                                <el-tag v-if="scope.row.declartionStatus === '0'" type="info">
+                                    {{ $util.tableRowFormat(scope.row, item) }}
+                                </el-tag>
+                                <el-tag v-if="scope.row.declartionStatus === '1'">
+                                    {{ $util.tableRowFormat(scope.row, item) }}
+                                </el-tag>
+                                <el-tag v-if="scope.row.declartionStatus === '2'" type="success">
+                                    {{ $util.tableRowFormat(scope.row, item) }}
+                                </el-tag>
+                            </template>
+                            <template v-else>{{ $util.tableRowFormat(scope.row, item) }}</template>
+                        </template>
                     </el-table-column>
                     <el-table-column label="操作" align="center">
                         <template slot-scope="scope">
-                            <el-button size="mini" @click="handleEdit(scope.$index, scope.row)">编辑</el-button>
-                            <el-button size="mini" type="danger" @click="handleDelete(scope.$index, scope.row)"
+                            <el-button
+                                size="mini"
+                                :disabled="scope.row.declartionStatus !== '0'"
+                                @click="handleEdit(scope.$index, scope.row)"
+                                >编辑</el-button
+                            >
+                            <el-button
+                                size="mini"
+                                :disabled="scope.row.declartionStatus !== '0'"
+                                type="danger"
+                                @click="handleDelete(scope.$index, scope.row)"
                                 >删除</el-button
                             >
                         </template>
@@ -44,7 +67,7 @@
                         type="daterange"
                         align="right"
                         unlink-panels
-                        range-separator="至"
+                        range-separator="-"
                         start-placeholder="开始日期"
                         end-placeholder="结束日期"
                         :picker-options="pickerOptions"
@@ -57,7 +80,7 @@
                         type="daterange"
                         align="right"
                         unlink-panels
-                        range-separator="至"
+                        range-separator="-"
                         start-placeholder="开始日期"
                         end-placeholder="结束日期"
                     >
@@ -114,19 +137,32 @@ export default {
                         title: '申报类型',
                         prop: 'declartionType'
                     },
-                    {
-                        title: '申报发起时间',
-                        prop: 'declartionStartTime'
-                    },
+                    // {
+                    //     title: '申报发起时间',
+                    //     prop: 'declartionStartTime'
+                    // },
                     {
                         title: '申报内容时间',
                         prop: 'declartionStartEndTime',
-                        width: '200'
+                        width: '200',
+                        type: 'listDateTime'
                     },
                     {
                         title: '申报填写时间',
                         prop: 'declartionWriteTime',
-                        width: '200'
+                        width: '200',
+                        type: 'listDateTime'
+                    },
+                    {
+                        title: '申报状态',
+                        prop: 'declartionStatus',
+                        type: 'format',
+                        width: '150',
+                        format: {
+                            '0': '申报未开始',
+                            '1': '申报正在进行中',
+                            '2': '申报已结束'
+                        }
                     },
                     {
                         title: '申报发起人',
@@ -137,16 +173,26 @@ export default {
                     {
                         declartionType: '季度',
                         declartionStartTime: '2020-6-1',
-                        declartionStartEndTime: '2020-1-1 至 2020-4-1',
-                        declartionWriteTime: '2020-6-1 至 2020-6-30',
-                        originPerson: '管理员'
+                        declartionStartEndTime: ['2020-06-01T16:00:00.000Z', '2020-06-03T15:59:59.000Z'],
+                        declartionWriteTime: ['2020-06-01T16:00:00.000Z', '2020-06-03T15:59:59.000Z'],
+                        originPerson: '管理员',
+                        declartionStatus: '0'
                     },
                     {
                         declartionType: '年度',
                         declartionStartTime: '2020-1-1',
-                        declartionStartEndTime: '2020-1-1 至 2020-4-1',
-                        declartionWriteTime: '2020-6-1 至 2020-6-30',
-                        originPerson: '管理员'
+                        declartionStartEndTime: ['2020-06-01T16:00:00.000Z', '2020-06-03T15:59:59.000Z'],
+                        declartionWriteTime: ['2020-06-01T16:00:00.000Z', '2020-06-03T15:59:59.000Z'],
+                        originPerson: '管理员',
+                        declartionStatus: '1'
+                    },
+                    {
+                        declartionType: '年度',
+                        declartionStartTime: '2020-1-1',
+                        declartionStartEndTime: ['2020-06-01T16:00:00.000Z', '2020-06-03T15:59:59.000Z'],
+                        declartionWriteTime: ['2020-06-01T16:00:00.000Z', '2020-06-03T15:59:59.000Z'],
+                        originPerson: '管理员',
+                        declartionStatus: '2'
                     }
                 ]
             },

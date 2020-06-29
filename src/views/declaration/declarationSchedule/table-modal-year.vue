@@ -14,10 +14,15 @@
             height="57vh"
             style="width: 100% "
         >
-            <!-- <el-table-column type="selection" width="55"> </el-table-column> -->
+            <el-table-column type="index" width="55"> </el-table-column>
             <!-- <el-table-column align="center" width="100" label="流水号" prop="orderNo"></el-table-column> -->
             <!-- <el-table-column align="center" width="100" label="发起申报人" prop="originPerson"></el-table-column> -->
-            <!-- <el-table-column align="center" label="申报类型" prop="declarationType"></el-table-column> -->
+            <el-table-column
+                align="center"
+                label="申报类型"
+                prop="declarationType"
+                :formatter="declarationTypeFormatter"
+            ></el-table-column>
             <!-- <el-table-column align="center" width="150" label="开始时间" prop="startTime"></el-table-column> -->
             <el-table-column align="center" width="200" label="报表周期" prop="contentTime"></el-table-column>
             <el-table-column align="center" width="200" label="申报起止日期" prop="declarationDate"></el-table-column>
@@ -62,28 +67,10 @@ export default {
                     {
                         originPerson: 'admin',
                         orderNo: '001',
-                        declarationType: 'month',
-                        declarationDate: '2020-6-1 至 2020-9-1',
-                        contentTime: '2020-1-1 至 2020-3-31',
-                        declarationStatus: 0,
-                        startTime: '2020-6-18 00:00:00'
-                    },
-                    {
-                        originPerson: 'admin',
-                        orderNo: '002',
                         declarationType: 'year',
                         declarationDate: '2020-6-1 至 2020-9-1',
-                        contentTime: '2020-1-1 至 2020-3-31',
+                        contentTime: '2019-1-1 至 2020-1-1',
                         declarationStatus: 1,
-                        startTime: '2020-6-18 00:00:00'
-                    },
-                    {
-                        originPerson: 'admin',
-                        orderNo: '003',
-                        declarationType: 'month',
-                        declarationDate: '2020-6-1 至 2020-9-1',
-                        contentTime: '2020-1-1 至 2020-3-31',
-                        declarationStatus: 2,
                         startTime: '2020-6-18 00:00:00'
                     }
                 ]
@@ -97,6 +84,9 @@ export default {
     },
     created() {},
     methods: {
+        look(row) {
+            this.$emit('setWidth')
+        },
         handleSizeChange() {},
         changePage() {},
         modalIsShow() {
@@ -121,6 +111,13 @@ export default {
                     message: '请选择一条数据数据查看',
                     type: 'warning'
                 })
+            }
+        },
+        declarationTypeFormatter(row) {
+            if (row.declarationType === 'quarter') {
+                return '季度'
+            } else {
+                return '年度'
             }
         }
     },
