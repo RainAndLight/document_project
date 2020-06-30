@@ -14,7 +14,7 @@
                     :data="tableData.list"
                     border
                     size="mini"
-                    height="calc(100vh - 220px)"
+                    height="calc(100vh - 260px)"
                     style="width: 100%;marginTop:10px "
                 >
                     <el-table-column type="index" width="50"> </el-table-column>
@@ -49,6 +49,17 @@
                         </template>
                     </el-table-column>
                 </el-table>
+                <el-pagination
+                    style="position: relative;bottom: 5px;marginTop:10px"
+                    @size-change="handleSizeChange"
+                    :page-sizes="[10, 20, 50]"
+                    layout="total, sizes, prev, pager, next, jumper"
+                    :current-page="page.currentPage"
+                    :page-size="page.pageSize"
+                    :total="page.total"
+                    @current-change="changePage"
+                >
+                </el-pagination>
             </div>
         </el-card>
     </div>
@@ -60,17 +71,24 @@ export default {
     props: {},
     data() {
         return {
+            page: {
+                currentPage: 1, // 默认请求页码
+                pageSize: 8,
+                total: 100 // 总页码
+            },
             selection: [],
             tableData: {
                 list: [
                     {
+                        id: '0',
                         originPerson: 'admin',
                         orderNo: '001',
-                        declarationType: 'month',
+                        declarationType: 'quarter',
                         declarationDate: '2020-6-1 至 2020-9-1',
                         declarationStatus: 0
                     },
                     {
+                        id: '1',
                         originPerson: 'admin',
                         orderNo: '002',
                         declarationType: 'year',
@@ -78,23 +96,26 @@ export default {
                         declarationStatus: 1
                     },
                     {
+                        id: '2',
                         originPerson: 'admin',
                         orderNo: '003',
-                        declarationType: 'month',
+                        declarationType: 'quarter',
                         declarationDate: '2020-6-1 至 2020-9-1',
                         declarationStatus: 2
                     },
                     {
+                        id: '3',
                         originPerson: 'admin',
                         orderNo: '004',
-                        declarationType: 'month',
+                        declarationType: 'quarter',
                         declarationDate: '2020-6-1 至 2020-9-1',
                         declarationStatus: 3
                     },
                     {
+                        id: '4',
                         originPerson: 'admin',
                         orderNo: '005',
-                        declarationType: 'month',
+                        declarationType: 'quarter',
                         declarationDate: '2020-6-1 至 2020-9-1',
                         declarationStatus: 4
                     }
@@ -102,11 +123,31 @@ export default {
             }
         }
     },
-    created() {},
+    created() {
+        this.getData()
+    },
     methods: {
+        getData() {
+            // this.$axios({
+            //     url: '/user/photo',
+            //     method: 'patch',
+            //     data:this.page
+            // }).then(({data}) => {
+            //     if (data.status === 200) {
+            //         this.tableData.list = data.returnData
+            //     }
+            // })
+        },
+        changePage(value) {
+            this.page.currentPage = value
+            this.getData()
+        },
+        handleSizeChange(value) {
+            this.page.pageSize = value
+            this.getData()
+        },
         tableSelectionChange(value) {
             console.log(value)
-
             this.selection = value
         },
         submit() {
@@ -118,10 +159,17 @@ export default {
                     })
                     return
                 }
+                if (this.selection[0].declarationStatus === 4) {
+                    this.$message({
+                        message: '该申报已结束，不可再提交申报',
+                        type: 'warning'
+                    })
+                    return
+                }
                 this.$router.push({
                     path: '/home/todoCenter/declaration',
                     query: {
-                        orderNo: this.selection[0].orderNo,
+                        id: this.selection[0].id,
                         declarationType: this.selection[0].declarationType,
                         entrance: 'declaration'
                     },
@@ -139,7 +187,7 @@ export default {
                 this.$router.push({
                     path: '/home/todoCenter/declaration',
                     query: {
-                        orderNo: this.selection[0].orderNo,
+                        id: this.selection[0].id,
                         declarationType: this.selection[0].declarationType,
                         entrance: 'look'
                     },

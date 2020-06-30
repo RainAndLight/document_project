@@ -24,5 +24,14 @@ export default {
             method: 'post',
             data
         })
+    },
+    // 查看一条数据对应的所有公司的申报进度
+    getScheduleDeclartion(data) {
+        return axios({
+            url: '/api/declartion',
+            method: 'post',
+            data
+        })
     }
+
 }

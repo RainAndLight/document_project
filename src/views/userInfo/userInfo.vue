@@ -4,14 +4,14 @@
         <el-backtop :bottom="100">
             <div
                 style="{
-        height: 100%;
-        width: 100%;
-        background-color: #f2f5f6;
-        box-shadow: 0 0 6px rgba(0,0,0, .12);
-        text-align: center;
-        line-height: 40px;
-        color: #1989fa;
-      }"
+                        height: 100%;
+                        width: 100%;
+                        background-color: #f2f5f6;
+                        box-shadow: 0 0 6px rgba(0,0,0, .12);
+                        text-align: center;
+                        line-height: 40px;
+                        color: #1989fa;
+                    }"
             >
                 UP
             </div>
@@ -264,7 +264,7 @@
             <div class="footerBtn">
                 <el-button type="success" @click="save">暂存</el-button>
                 <!-- <el-button type="success" @click="returnExcel">导出Excel</el-button> -->
-                <el-button type="primary">提交</el-button>
+                <el-button type="primary" @click="submit">提交</el-button>
             </div>
         </el-card>
     </div>
@@ -483,6 +483,21 @@ export default {
                 message: '保存成功',
                 type: 'success'
             })
+        },
+        submit() {
+            // let data = {
+            //     Form: this.Form,
+            //     tableData: this.tableData
+            // }
+            // this.$axios({
+            //     url: '/user/photo',
+            //     method: 'patch',
+            //     data
+            // }).then(({data}) => {
+            //     if (result.status === 200) {
+            //         this.$message.success('保存成功')
+            //     }
+            // })
         }
     },
     components: {}

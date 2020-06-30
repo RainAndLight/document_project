@@ -5,7 +5,6 @@
                 <template slot="title">申报 <span style="color:#C0C4CC;margin:0 5px">></span> 申报进度</template>
             </bread-crumb>
             <div style="height:calc(80vh - 50px);over:hidden">
-                <!-- <el-row> -->
                 <split-pane @resize="resize" :min-percent="0" :default-percent="50" split="vertical" ref="splitPane">
                     <template slot="paneL">
                         <el-card>
@@ -100,6 +99,7 @@
 import tableModalQuarter from './table-modal-quarter'
 import tableModalYear from './table-modal-year'
 import splitPane from 'vue-splitpane'
+// import api from '@/api/declartion'
 
 export default {
     name: '',
@@ -179,10 +179,25 @@ export default {
         }
     },
     computed: {},
-    created() {},
+    created() {
+        // this.getData()
+    },
     mounted() {},
     watch: {},
     methods: {
+        getData() {
+            // api.getData(this.page).then(({ data }) => {
+            //     console.log(data)
+            //     if(data.Status === 200){
+            //         let arr = data.returnData
+            //         let yearList = arr.find(item => item.declarationType === 'year')
+            //         let quarterList = arr.find(item => item.declarationType === 'quarter')
+            //     }
+            // })
+        },
+        getScheduleData() {
+            // api.getScheduleDeclartion()
+        },
         setWidth() {
             this.$refs.splitPane.percent = 0
         },

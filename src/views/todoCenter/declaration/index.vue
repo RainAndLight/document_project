@@ -7,10 +7,10 @@
                 <el-breadcrumb-item>物流企业经营状况表申报</el-breadcrumb-item>
                 <!-- <template slot="title">待办</template> -->
             </el-breadcrumb>
-            <declarationQuarter v-if="selectType === 'month'"></declarationQuarter>
-            <declarationYear v-if="selectType === 'year'"></declarationYear>
+            <declarationQuarter v-if="selectType === 'quarter'" ref="declarationQuarter"></declarationQuarter>
+            <declarationYear v-if="selectType === 'year'" ref="declarationYear"></declarationYear>
             <div class="footerBtn">
-                <el-button type="success">暂存</el-button>
+                <el-button type="success" @click="webSave">暂存</el-button>
                 <el-button type="primary" @click="submit">提交</el-button>
             </div>
         </el-card>
@@ -32,7 +32,13 @@ export default {
     activated() {},
     created() {},
     mounted() {
-        console.log(this.$route.query.declarationType, '$route')
+        // console.log(this.$route.query.declarationType, '$route')
+        let data = window.localStorage.getItem(`${this.$route.query.id}`)
+        if (data) {
+            this.$route.query.declarationType === 'quarter'
+                ? (this.$refs.declarationQuarter.tableData.list = JSON.parse(data))
+                : (this.$refs.declarationYear.tableData.list = JSON.parse(data))
+        }
     },
     watch: {},
     methods: {
@@ -49,6 +55,19 @@ export default {
                 query: {},
                 params: { op: 'refresh' }
             })
+        },
+        webSave() {
+            let declarationType = this.$route.query.declarationType
+            let id = this.$route.query.id
+            if (declarationType === 'quarter') {
+                let data = this.$refs.declarationQuarter.tableData.list
+                window.localStorage.setItem(`${id}`, JSON.stringify(data))
+                this.$message.success('暂存成功')
+            } else if (declarationType === 'year') {
+                let data = this.$refs.declarationYear.tableData.list
+                window.localStorage.setItem(`${id}`, JSON.stringify(data))
+                this.$message.success('暂存成功')
+            }
         }
     },
     components: {
