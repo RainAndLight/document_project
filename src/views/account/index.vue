@@ -15,9 +15,18 @@
                 <!-- <el-form-item prop="companyPassword" label="密码">
                     <el-input v-model="formData.companyPassword" show-password style="width:40%"></el-input>
                 </el-form-item> -->
-                <el-form-item prop="audit" label="审核是否通过">
-                    <el-checkbox v-model="formData.audit" disabled>已通过</el-checkbox>
-                    <el-checkbox v-model="formData.audit1" disabled>未通过</el-checkbox>
+                <el-form-item prop="audit" label="账号审核">
+                    <!-- <el-checkbox v-model="formData.audit" disabled>已通过</el-checkbox>
+                    <el-checkbox v-model="formData.audit1" disabled>未通过</el-checkbox> -->
+                    <el-switch
+                        inactive-text="暂未通过"
+                        active-text="已通过"
+                        disabled
+                        v-model="formData.audit"
+                        active-color="#13ce66"
+                        inactive-color="#ff4949"
+                    >
+                    </el-switch>
                 </el-form-item>
             </el-form>
             <!-- 上传组件 -->
@@ -49,7 +58,7 @@ export default {
                 companyName: '中创物流股份有限公司',
                 companyAccount: 'sys_admin',
                 companyPassword: '123456',
-                audit: true,
+                audit: false,
                 audit1: false
             },
             defaultImg: require('../../assets/img/cat.jpg'),

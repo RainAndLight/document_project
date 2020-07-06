@@ -3,7 +3,7 @@
     <el-container>
         <!-- 左右布局 -->
         <el-aside
-            :style="{ width: collapse ? '60px' : '230px' }"
+            :style="{ width: collapse ? '69px' : '230px' }"
             style="transition: all 0.5s;  min-height:100vh;background-color:#353b4e;"
         >
             <layout-aside :collapse="collapse"></layout-aside>

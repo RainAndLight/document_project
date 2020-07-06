@@ -1,7 +1,7 @@
 <template>
     <div class="box">
-        <el-backtop></el-backtop>
-        <el-backtop :bottom="100">
+        <el-backtop :bottom="100"></el-backtop>
+        <el-backtop :bottom="150">
             <div
                 style="{
                         height: 100%;

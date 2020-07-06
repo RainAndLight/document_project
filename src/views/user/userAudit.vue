@@ -8,7 +8,7 @@
                 <el-table
                     :data="tableData.list"
                     border
-                    height="calc(89vh - 111px)"
+                    height="calc(89vh - 150px)"
                     highlight-current-row
                     oncontextmenu="return false;"
                     ref="table"
@@ -16,8 +16,8 @@
                     sortable="custom"
                     style="width: 100%"
                 >
-                    <el-table-column type="selection" width="40" fixed></el-table-column>
-                    <el-table-column align="center" type="index" width="40" label="#" fixed> </el-table-column>
+                    <!-- <el-table-column type="selection" width="40" fixed></el-table-column> -->
+                    <el-table-column align="center" type="index" width="50" label="序号" fixed> </el-table-column>
                     <el-table-column
                         v-for="item in tableData.columnList"
                         :align="item.align || 'center'"
@@ -26,6 +26,10 @@
                         :prop="item.prop"
                         :width="item.width || '200'"
                     >
+                        <template slot-scope="scope">
+                            <!-- <template v-if="item.prop === 'declartionStatus'"></template> -->
+                            <template>{{ $util.tableRowFormat(scope.row, item) }}</template>
+                        </template>
                     </el-table-column>
                     <el-table-column label="操作" align="center">
                         <template slot-scope="scope">
@@ -34,6 +38,17 @@
                         </template>
                     </el-table-column>
                 </el-table>
+                <el-pagination
+                    style="position: relative;bottom: 5px;marginTop:10px"
+                    @size-change="handleSizeChange"
+                    :page-sizes="[10, 20, 50]"
+                    layout="total, sizes, prev, pager, next, jumper"
+                    :current-page="page.currentPage"
+                    :page-size="page.pageSize"
+                    :total="page.total"
+                    @current-change="changePage"
+                >
+                </el-pagination>
             </div>
         </el-card>
     </div>
@@ -45,24 +60,27 @@ export default {
     props: {},
     data() {
         return {
+            page: {
+                currentPage: 1, // 默认请求页码
+                pageSize: 8,
+                total: 100 // 总页码
+            },
             tableData: {
                 columnList: [
                     {
                         title: '公司全称',
-                        prop: 'company'
+                        prop: 'company',
+                        width: '250'
                     },
                     {
                         title: '用户申请账号',
                         prop: 'user'
                     },
                     {
-                        title: '用户申请密码',
-                        prop: 'password'
-                    },
-                    {
                         title: '申请时间',
                         prop: 'applyTime',
-                        width: '200'
+                        width: '200',
+                        type: 'dateTime'
                     }
                 ],
                 list: [
@@ -70,7 +88,8 @@ export default {
                         company: '中创物流股份有限公司',
                         user: 'admin',
                         password: '123456',
-                        applyTime: '2020-6-17 15:42:05 '
+                        applyTime: 'Fri Jun 05 2020 00:00:00 GMT+0800 (中国标准时间)',
+                        passTime: 'Fri Jun 05 2020 00:00:00 GMT+0800 (中国标准时间)'
                     }
                 ]
             }
@@ -81,6 +100,18 @@ export default {
     mounted() {},
     watch: {},
     methods: {
+        changePage(value) {
+            this.page.currentPage = value
+            this.getData()
+        },
+        handleSizeChange(value) {
+            this.page.pageSize = value
+            this.getData()
+        },
+        tableSelectionChange(value) {
+            console.log(value)
+            this.selection = value
+        },
         confirm() {},
         del() {}
     },

@@ -1,43 +1,50 @@
 <template>
     <div class="layout-aside">
         <!-- 左侧导航组件  开启路由 :router="true" 或者 router-->
+        <!-- <el-menu
+            :collapse="collapse"
+            router
+            background-color="#353b4e"
+            text-color="#adafb5"
+            active-text-color="#ffd04b"
+        > -->
         <el-menu
             :collapse="collapse"
             router
             background-color="#353b4e"
             text-color="#adafb5"
             active-text-color="#ffd04b"
+            :default-openeds="menuDefaultList"
         >
-            <el-menu
-                :collapse="collapse"
-                router
-                background-color="#353b4e"
-                text-color="#adafb5"
-                active-text-color="#ffd04b"
-            >
-                <template v-for="(item, index) in routes">
-                    <component
-                        class="menu-item"
-                        v-if="!item.hidden"
-                        :key="index"
-                        :index="item.index"
-                        :is="item.children && item.children.length > 0 ? 'el-submenu' : 'el-menu-item'"
-                    >
+            <template v-for="(item, index) in routes">
+                <component
+                    class="menu-item"
+                    v-if="!item.hidden"
+                    :key="index"
+                    :index="item.index"
+                    :is="item.children && item.children.length > 0 ? 'el-submenu' : 'el-menu-item'"
+                >
+                    <template v-if="item.children && item.children.length > 0">
                         <template slot="title">
                             <i :class="item.icon"></i>
                             <span>{{ item.title }}</span>
                         </template>
-                        <template v-if="item.children && item.children.length > 0">
+                        <template>
                             <el-menu-item class="menu-item" v-for="(v, i) in item.children" :key="i" :index="v.index">
                                 <i :class="v.icon"></i>
                                 <span slot="title">{{ v.title }}</span>
                             </el-menu-item>
                         </template>
-                    </component>
-                </template>
-            </el-menu>
+                    </template>
+                    <template v-else>
+                        <i :class="item.icon"></i>
+                        <span>{{ item.title }}</span>
+                    </template>
+                </component>
+            </template>
+        </el-menu>
 
-            <!-- <el-menu-item v-for="item in routes" :key="item.index" :index="item.index">
+        <!-- <el-menu-item v-for="item in routes" :key="item.index" :index="item.index">
                 <template slot="title" v-if="item.children">
                     <i :class="item.icon"></i>
                     <span>{{ item.title }}</span>
@@ -51,7 +58,7 @@
                 </el-menu-item>
             </el-menu-item> -->
 
-            <!-- <el-menu-item index="/home">
+        <!-- <el-menu-item index="/home">
                 <i class="el-icon-s-home"></i>
                 <span>首页</span>
             </el-menu-item>
@@ -83,16 +90,17 @@
                 <i class="el-icon-edit-outline"></i>
                 <span>待办</span>
             </el-menu-item> -->
-        </el-menu>
+        <!-- </el-menu> -->
     </div>
 </template>
 
 <script>
 export default {
-    name: 'menu',
+    name: 'layoutAside',
     props: ['collapse'],
     data() {
         return {
+            menuDefaultList: ['1', '3', '2'],
             bigImg: require('../../assets/img/logo_admin.png'),
             smallImg: require('../../assets/img/toutiao.png'),
             routes: [

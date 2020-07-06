@@ -19,7 +19,8 @@
                 >
                     <el-table-column type="index" width="50"> </el-table-column>
                     <el-table-column type="selection" width="55"> </el-table-column>
-                    <el-table-column align="center" width="100" label="流水号" prop="orderNo"></el-table-column>
+                    <!-- <el-table-column align="center" width="100" label="ID" prop="id"></el-table-column> -->
+                    <!-- <el-table-column align="center" width="100" label="流水号" prop="orderNo"></el-table-column> -->
                     <el-table-column
                         align="center"
                         width="100"
@@ -31,6 +32,7 @@
                         width="100"
                         label="申报类型"
                         prop="declarationType"
+                        :formatter="declarationTypeFormatter"
                     ></el-table-column>
                     <el-table-column
                         align="center"
@@ -198,6 +200,13 @@ export default {
                     message: '请选择一条数据数据查看',
                     type: 'warning'
                 })
+            }
+        },
+        declarationTypeFormatter(row) {
+            if (row.declarationType === 'quarter') {
+                return '季度'
+            } else {
+                return '年度'
             }
         }
     },

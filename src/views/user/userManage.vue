@@ -16,16 +16,17 @@
                     sortable="custom"
                     style="width: 100%"
                 >
-                    <el-table-column type="selection" width="40" fixed></el-table-column>
-                    <el-table-column align="center" type="index" width="40" label="#" fixed> </el-table-column>
+                    <!-- <el-table-column type="selection" width="40" fixed></el-table-column> -->
+                    <el-table-column align="center" type="index" width="50" label="序号" fixed> </el-table-column>
                     <el-table-column
                         v-for="item in tableData.columnList"
                         :align="item.align || 'center'"
                         :key="item.prop"
                         :label="item.title"
                         :prop="item.prop"
-                        :width="item.width || '200'"
+                        :width="item.width || '150'"
                     >
+                        <template slot-scope="scope">{{ $util.tableRowFormat(scope.row, item) }}</template>
                     </el-table-column>
                     <el-table-column label="企业单位基本情况" align="center" width="200px">
                         <template slot-scope="scope">
@@ -33,7 +34,7 @@
                             <el-button type="text" size="small" @click="lookHistory(scope.row)">修改历史</el-button>
                         </template>
                     </el-table-column>
-                    <el-table-column label="操作" align="center" width="200px">
+                    <el-table-column label="操作" align="center">
                         <template slot-scope="scope">
                             <el-button type="text" size="small" @click="edit(scope.row)">编辑</el-button>
                             <el-button type="text" size="small" @click="del(scope.row)">删除</el-button>
@@ -54,7 +55,7 @@
                     </el-form>
                     <div slot="footer" class="dialog-footer">
                         <el-button @click="dialogFormVisible = false">取 消</el-button>
-                        <el-button type="primary" @click="dialogFormVisible = false">确 定</el-button>
+                        <el-button type="primary" @click="dialogFormVisible = false">修 改</el-button>
                     </div>
                 </el-dialog>
             </div>
@@ -86,14 +87,20 @@ export default {
                         title: '用户账号',
                         prop: 'user'
                     },
-                    {
-                        title: '用户密码',
-                        prop: 'password'
-                    },
+                    // {
+                    //     title: '用户密码',
+                    //     prop: 'password'
+                    // },
                     {
                         title: '申请时间',
                         prop: 'applyTime',
-                        width: '200'
+                        width: '200',
+                        type: 'dateTime'
+                    },
+                    {
+                        title: '审核通过时间',
+                        prop: 'passTime',
+                        type: 'dateTime'
                     }
                 ],
                 list: [
@@ -101,19 +108,22 @@ export default {
                         company: '中创物流股份有限公司',
                         user: 'admin',
                         password: '123456',
-                        applyTime: '2020-6-17 15:42:05 '
+                        applyTime: 'Fri Jun 05 2020 00:00:00 GMT+0800 (中国标准时间)',
+                        passTime: 'Fri Jun 05 2020 00:00:00 GMT+0800 (中国标准时间)'
                     },
                     {
                         company: '京东物流有限公司',
                         user: 'jdadmin',
                         password: '123456',
-                        applyTime: '2020-6-17 15:42:05 '
+                        applyTime: 'Fri Jun 05 2020 00:00:00 GMT+0800 (中国标准时间)',
+                        passTime: 'Fri Jun 05 2020 00:00:00 GMT+0800 (中国标准时间)'
                     },
                     {
                         company: '顺丰物流有限公司',
                         user: 'sfadmin',
                         password: '123456',
-                        applyTime: '2020-6-17 15:42:05 '
+                        applyTime: 'Fri Jun 05 2020 00:00:00 GMT+0800 (中国标准时间)',
+                        passTime: 'Fri Jun 05 2020 00:00:00 GMT+0800 (中国标准时间)'
                     }
                 ]
             }
@@ -124,6 +134,17 @@ export default {
     mounted() {},
     watch: {},
     methods: {
+        getData() {
+            // this.$axios({
+            //     url: '/user/photo',
+            //     method: 'patch',
+            //     data:this.page
+            // }).then(({data}) => {
+            //     if (data.status === 200) {
+            //         this.tableData.list = data.returnData
+            //     }
+            // })
+        },
         edit(row) {
             this.dialogFormVisible = true
             let obj = {

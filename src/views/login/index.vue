@@ -193,7 +193,7 @@ export default {
         right: 100px;
         top: 20vh;
         width: 300px;
-        height: 385px;
+        height: 350px;
         z-index: 2;
         background-color: rgba(255, 255, 255, 0.7);
         .title {

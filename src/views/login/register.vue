@@ -13,7 +13,13 @@
                 label-position="top"
             >
                 <el-form-item prop="company" label="公司名称">
-                    <el-select
+                    <el-input
+                        clearable
+                        placeholder="请输入公司名称"
+                        prefix-icon="el-icon-user-solid"
+                        v-model="loginForm.company"
+                    ></el-input>
+                    <!-- <el-select
                         clearable
                         v-model="loginForm.company"
                         placeholder="请选择公司"
@@ -28,7 +34,7 @@
                             :value="item.value"
                         >
                         </el-option>
-                    </el-select>
+                    </el-select> -->
                 </el-form-item>
                 <el-form-item prop="user" label="用户名">
                     <el-tooltip
@@ -154,7 +160,8 @@ export default {
                 user: '',
                 password: '',
                 affirmPassword: '',
-                code: ''
+                code: '',
+                captchaIdentity: ''
                 // company: '001',
                 // user: 'admin',
                 // password: '123456',
@@ -178,10 +185,18 @@ export default {
         }
     },
     computed: {},
-    created() {},
+    created() {
+        this.getKey()
+    },
     mounted() {},
     watch: {},
     methods: {
+        getKey() {
+            // api.getImgSrc().then(({ data }) => {
+            //     this.imgSrc = data.captchaBase64
+            //     this.form.captchaIdentity = data.captchaIdentity
+            // })
+        },
         goBack() {
             this.$parent.flag = 'login'
         },

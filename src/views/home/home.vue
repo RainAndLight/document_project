@@ -1,7 +1,8 @@
 <template>
     <div>
-        <el-button @click="btn">测试导出</el-button>
-        <el-button @click="btn2">测试导出2</el-button>
+        <el-button @click="btn">测试导出年度</el-button>
+        <el-button @click="btnQuarter">测试导出季度</el-button>
+        <el-button @click="btn2">测试导出合并（季度）</el-button>
         <!-- <div class="content">
             <p>
                 您好，管理员，欢迎使用物流企业申报系统
@@ -298,63 +299,447 @@ export default {
                     last: '50%'
                 }
             ],
+            quarterData: [
+                {
+                    targetName: '货运量',
+                    measureUnit: '吨',
+                    code: '01',
+                    current: '',
+                    YOY: ''
+                },
+                {
+                    targetName: '周转量',
+                    measureUnit: '吨公里',
+                    code: '02',
+                    current: '',
+                    YOY: ''
+                },
+                {
+                    targetName: '配送量',
+                    measureUnit: '吨',
+                    code: '03',
+                    current: '',
+                    YOY: ''
+                },
+                {
+                    targetName: '流通加工量',
+                    measureUnit: '吨',
+                    code: '04',
+                    current: '',
+                    YOY: ''
+                },
+                {
+                    targetName: '包装量',
+                    measureUnit: '吨',
+                    code: '05',
+                    current: '',
+                    YOY: ''
+                },
+                {
+                    targetName: '装卸搬运量',
+                    measureUnit: '吨',
+                    code: '06',
+                    current: '',
+                    YOY: ''
+                },
+                {
+                    targetName: '吞吐量',
+                    measureUnit: '吨',
+                    code: '07',
+                    current: '',
+                    YOY: ''
+                },
+                {
+                    targetName: '货代业务量',
+                    measureUnit: '票',
+                    code: '08',
+                    current: '',
+                    YOY: ''
+                },
+                {
+                    targetName: '一体化物流业务量',
+                    measureUnit: '份',
+                    code: '09',
+                    current: '',
+                    YOY: ''
+                },
+                {
+                    targetName: '年末库存额',
+                    measureUnit: '万元',
+                    code: '10',
+                    current: '',
+                    YOY: ''
+                },
+                {
+                    targetName: '自运货物平均运价',
+                    measureUnit: '元/吨公里',
+                    code: '11',
+                    current: '',
+                    YOY: ''
+                },
+                {
+                    targetName: '委托代理货物平均运价',
+                    measureUnit: '元/吨公里',
+                    code: '12',
+                    current: '',
+                    YOY: ''
+                },
+                {
+                    targetName: '平均货物配送费率',
+                    measureUnit: '元/吨',
+                    code: '13',
+                    current: '',
+                    YOY: ''
+                },
+                {
+                    targetName: '平均货物流通加工费率',
+                    measureUnit: '元/吨',
+                    code: '14',
+                    current: '',
+                    YOY: ''
+                },
+                {
+                    targetName: '平均货物包装费率',
+                    measureUnit: '元/吨',
+                    code: '15',
+                    current: '',
+                    YOY: ''
+                },
+                {
+                    targetName: '平均货物仓储费率',
+                    measureUnit: '元/吨',
+                    code: '16',
+                    current: '',
+                    YOY: ''
+                },
+                {
+                    targetName: '平均货物装卸搬运费率',
+                    measureUnit: '元/吨',
+                    code: '17',
+                    current: '',
+                    YOY: ''
+                },
+                {
+                    targetName: '主营业务收入',
+                    measureUnit: '万元',
+                    code: '18',
+                    current: '',
+                    YOY: ''
+                },
+                {
+                    targetName: '其中:保管收入',
+                    measureUnit: '万元',
+                    code: '19',
+                    current: '',
+                    YOY: ''
+                },
+                {
+                    targetName: '其中:仓储收入',
+                    measureUnit: '万元',
+                    code: '20',
+                    current: '',
+                    YOY: ''
+                },
+                {
+                    targetName: '保险收入',
+                    measureUnit: '万元',
+                    code: '21',
+                    current: '',
+                    YOY: ''
+                },
+                {
+                    targetName: '信息及相关服务收入',
+                    measureUnit: '万元',
+                    code: '22',
+                    current: '',
+                    YOY: ''
+                },
+                {
+                    targetName: '配送收入',
+                    measureUnit: '万元',
+                    code: '23',
+                    current: '',
+                    YOY: ''
+                },
+                {
+                    targetName: '流通加工收入',
+                    measureUnit: '万元',
+                    code: '24',
+                    current: '',
+                    YOY: ''
+                },
+                {
+                    targetName: '包装收入',
+                    measureUnit: '万元',
+                    code: '25',
+                    current: '',
+                    YOY: ''
+                },
+                {
+                    targetName: '其他保管收入',
+                    measureUnit: '万元',
+                    code: '26',
+                    current: '',
+                    YOY: ''
+                },
+                {
+                    targetName: '运输收入',
+                    measureUnit: '万元',
+                    code: '27',
+                    current: '',
+                    YOY: ''
+                },
+                {
+                    targetName: '其中：运输收入',
+                    measureUnit: '万元',
+                    code: '28',
+                    current: '',
+                    YOY: ''
+                },
+                {
+                    targetName: '装卸搬运等辅助收入',
+                    measureUnit: '万元',
+                    code: '29',
+                    current: '',
+                    YOY: ''
+                },
+                {
+                    targetName: '货运业务收入',
+                    measureUnit: '万元',
+                    code: '30',
+                    current: '',
+                    YOY: ''
+                },
+                {
+                    targetName: '运输附加收入',
+                    measureUnit: '万元',
+                    code: '31',
+                    current: '',
+                    YOY: ''
+                },
+                {
+                    targetName: '其他收入',
+                    measureUnit: '万元',
+                    code: '32',
+                    current: '',
+                    YOY: ''
+                },
+                {
+                    targetName: '其中：一体化物流业务收入',
+                    measureUnit: '万元',
+                    code: '33',
+                    current: '',
+                    YOY: ''
+                },
+                {
+                    targetName: '主营业务成本',
+                    measureUnit: '万元',
+                    code: '34',
+                    current: '',
+                    YOY: ''
+                },
+                {
+                    targetName: '其中：保管成本',
+                    measureUnit: '万元',
+                    code: '35',
+                    current: '',
+                    YOY: ''
+                },
+                {
+                    targetName: '其中：利息成本',
+                    measureUnit: '万元',
+                    code: '36',
+                    current: '',
+                    YOY: ''
+                },
+                {
+                    targetName: '仓储成本',
+                    measureUnit: '万元',
+                    code: '37',
+                    current: '',
+                    YOY: ''
+                },
+                {
+                    targetName: '保险成本',
+                    measureUnit: '万元',
+                    code: '38',
+                    current: '',
+                    YOY: ''
+                },
+                {
+                    targetName: '货物损耗成本',
+                    measureUnit: '万元',
+                    code: '39',
+                    current: '',
+                    YOY: ''
+                },
+                {
+                    targetName: '信息及相关服务成本',
+                    measureUnit: '万元',
+                    code: '40',
+                    current: '',
+                    YOY: ''
+                },
+                {
+                    targetName: '配送成本',
+                    measureUnit: '万元',
+                    code: '41',
+                    current: '',
+                    YOY: ''
+                },
+                {
+                    targetName: '流通加工成本',
+                    measureUnit: '万元',
+                    code: '42',
+                    current: '',
+                    YOY: ''
+                },
+                {
+                    targetName: '包装成本',
+                    measureUnit: '万元',
+                    code: '43',
+                    current: '',
+                    YOY: ''
+                },
+                {
+                    targetName: '其他保管成本',
+                    measureUnit: '万元',
+                    code: '44',
+                    current: '',
+                    YOY: ''
+                },
+                {
+                    targetName: '管理成本',
+                    measureUnit: '万元',
+                    code: '45',
+                    current: '',
+                    YOY: ''
+                },
+                {
+                    targetName: '其中：管理人员报酬',
+                    measureUnit: '万元',
+                    code: '46',
+                    current: '',
+                    YOY: ''
+                },
+                {
+                    targetName: '办公成本',
+                    measureUnit: '万元',
+                    code: '47',
+                    current: '',
+                    YOY: ''
+                },
+                {
+                    targetName: '教育培训成本',
+                    measureUnit: '万元',
+                    code: '48',
+                    current: '',
+                    YOY: ''
+                },
+                {
+                    targetName: '劳动保险成本',
+                    measureUnit: '万元',
+                    code: '49',
+                    current: '',
+                    YOY: ''
+                },
+                {
+                    targetName: '车船使用成本',
+                    measureUnit: '万元',
+                    code: '50',
+                    current: '',
+                    YOY: ''
+                },
+                {
+                    targetName: '运输成本',
+                    measureUnit: '万元',
+                    code: '51',
+                    current: '',
+                    YOY: ''
+                },
+                {
+                    targetName: '其中：运输成本',
+                    measureUnit: '万元',
+                    code: '52',
+                    current: '',
+                    YOY: ''
+                },
+                {
+                    targetName: '装卸搬运等辅助成本',
+                    measureUnit: '万元',
+                    code: '53',
+                    current: '',
+                    YOY: ''
+                },
+                {
+                    targetName: '货运业务成本',
+                    measureUnit: '万元',
+                    code: '54',
+                    current: '',
+                    YOY: ''
+                },
+                {
+                    targetName: '运输附加费',
+                    measureUnit: '万元',
+                    code: '55',
+                    current: '',
+                    YOY: ''
+                },
+                {
+                    targetName: '其他成本',
+                    measureUnit: '万元',
+                    code: '56',
+                    current: '',
+                    YOY: ''
+                },
+                {
+                    targetName: '其中：一体化物流业务成本',
+                    measureUnit: '万元',
+                    code: '57',
+                    current: '',
+                    YOY: ''
+                },
+                {
+                    targetName: '主营业务利润额',
+                    measureUnit: '万元',
+                    code: '58',
+                    current: '',
+                    YOY: ''
+                },
+                {
+                    targetName: '主营业务营业税金',
+                    measureUnit: '万元',
+                    code: '59',
+                    current: '',
+                    YOY: ''
+                },
+                {
+                    targetName: '资产总计',
+                    measureUnit: '万元',
+                    code: '60',
+                    current: '',
+                    YOY: ''
+                },
+                {
+                    targetName: '固定资产折旧',
+                    measureUnit: '万元',
+                    code: '61',
+                    current: '',
+                    YOY: ''
+                },
+                {
+                    targetName: '固定资产投资完成额',
+                    measureUnit: '万元',
+                    code: '62',
+                    current: '',
+                    YOY: ''
+                }
+            ],
             headline: '2020 1月~4月 季度',
             headlineCompany: '京东'
         }
     },
     methods: {
-        exportDefaultExcel() {
-            let list = this.excelData
-            let header = [
-                { k: 'targetName', v: '指标名称' },
-                { k: 'measureUnit', v: '计量单位' },
-                { k: 'code', v: '代码' },
-                { k: 'current', v: '本期' },
-                { k: 'YOY', v: '上年同期' }
-            ]
-            let fileName = '企业物流经营状况表（年度）.xlsx'
-            exportExcel(header, list, fileName)
-        },
-        // 将一个sheet转成最终的excel文件的blob对象，然后利用URL.createObjectURL下载
-        sheetblob(sheet, sheetName) {
-            sheetName = sheetName || 'sheet1'
-            var workbook = {
-                SheetNames: [sheetName],
-                Sheets: {}
-            }
-            workbook.Sheets[sheetName] = sheet
-            // 生成excel的配置项
-            var wopts = {
-                bookType: 'xlsx', // 要生成的文件类型
-                bookSST: false, // 是否生成Shared String Table，官方解释是，如果开启生成速度会下降，但在低版本IOS设备上有更好的兼容性
-                type: 'binary'
-            }
-            var wbout = XLSX.write(workbook, wopts)
-            var blob = new Blob([s2ab(wbout)], { type: 'application/octet-stream' })
-            // 字符串转ArrayBuffer
-            function s2ab(s) {
-                var buf = new ArrayBuffer(s.length)
-                var view = new Uint8Array(buf)
-                for (var i = 0; i !== s.length; ++i) view[i] = s.charCodeAt(i) & 0xff
-                return buf
-            }
-            return blob
-        },
-        openDownloadDialog(url, saveName) {
-            if (typeof url === 'object' && url instanceof Blob) {
-                url = URL.createObjectURL(url) // 创建blob地址
-            }
-            var aLink = document.createElement('a')
-            aLink.href = url
-            aLink.download = saveName || '' // HTML5新增的属性，指定保存文件名，可以不要后缀，注意，file:///模式下不会生效
-            var event
-            if (window.MouseEvent) event = new MouseEvent('click')
-            else {
-                event = document.createEvent('MouseEvents')
-                event.initMouseEvent('click', true, false, window, 0, 0, 0, 0, 0, false, false, false, false, 0, null)
-            }
-            aLink.dispatchEvent(event)
-        },
         btn() {
             // this.exportDefaultExcel()
             let aoa = [
@@ -373,8 +758,30 @@ export default {
             sheet['!cols'] = [{ wch: 25 }, { wch: 20 }]
             console.log('sheet', sheet)
 
-            this.openDownloadDialog(
-                this.sheetblob(sheet),
+            this.$util.openDownloadDialog(
+                this.$util.sheetblob(sheet),
+                `${this.headlineCompany}物流经营状况表（${this.headline}）.xlsx`
+            )
+        },
+        btnQuarter() {
+            let aoa = [
+                [`物流企业经营状况表`, null, null, null, null, null],
+                ['指标名称', '计量单位', '代码', '本期', '上年同期', '上年同比']
+            ]
+            let data = _.cloneDeep(this.quarterData)
+            data.forEach(item => {
+                aoa.push(Object.values(item))
+            })
+            let sheet = XLSX.utils.aoa_to_sheet(aoa)
+            sheet['!merges'] = [
+                // 设置A1-C1的单元格合并
+                { s: { r: 0, c: 0 }, e: { r: 0, c: 5 } }
+            ]
+            sheet['!cols'] = [{ wch: 25 }, { wch: 20 }]
+            // console.log('sheet', sheet)
+
+            this.$util.openDownloadDialog(
+                this.$util.sheetblob(sheet),
                 `${this.headlineCompany}物流经营状况表（${this.headline}）.xlsx`
             )
         },
@@ -1147,7 +1554,7 @@ export default {
             // api.getSheetMergeData().then()
             let sheet = XLSX.utils.aoa_to_sheet(aoa)
             sheet['!cols'] = optionWidth
-            this.openDownloadDialog(this.sheetblob(sheet), `物流101.xlsx`)
+            this.$util.openDownloadDialog(this.$util.sheetblob(sheet), `物流101.xlsx`)
         }
     }
 }
