@@ -37,6 +37,12 @@
                     <el-table-column
                         align="center"
                         width="200"
+                        label="申报周期"
+                        prop="declartionStartEndTime"
+                    ></el-table-column>
+                    <el-table-column
+                        align="center"
+                        width="200"
                         label="申报起止日期"
                         prop="declarationDate"
                     ></el-table-column>
@@ -46,8 +52,8 @@
                             <!-- <el-tag v-show="scoped.row.declarationStatus === 1">申报中</el-tag> -->
                             <el-tag v-show="scoped.row.declarationStatus === 1">申报已提交</el-tag>
                             <el-tag v-show="scoped.row.declarationStatus === 2" type="success">审核完成</el-tag>
-                            <el-tag v-show="scoped.row.declarationStatus === 3" type="danger">申报驳回</el-tag>
-                            <el-tag v-show="scoped.row.declarationStatus === 4" type="danger">申报超时</el-tag>
+                            <el-tag v-show="scoped.row.declarationStatus === 3" type="danger">申报超时</el-tag>
+                            <!-- <el-tag v-show="scoped.row.declarationStatus === 4" type="danger">申报驳回</el-tag> -->
                         </template>
                     </el-table-column>
                 </el-table>
@@ -112,14 +118,6 @@ export default {
                         declarationType: 'quarter',
                         declarationDate: '2020-6-1 至 2020-9-1',
                         declarationStatus: 3
-                    },
-                    {
-                        id: '4',
-                        originPerson: 'admin',
-                        orderNo: '005',
-                        declarationType: 'quarter',
-                        declarationDate: '2020-6-1 至 2020-9-1',
-                        declarationStatus: 4
                     }
                 ]
             }

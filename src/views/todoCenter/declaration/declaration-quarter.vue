@@ -36,7 +36,7 @@ export default {
             tableData: {
                 list: [
                     {
-                        targetName: '运货量',
+                        targetName: '货运量',
                         measureUnit: '吨',
                         code: '01',
                         current: '',

@@ -16,7 +16,7 @@
             active-text-color="#ffd04b"
             :default-openeds="menuDefaultList"
         >
-            <template v-for="(item, index) in routes">
+            <!-- <template v-for="(item, index) in routes">
                 <component
                     class="menu-item"
                     v-if="!item.hidden"
@@ -42,23 +42,9 @@
                     </template>
                 </component>
             </template>
-        </el-menu>
+        </el-menu> -->
 
-        <!-- <el-menu-item v-for="item in routes" :key="item.index" :index="item.index">
-                <template slot="title" v-if="item.children">
-                    <i :class="item.icon"></i>
-                    <span>{{ item.title }}</span>
-                </template>
-                <span v-else>
-                    <i :class="item.icon"></i>
-                    <span>{{ item.title }}</span>
-                </span>
-                <el-menu-item v-for="x in item.children" :key="x.index" :index="x.index">
-                    {{ x.title }}
-                </el-menu-item>
-            </el-menu-item> -->
-
-        <!-- <el-menu-item index="/home">
+            <el-menu-item index="/home">
                 <i class="el-icon-s-home"></i>
                 <span>首页</span>
             </el-menu-item>
@@ -89,8 +75,8 @@
             <el-menu-item index="/home/todoCenter">
                 <i class="el-icon-edit-outline"></i>
                 <span>待办</span>
-            </el-menu-item> -->
-        <!-- </el-menu> -->
+            </el-menu-item>
+        </el-menu>
     </div>
 </template>
 
@@ -178,9 +164,20 @@ export default {
                     if (item.title === '账号管理') {
                         item.hidden = true
                     }
+                    if (item.title === '待办') {
+                        item.hidden = true
+                    }
                 })
-            }
-            if (level === '1') {
+            } else if (level === '1') {
+                this.routes.forEach(item => {
+                    if (item.title === '申报') {
+                        item.hidden = true
+                    }
+                    if (item.title === '账号管理') {
+                        item.hidden = true
+                    }
+                })
+            } else if (level === '2') {
                 this.routes.forEach(item => {
                     if (item.title === '企业信息') {
                         item.hidden = true
@@ -193,7 +190,7 @@ export default {
         }
     },
     created() {
-        this.getLevel()
+        // this.getLevel()
     }
 }
 </script>

@@ -5,7 +5,7 @@
         <el-button @click="btn2">测试导出合并（季度）</el-button>
         <!-- <div class="content">
             <p>
-                您好，管理员，欢迎使用物流企业申报系统
+                欢迎使用物流企业申报系统
             </p>
         </div> -->
         <el-calendar>

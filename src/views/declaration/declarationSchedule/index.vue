@@ -138,8 +138,14 @@ export default {
                         }
                     },
                     {
-                        title: '申报起止日期',
+                        title: '报表周期',
                         prop: 'declartionStartEndTime',
+                        width: '200',
+                        type: 'listDateTime'
+                    },
+                    {
+                        title: '申报起止日期',
+                        prop: 'declartionWriteTime',
                         width: '200',
                         type: 'dateTime'
                     },
@@ -154,25 +160,41 @@ export default {
                         company: '中创物流',
                         declartionType: '季度',
                         declartionStatus: '0',
-                        declartionStartEndTime: 'Thu Jun 18 2020 16:00:55 GMT+0800 (中国标准时间)'
+                        declartionStartEndTime: [
+                            'Thu Jun 18 2020 16:00:55 GMT+0800 (中国标准时间)',
+                            'Thu Jun 18 2020 16:00:55 GMT+0800 (中国标准时间)'
+                        ],
+                        declartionWriteTime: 'Thu Jun 18 2020 16:00:55 GMT+0800 (中国标准时间)'
                     },
                     {
                         company: '申通物流',
                         declartionType: '季度',
                         declartionStatus: '1',
-                        declartionStartEndTime: 'Thu Jun 18 2020 16:00:55 GMT+0800 (中国标准时间)'
+                        declartionStartEndTime: [
+                            'Thu Jun 18 2020 16:00:55 GMT+0800 (中国标准时间)',
+                            'Thu Jun 18 2020 16:00:55 GMT+0800 (中国标准时间)'
+                        ],
+                        declartionWriteTime: 'Thu Jun 18 2020 16:00:55 GMT+0800 (中国标准时间)'
                     },
                     {
                         company: '京东物流',
                         declartionType: '季度',
                         declartionStatus: '2',
-                        declartionStartEndTime: 'Thu Jun 18 2020 16:00:55 GMT+0800 (中国标准时间)'
+                        declartionStartEndTime: [
+                            'Thu Jun 18 2020 16:00:55 GMT+0800 (中国标准时间)',
+                            'Thu Jun 18 2020 16:00:55 GMT+0800 (中国标准时间)'
+                        ],
+                        declartionWriteTime: 'Thu Jun 18 2020 16:00:55 GMT+0800 (中国标准时间)'
                     },
                     {
                         company: '韵达物流',
                         declartionType: '季度',
                         declartionStatus: '1',
-                        declartionStartEndTime: 'Thu Jun 18 2020 16:00:55 GMT+0800 (中国标准时间)'
+                        declartionStartEndTime: [
+                            'Thu Jun 18 2020 16:00:55 GMT+0800 (中国标准时间)',
+                            'Thu Jun 18 2020 16:00:55 GMT+0800 (中国标准时间)'
+                        ],
+                        declartionWriteTime: 'Thu Jun 18 2020 16:00:55 GMT+0800 (中国标准时间)'
                     }
                 ]
             }

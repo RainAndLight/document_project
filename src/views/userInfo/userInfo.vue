@@ -311,7 +311,8 @@ export default {
                 returnTime: '', // 报出日期
                 companyPrincipal: '', // 单位负责人
                 preparer: '', // 填表人
-                phone: '' // 电话
+                phone: '', // 电话
+                list: this.tableData.list
             },
             enrollOptions: [
                 {
@@ -486,8 +487,7 @@ export default {
         },
         submit() {
             // let data = {
-            //     Form: this.Form,
-            //     tableData: this.tableData
+            //     Form: this.Form
             // }
             // this.$axios({
             //     url: '/user/photo',

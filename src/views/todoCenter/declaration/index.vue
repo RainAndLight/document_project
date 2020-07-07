@@ -10,7 +10,7 @@
             <declarationQuarter v-if="selectType === 'quarter'" ref="declarationQuarter"></declarationQuarter>
             <declarationYear v-if="selectType === 'year'" ref="declarationYear"></declarationYear>
             <div class="footerBtn">
-                <el-button type="success" @click="webSave">暂存</el-button>
+                <!-- <el-button type="success" @click="webSave">暂存</el-button> -->
                 <el-button type="primary" @click="submit">提交</el-button>
             </div>
         </el-card>
