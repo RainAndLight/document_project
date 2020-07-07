@@ -791,3 +791,152 @@ returnData：{
 }
 ```
 
+### 申请账号同意与否
+
+| 项目        | 描述                            |
+| ----------- | ------------------------------- |
+| 接口描述    | 申请账号的点击同意和拒绝        |
+| HTTP Header | Authorization:"`Bearer  token`" |
+| Method      |                                 |
+| 请求参数    | id , status    yes / no         |
+| 请求地址    | /api/                           |
+
+
+
+### 账号列表接口
+
+| 项目        | 描述                            |
+| ----------- | ------------------------------- |
+| 接口描述    | 通过申请的用户的列表            |
+| HTTP Header | Authorization:"`Bearer  token`" |
+| Method      |                                 |
+| 请求参数    | page                            |
+| 请求地址    |                                 |
+
+``` js
+// 请求数据
+page : {
+    currentPage ,  // 请求页码
+    pageSize ，  // 显示条数
+}
+
+//返回数据
+returnData：{
+	total: 100, // 总条数
+    list:[
+		{
+            id,
+        	company, // 公司名称
+    		user, //用户申请账号
+			applyTime, // 申请时间
+			passTime, // 申请通过时间
+        }
+    ]
+}
+```
+
+
+
+#### 查看接口
+
+| 项目        | 描述                            |
+| ----------- | ------------------------------- |
+| 接口        | 查看用户的企业单位基本情况表    |
+| HTTP Header | Authorization:"`Bearer  token`" |
+| Method      |                                 |
+| 请求参数    | id                              |
+| 请求地址    |                                 |
+
+``` js
+//返回数据
+returnData：{
+    list: {
+    	form,
+        tableData
+    }
+}
+```
+
+
+
+#### 查看修改历史
+
+| 项目        | 描述                                 |
+| ----------- | ------------------------------------ |
+| 接口        | 查看用户的企业单位基本情况表修改记录 |
+| HTTP Header | Authorization:"`Bearer  token`"      |
+| Method      |                                      |
+| 请求参数    | id                                   |
+| 请求地址    |                                      |
+
+``` js
+//返回数据
+returnData：{
+    data:{
+        修改的字段名 ， 以及修改的内容
+        table 修改的话 ， 直接返回全部table展示，
+        修改年月，
+        修改日期时间
+        list:[
+            {
+                time:'2020-1-1',
+                list:[
+                    {
+                        time:'2020-1-1 12:00'
+                    }
+                ]
+            },
+            {
+             	time:'2020-1-2',
+                list:[
+                    {
+                        time:'2020-1-2 12:00'
+                    }
+                ]
+            }
+        ]
+    }
+}
+```
+
+#### 用户账号编辑
+
+| 项目        | 描述                            |
+| ----------- | ------------------------------- |
+| 接口        | 编辑用户的账号密码公司          |
+| HTTP Header | Authorization:"`Bearer  token`" |
+| Method      |                                 |
+| 请求参数    | id , data                       |
+| 请求地址    |                                 |
+
+``` js
+// 请求参数
+id,
+data:{
+    company
+    user
+    password
+}
+
+// 返回数据
+
+```
+
+#### 用户账号删除
+
+| 项目        | 描述                            |
+| ----------- | ------------------------------- |
+| 接口        | 删除用户的账号密码公司          |
+| HTTP Header | Authorization:"`Bearer  token`" |
+| Method      |                                 |
+| 请求参数    | id                              |
+| 请求地址    |                                 |
+
+```js
+// 请求参数
+id
+
+// 返回数据
+
+```
+
