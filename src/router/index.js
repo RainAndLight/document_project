@@ -1,9 +1,8 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
 import Home from '../views/home'
-import Login from '../views/login'
+// import Login from '../views/login'
 import Home2 from '../views/home/home.vue'
-import TodoCenter from '../views/todoCenter'
 Vue.use(VueRouter)
 
 const routes = [{
@@ -12,11 +11,10 @@ const routes = [{
     },
     {
         path: '*',
-        component: () => import('../views/404')
+        component: () => import('@/views/404')
     },
     {
         path: '/home',
-        name: 'home',
         component: Home,
         children: [{
                 path: '', // 二级路由地址什么都不写  代表二级路由默认的组件
@@ -62,10 +60,10 @@ const routes = [{
                 path: 'declaration',
                 component: () => import('../views/declaration/declaration')
             },
-            {
-                path: 'todoCenter',
-                component: () => import('@/views/todoCenter')
-            },
+            // {
+            //     path: 'todoCenter',
+            //     component: () => import('@/views/todoCenter')
+            // },
             {
                 path: 'todoCenter/declaration',
                 component: () => import('@/views/todoCenter/declaration')
@@ -85,7 +83,8 @@ const routes = [{
         ]
     }, {
         path: '/login',
-        component: Login
+        name: 'login',
+        component: (resolve) => require(['@/views/login'], resolve)
     }
 ]
 

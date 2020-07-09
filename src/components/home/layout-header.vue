@@ -29,8 +29,10 @@ export default {
     data() {
         return {
             collapse: false, // 默认是展开
-            userInfo: {}, // 定义一个用户对象
-            defaultImg: require('../../assets/img/header.jpg') // 先将图片转化成了一个变量
+            userInfo: {
+                name: '管理员'
+            }, // 定义一个用户对象
+            defaultImg: require('@/assets/img/saber.jpg') // 先将图片转化成了一个变量
         }
     },
     created() {
@@ -48,11 +50,11 @@ export default {
             eventBus.$emit('changeCollapse') // 触发一个事件
         },
         getUserInfo() {
-            this.$axios({
-                url: '/user/profile'
-            }).then(result => {
-                this.userInfo = result.data
-            })
+            // this.$axios({
+            //     url: '/user/profile'
+            // }).then(result => {
+            //     this.userInfo = result.data
+            // })
         },
         //   点击菜单项时触发
         clickMenu(command) {

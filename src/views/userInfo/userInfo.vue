@@ -312,7 +312,7 @@ export default {
                 companyPrincipal: '', // 单位负责人
                 preparer: '', // 填表人
                 phone: '', // 电话
-                list: this.tableData.list
+                list: ''
             },
             enrollOptions: [
                 {
@@ -486,13 +486,11 @@ export default {
             })
         },
         submit() {
-            // let data = {
-            //     Form: this.Form
-            // }
+            // this.Form.list = this.tableData.list
             // this.$axios({
             //     url: '/user/photo',
             //     method: 'patch',
-            //     data
+            //     data:this.Form
             // }).then(({data}) => {
             //     if (result.status === 200) {
             //         this.$message.success('保存成功')

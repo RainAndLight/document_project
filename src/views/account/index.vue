@@ -61,7 +61,7 @@ export default {
                 audit: false,
                 audit1: false
             },
-            defaultImg: require('../../assets/img/cat.jpg'),
+            defaultImg: require('../../assets/img/saber.jpg'),
             rules: {
                 //   用户名 邮箱
                 // name: [

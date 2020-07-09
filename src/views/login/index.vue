@@ -48,6 +48,8 @@
 <script>
 import md5 from 'md5'
 import register from './register'
+import eventBus from '@/utils/eventBus'
+import routes from '@/router/index'
 // import api from '@/api/login'
 export default {
     components: {
@@ -56,28 +58,28 @@ export default {
     data() {
         return {
             flag: 'login',
-            companyOptions: [
-                {
-                    label: '琴岛盈智科技有限公司',
-                    value: '001'
-                },
-                {
-                    label: '青岛运必达物流有限公司',
-                    value: '002'
-                },
-                {
-                    label: '京东物流有限公司',
-                    value: '003'
-                },
-                {
-                    label: '中创股份有限公司',
-                    value: '004'
-                },
-                {
-                    label: '中国邮政青岛分部物流股份有限公司',
-                    value: '005'
-                }
-            ],
+            // companyOptions: [
+            //     {
+            //         label: '琴岛盈智科技有限公司',
+            //         value: '001'
+            //     },
+            //     {
+            //         label: '青岛运必达物流有限公司',
+            //         value: '002'
+            //     },
+            //     {
+            //         label: '京东物流有限公司',
+            //         value: '003'
+            //     },
+            //     {
+            //         label: '中创股份有限公司',
+            //         value: '004'
+            //     },
+            //     {
+            //         label: '中国邮政青岛分部物流股份有限公司',
+            //         value: '005'
+            //     }
+            // ],
             url: 'http://img5.imgtn.bdimg.com/it/u=1320441599,4127074888&fm=26&gp=0.jpg',
             loginForm: {
                 company: '中创物流股份有限公司',
@@ -99,6 +101,15 @@ export default {
             // api.getImgSrc().then(({ data }) => {
             //     this.imgSrc = data.captchaBase64
             //     this.form.captchaIdentity = data.captchaIdentity
+            // })
+            // this.$axios({
+            //     url: '',
+            //     method: '',
+            //     data
+            // }).then(result => {
+            //     if (result.status === 200) {
+            //          this.url = data.url
+            //     }
             // })
         },
         submitLogin() {
@@ -137,7 +148,7 @@ export default {
                             }
                         }
                     }).catch(res => {
-                        console.log(res)
+                        console.log("res",res)
                     })
                 }
             } */
@@ -158,6 +169,30 @@ export default {
                         } else {
                             window.sessionStorage.setItem('level', '0')
                         }
+                        eventBus.$emit('level', '0')
+                        console.log(routes)
+
+                        this.$router.options.routes[2].children.push({
+                            path: 'todoCenter',
+                            component: () => import('@/views/todoCenter')
+                        })
+                        console.log('1', routes)
+                        // this.$router.options.routes[2].children.push({
+                        //     path: '/home/todoCenter',
+                        //     component: () => import('@/views/todoCenter')
+                        // })
+                        // this.$router.addRoutes([
+                        //     {
+                        //         path: '/home/todoCenter',
+                        //         component: () => import('@/views/todoCenter')
+                        //     }
+                        // ])
+                        // this.$router.addRoutes([
+                        //     {
+                        //         path: '*',
+                        //         component: () => import('@/views/404')
+                        //     }
+                        // ])
                         // 前端缓存 登录成功返回给我们的令牌
                         window.localStorage.setItem('user-token', result.data.token)
                         this.$router.push('/home')
