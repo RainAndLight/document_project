@@ -50,6 +50,8 @@ import md5 from 'md5'
 import register from './register'
 import eventBus from '@/utils/eventBus'
 import routes from '@/router/index'
+import Home from '@/views/home'
+import Home2 from '@/views/home/home.vue'
 // import api from '@/api/login'
 export default {
     components: {
@@ -169,30 +171,60 @@ export default {
                         } else {
                             window.sessionStorage.setItem('level', '0')
                         }
-                        eventBus.$emit('level', '0')
-                        console.log(routes)
-
-                        this.$router.options.routes[2].children.push({
-                            path: 'todoCenter',
-                            component: () => import('@/views/todoCenter')
-                        })
-                        console.log('1', routes)
-                        // this.$router.options.routes[2].children.push({
-                        //     path: '/home/todoCenter',
-                        //     component: () => import('@/views/todoCenter')
-                        // })
-                        // this.$router.addRoutes([
-                        //     {
-                        //         path: '/home/todoCenter',
-                        //         component: () => import('@/views/todoCenter')
-                        //     }
-                        // ])
-                        // this.$router.addRoutes([
-                        //     {
-                        //         path: '*',
-                        //         component: () => import('@/views/404')
-                        //     }
-                        // ])
+                        let routerList = [
+                            {
+                                path: '/home',
+                                component: Home,
+                                children: [
+                                    {
+                                        path: '', // 二级路由地址什么都不写  代表二级路由默认的组件
+                                        component: Home2
+                                    },
+                                    {
+                                        path: 'account',
+                                        component: () => import('@/views/account')
+                                    },
+                                    {
+                                        path: 'userInfo',
+                                        component: () => import('@/views/userInfo/userInfo')
+                                    },
+                                    {
+                                        path: 'declarationOperate',
+                                        component: () => import('@/views/declaration/declarationOperate')
+                                    },
+                                    {
+                                        path: 'declarationSchedule',
+                                        component: () => import('@/views/declaration/declarationSchedule')
+                                    },
+                                    {
+                                        path: 'declaration',
+                                        component: () => import('@/views/declaration/declaration')
+                                    },
+                                    {
+                                        path: 'todoCenter',
+                                        component: () => import('@/views/todoCenter')
+                                    },
+                                    {
+                                        path: 'todoCenter/declaration',
+                                        component: () => import('@/views/todoCenter/declaration')
+                                    },
+                                    {
+                                        path: 'user/userAudit',
+                                        component: () => import('@/views/user/userAudit')
+                                    },
+                                    {
+                                        path: 'user/userManage',
+                                        component: () => import('@/views/user/userManage')
+                                    },
+                                    {
+                                        path: 'user/userManage/userinfo',
+                                        component: () => import('@/views/user/user-info')
+                                    }
+                                ]
+                            }
+                        ]
+                        console.log(this.$router)
+                        this.$router.addRoutes(routerList)
                         // 前端缓存 登录成功返回给我们的令牌
                         window.localStorage.setItem('user-token', result.data.token)
                         this.$router.push('/home')

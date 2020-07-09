@@ -940,3 +940,168 @@ id
 
 ```
 
+
+
+
+
+# 关于权限控制路由
+
+## 一个简单的方法
+
++ 用户输入账号密码  ，  如果后台对比正确  ， 返回该用户所拥有的权限路由
++ 对应三种情况
+  + 未通过审核的用户
+  + 审核通过的用户
+  + 管理员
+
+### 完整的路由表
+
+``` js
+let routerList = [
+    {
+        path: '/home',
+        component: Home,
+        children: [
+            {
+                path: '', 
+                component: Home2
+            },
+            {
+                path: 'account',
+                component: () => import('@/views/account')
+            },
+            {
+                path: 'userInfo',
+                component: () => import('@/views/userInfo/userInfo')
+            },
+            {
+                path: 'declarationOperate',
+                component: () => import('@/views/declaration/declarationOperate')
+            },
+            {
+                path: 'declarationSchedule',
+                component: () => import('@/views/declaration/declarationSchedule')
+            },
+            {
+                path: 'declaration',
+                component: () => import('@/views/declaration/declaration')
+            },
+            {
+                path: 'todoCenter',
+                component: () => import('@/views/todoCenter')
+            },
+            {
+                path: 'todoCenter/declaration',
+                component: () => import('@/views/todoCenter/declaration')
+            },
+            {
+                path: 'user/userAudit',
+                component: () => import('@/views/user/userAudit')
+            },
+            {
+                path: 'user/userManage',
+                component: () => import('@/views/user/userManage')
+            },
+            {
+                path: 'user/userManage/userinfo',
+                component: () => import('@/views/user/user-info')
+            }
+        ]
+    }
+]
+```
+
+### 三种人对应不同的返回结果
+
+1. 未通过审核的用户
+
+``` js
+let routerList = [
+    {
+        path: '/home',
+        component: Home,
+        children: [
+            {
+                path: '', 
+                component: Home2
+            },
+            {
+                path: 'account',
+                component: () => import('@/views/account')
+            },
+            {
+                path: 'userInfo',
+                component: () => import('@/views/userInfo/userInfo')
+            }
+        ]
+    }
+]
+```
+
+2. 审核通过的用户
+
+``` js
+let routerList = [
+    {
+        path: '/home',
+        component: Home,
+        children: [
+            {
+                path: '', 
+                component: Home2
+            },
+            {
+                path: 'account',
+                component: () => import('@/views/account')
+            },
+            {
+                path: 'userInfo',
+                component: () => import('@/views/userInfo/userInfo')
+            },
+            {
+                path: 'todoCenter',
+                component: () => import('@/views/todoCenter')
+            }
+        ]
+    }
+]
+```
+
+3. 管理员
+
+``` js
+let routerList = [
+    {
+        path: '/home',
+        component: Home,
+        children: [
+            {
+                path: '', 
+                component: Home2
+            },
+            {
+                path: 'user/userAudit',
+                component: () => import('@/views/user/userAudit')
+            },
+            {
+                path: 'user/userManage',
+                component: () => import('@/views/user/userManage')
+            },
+            {
+                path: 'user/userManage/userinfo',
+                component: () => import('@/views/user/user-info')
+            },
+            ,
+            {
+                path: 'declarationOperate',
+                component: () => import('@/views/declaration/declarationOperate')
+            },
+            {
+                path: 'declarationSchedule',
+                component: () => import('@/views/declaration/declarationSchedule')
+            }
+        ]
+    }
+]
+```
+
