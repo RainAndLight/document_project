@@ -24,7 +24,7 @@
                         :key="item.prop"
                         :label="item.title"
                         :prop="item.prop"
-                        :width="item.width || '150'"
+                        :width="item.width || 150"
                     >
                         <template slot-scope="scope">{{ $util.tableRowFormat(scope.row, item) }}</template>
                     </el-table-column>
@@ -61,7 +61,7 @@
                 <el-pagination
                     style="position: relative;bottom: 5px;marginTop:10px"
                     @size-change="handleSizeChange"
-                    :page-sizes="[1, 2, 5]"
+                    :page-sizes="[5, 10, 20]"
                     layout="total, sizes, prev, pager, next, jumper"
                     :current-page="page.pageNum"
                     :page-size="page.pageSize"
@@ -76,12 +76,14 @@
 </template>
 
 <script>
+import md5 from 'md5'
 import userInfoTimeLine from './user-info-timeLine'
 export default {
     name: 'userManage',
     props: {},
     data() {
         return {
+            row: null,
             page: {
                 pageNum: 1,
                 pageSize: 10
@@ -113,7 +115,7 @@ export default {
                     },
                     {
                         title: '申请时间',
-                        prop: 'applyTime',
+                        prop: 'createdTime',
                         width: '200',
                         type: 'dateTime'
                     },
@@ -184,35 +186,73 @@ export default {
             })
         },
         edit(row) {
-            this.dialogFormVisible = true
+            this.row = row
             let obj = {
                 company: row.company,
                 userName: row.userName,
                 password: row.password
             }
             this.form = obj
+            this.dialogFormVisible = true
         },
         uploadUserInfo() {
-            // this.$axios({
-            //     url: '/api/user/update',
-            //     method: 'post',
-            //     data:
-            // }).then(data => {
-            //     if (data.returnCode === 200) {
-            //         this.$message({
-            //             type: 'success',
-            //             message: '修改成功'
-            //         })
-            //     } else {
-            //         this.$message({
-            //             type: 'error',
-            //             message: data.returnMsg
-            //         })
-            //     }
-            // })
+            // this.form.password = (this.form.password).toUpperCase()
+            this.row.company = this.form.company
+            this.row.userName = this.form.userName
+            this.row.password = md5(this.form.password)
+            this.$axios({
+                url: '/api/user/update',
+                method: 'post',
+                data: this.row
+            }).then(data => {
+                if (data.returnCode === 200) {
+                    this.getData()
+                    this.$message({
+                        type: 'success',
+                        message: '修改成功'
+                    })
+                } else {
+                    this.$message({
+                        type: 'error',
+                        message: data.returnMsg
+                    })
+                }
+            })
             this.dialogFormVisible = false
         },
-        del(row) {},
+        del(row) {
+            this.$confirm('此操作将永久删除该用户, 是否继续?', '提示', {
+                confirmButtonText: '确定',
+                cancelButtonText: '取消',
+                type: 'warning'
+            })
+                .then(() => {
+                    this.$axios({
+                        url: '/api/user/delete',
+                        method: 'delete',
+                        data: row
+                    }).then(data => {
+                        if (data.returnCode === 200) {
+                            this.getData()
+                            this.$message({
+                                type: 'success',
+                                message: '删除成功'
+                            })
+                        } else {
+                            this.$message({
+                                type: 'error',
+                                message: data.returnMsg
+                            })
+                        }
+                    })
+                })
+                .catch(() => {
+                    this.$message({
+                        type: 'info',
+                        message: '已取消删除'
+                    })
+                })
+        },
         lookHistory(row) {
             this.$refs.userInfoTimeLine.modalIsShow()
         },

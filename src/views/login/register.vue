@@ -209,7 +209,7 @@ export default {
                             })
                         } else {
                             this.$message({
-                                type: 'success',
+                                type: 'error',
                                 message: data.returnMsg
                             })
                         }
