@@ -22,9 +22,50 @@ const routes = [{
         path: '/home',
         component: Home,
         children: [{
-            path: '', // 二级路由地址什么都不写  代表二级路由默认的组件
-            component: Home2
-        }]
+                path: '',
+                component: Home2
+            },
+            {
+                path: 'account',
+                component: () => import('@/views/account')
+            },
+            {
+                path: 'userInfo',
+                component: () => import('@/views/userInfo/userInfo')
+            },
+            {
+                path: 'declarationOperate',
+                component: () => import('@/views/declaration/declarationOperate')
+            },
+            {
+                path: 'declarationSchedule',
+                component: () => import('@/views/declaration/declarationSchedule')
+            },
+            {
+                path: 'declaration',
+                component: () => import('@/views/declaration/declaration')
+            },
+            {
+                path: 'todoCenter',
+                component: () => import('@/views/todoCenter')
+            },
+            {
+                path: 'todoCenter/declaration',
+                component: () => import('@/views/todoCenter/declaration')
+            },
+            {
+                path: 'user/userAudit',
+                component: () => import('@/views/user/userAudit')
+            },
+            {
+                path: 'user/userManage',
+                component: () => import('@/views/user/userManage')
+            },
+            {
+                path: 'user/userManage/userinfo',
+                component: () => import('@/views/user/user-info')
+            }
+        ]
     }
 ]
 

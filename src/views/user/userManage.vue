@@ -8,7 +8,7 @@
                 <el-table
                     :data="tableData.list"
                     border
-                    height="calc(89vh - 111px)"
+                    height="calc(89vh - 150px)"
                     highlight-current-row
                     oncontextmenu="return false;"
                     ref="table"
@@ -47,7 +47,7 @@
                             <el-input v-model="form.company"></el-input>
                         </el-form-item>
                         <el-form-item label="用户账号" label-width="auto">
-                            <el-input v-model="form.user"></el-input>
+                            <el-input v-model="form.userName"></el-input>
                         </el-form-item>
                         <el-form-item label="用户密码" label-width="auto">
                             <el-input v-model="form.password"></el-input>
@@ -55,9 +55,20 @@
                     </el-form>
                     <div slot="footer" class="dialog-footer">
                         <el-button @click="dialogFormVisible = false">取 消</el-button>
-                        <el-button type="primary" @click="dialogFormVisible = false">修 改</el-button>
+                        <el-button type="primary" @click="uploadUserInfo">修 改</el-button>
                     </div>
                 </el-dialog>
+                <el-pagination
+                    style="position: relative;bottom: 5px;marginTop:10px"
+                    @size-change="handleSizeChange"
+                    :page-sizes="[1, 2, 5]"
+                    layout="total, sizes, prev, pager, next, jumper"
+                    :current-page="page.pageNum"
+                    :page-size="page.pageSize"
+                    :total="tableData.total"
+                    @current-change="changePage"
+                >
+                </el-pagination>
             </div>
         </el-card>
         <userInfoTimeLine ref="userInfoTimeLine"></userInfoTimeLine>
@@ -71,13 +82,26 @@ export default {
     props: {},
     data() {
         return {
+            page: {
+                pageNum: 1,
+                pageSize: 10
+                // filterList: [
+                //     {
+                //         filterKey: '',
+                //         filterValue: 1
+                //     }
+                // ]
+            },
             form: {
                 company: '',
-                user: '',
+                userName: '',
                 password: ''
             },
             dialogFormVisible: false,
             tableData: {
+                pageNum: 1,
+                pageSize: 10,
+                total: 20,
                 columnList: [
                     {
                         title: '公司全称',
@@ -85,12 +109,8 @@ export default {
                     },
                     {
                         title: '用户账号',
-                        prop: 'user'
+                        prop: 'userName'
                     },
-                    // {
-                    //     title: '用户密码',
-                    //     prop: 'password'
-                    // },
                     {
                         title: '申请时间',
                         prop: 'applyTime',
@@ -104,55 +124,93 @@ export default {
                     }
                 ],
                 list: [
-                    {
-                        company: '中创物流股份有限公司',
-                        user: 'admin',
-                        password: '123456',
-                        applyTime: 'Fri Jun 05 2020 00:00:00 GMT+0800 (中国标准时间)',
-                        passTime: 'Fri Jun 05 2020 00:00:00 GMT+0800 (中国标准时间)'
-                    },
-                    {
-                        company: '京东物流有限公司',
-                        user: 'jdadmin',
-                        password: '123456',
-                        applyTime: 'Fri Jun 05 2020 00:00:00 GMT+0800 (中国标准时间)',
-                        passTime: 'Fri Jun 05 2020 00:00:00 GMT+0800 (中国标准时间)'
-                    },
-                    {
-                        company: '顺丰物流有限公司',
-                        user: 'sfadmin',
-                        password: '123456',
-                        applyTime: 'Fri Jun 05 2020 00:00:00 GMT+0800 (中国标准时间)',
-                        passTime: 'Fri Jun 05 2020 00:00:00 GMT+0800 (中国标准时间)'
-                    }
+                    // {
+                    //     company: '中创物流股份有限公司',
+                    //     user: 'admin',
+                    //     password: '123456',
+                    //     applyTime: 'Fri Jun 05 2020 00:00:00 GMT+0800 (中国标准时间)',
+                    //     passTime: 'Fri Jun 05 2020 00:00:00 GMT+0800 (中国标准时间)'
+                    // },
+                    // {
+                    //     company: '京东物流有限公司',
+                    //     user: 'jdadmin',
+                    //     password: '123456',
+                    //     applyTime: 'Fri Jun 05 2020 00:00:00 GMT+0800 (中国标准时间)',
+                    //     passTime: 'Fri Jun 05 2020 00:00:00 GMT+0800 (中国标准时间)'
+                    // },
+                    // {
+                    //     company: '顺丰物流有限公司',
+                    //     user: 'sfadmin',
+                    //     password: '123456',
+                    //     applyTime: 'Fri Jun 05 2020 00:00:00 GMT+0800 (中国标准时间)',
+                    //     passTime: 'Fri Jun 05 2020 00:00:00 GMT+0800 (中国标准时间)'
+                    // }
                 ]
             }
         }
     },
     computed: {},
-    created() {},
+    created() {
+        this.getData()
+    },
     mounted() {},
     watch: {},
     methods: {
+        handleSizeChange(value) {
+            this.page.pageSize = value
+            this.getData()
+        },
+        changePage(value) {
+            this.page.pageNum = value
+            this.getData()
+        },
         getData() {
-            // this.$axios({
-            //     url: '/user/photo',
-            //     method: 'patch',
-            //     data:this.page
-            // }).then(({data}) => {
-            //     if (data.status === 200) {
-            //         this.tableData.list = data.returnData
-            //     }
-            // })
+            this.$axios({
+                url: '/api/user/page',
+                method: 'post',
+                data: this.page
+            }).then(data => {
+                if (data.returnCode === 200) {
+                    this.tableData.total = data.returnData.total
+                    this.tableData.pageNum = data.returnData.pageNum
+                    this.tableData.pageSize = data.returnData.pageSize
+                    this.tableData.list = data.returnData.list
+                } else {
+                    this.$message({
+                        type: 'error',
+                        message: data.returnMsg
+                    })
+                }
+            })
         },
         edit(row) {
             this.dialogFormVisible = true
             let obj = {
                 company: row.company,
-                user: row.user,
+                userName: row.userName,
                 password: row.password
             }
             this.form = obj
+        },
+        uploadUserInfo() {
+            // this.$axios({
+            //     url: '/api/user/update',
+            //     method: 'post',
+            //     data:
+            // }).then(data => {
+            //     if (data.returnCode === 200) {
+            //         this.$message({
+            //             type: 'success',
+            //             message: '修改成功'
+            //         })
+            //     } else {
+            //         this.$message({
+            //             type: 'error',
+            //             message: data.returnMsg
+            //         })
+            //     }
+            // })
+            this.dialogFormVisible = false
         },
         del(row) {},
         lookHistory(row) {

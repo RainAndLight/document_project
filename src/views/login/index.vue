@@ -25,11 +25,16 @@
                 <el-form-item prop="code">
                     <el-row :gutter="20">
                         <el-col :span="13">
-                            <el-input placeholder="请输入验证码" prefix-icon="el-icon-message" v-model="loginForm.code">
+                            <el-input
+                                placeholder="请输入验证码"
+                                prefix-icon="el-icon-message"
+                                v-model="loginForm.code"
+                                @keyup.enter.native="submitLogin"
+                            >
                             </el-input>
                         </el-col>
                         <el-col :span="10" style="padding:0;height:40px">
-                            <el-image style="width: 100%; height: 40px" :src="url"></el-image>
+                            <el-image style="width: 100%; height: 40px" :src="url" @click="getKey()"></el-image>
                         </el-col>
                     </el-row>
                 </el-form-item>
@@ -52,43 +57,19 @@ import eventBus from '@/utils/eventBus'
 import routes from '@/router/index'
 import Home from '@/views/home'
 import Home2 from '@/views/home/home.vue'
-// import api from '@/api/login'
 export default {
+    name: 'login',
     components: {
         register
     },
     data() {
         return {
             flag: 'login',
-            // companyOptions: [
-            //     {
-            //         label: '琴岛盈智科技有限公司',
-            //         value: '001'
-            //     },
-            //     {
-            //         label: '青岛运必达物流有限公司',
-            //         value: '002'
-            //     },
-            //     {
-            //         label: '京东物流有限公司',
-            //         value: '003'
-            //     },
-            //     {
-            //         label: '中创股份有限公司',
-            //         value: '004'
-            //     },
-            //     {
-            //         label: '中国邮政青岛分部物流股份有限公司',
-            //         value: '005'
-            //     }
-            // ],
-            url: 'http://img5.imgtn.bdimg.com/it/u=1320441599,4127074888&fm=26&gp=0.jpg',
+            url: '',
             loginForm: {
-                company: '中创物流股份有限公司',
-                user: 'cml_qd',
-                password: 'admin',
-                code: 'kdqu',
-                captchaIdentity: ''
+                user: 'sys_admin',
+                password: '123456',
+                code: ''
             },
             loginRules: {
                 company: [{ required: true, message: '请输入公司名', trigger: 'change' }],
@@ -100,141 +81,217 @@ export default {
     },
     methods: {
         getKey() {
-            // api.getImgSrc().then(({ data }) => {
-            //     this.imgSrc = data.captchaBase64
-            //     this.form.captchaIdentity = data.captchaIdentity
-            // })
-            // this.$axios({
-            //     url: '',
-            //     method: '',
-            //     data
-            // }).then(result => {
-            //     if (result.status === 200) {
-            //          this.url = data.url
-            //     }
-            // })
+            this.$axios({
+                url: '/api/captcha/fetch_captcha'
+            }).then(res => {
+                this.url = res.code
+            })
         },
         submitLogin() {
-            /* let _this = this
+            let _this = this
             this.$refs.form.validate(isOK => {
                 if (isOK) {
                     let passwordUpperCase = md5(_this.loginForm.password).toUpperCase()
                     let params = {
-                        user:_this.loginForm.user,
-                        password:passwordUpperCase,
-                        code:_this.loginForm.code,
-                        captchaIdentity:_this.loginForm.captchaIdentity
+                        userName: _this.loginForm.user,
+                        password: passwordUpperCase,
+                        code: _this.loginForm.code,
+                        captchaIdentity: _this.loginForm.captchaIdentity
                     }
-                    api.getData(params).then(({data}) => {
-                        if (result.data.returnCode === 200) {
-                            window.localStorage.setItem('user-token', data.returnData.token)
-                            if (data.status === '0') {
-                                window.sessionStorage.setItem('level', '0')
-                            } else {
-                                window.sessionStorage.setItem('level', '1')
-                            }
-                            this.$router.push('/home')
-                            this.$message({
-                                type:'success',
-                                mesaages:'登录成功'
-                            })
-                        }else {
-                            if(result.data.returnCode === 401){
-                                this.form.code = '';
-                                this.getKey();
-                            }
-                            if (result.data.returnMsg && result.data.returnMsg !== '验证码错误') {
-                                this.$message({
-                                    type:'error',message:result.data.returnMsg
-                                });
-                            }
-                        }
-                    }).catch(res => {
-                        console.log("res",res)
-                    })
-                }
-            } */
-            let _this = this
-            this.$refs.form.validate(isOK => {
-                if (isOK) {
-                    let passwordUpperCase = md5(_this.loginForm.password).toUpperCase() //eslint-disable-line
                     this.$axios({
-                        url: '/authorizations',
+                        url: '/api/authenticate',
                         method: 'post',
-                        data: {
-                            mobile: '15110514010',
-                            code: '246810'
-                        }
-                    }).then(result => {
-                        if (this.loginForm.company === 'admin') {
-                            window.sessionStorage.setItem('level', '1')
-                        } else {
-                            window.sessionStorage.setItem('level', '0')
-                        }
-                        let routerList = [
-                            {
-                                path: '/home',
-                                component: Home,
-                                children: [
-                                    {
-                                        path: '', // 二级路由地址什么都不写  代表二级路由默认的组件
-                                        component: Home2
-                                    },
-                                    {
-                                        path: 'account',
-                                        component: () => import('@/views/account')
-                                    },
-                                    {
-                                        path: 'userInfo',
-                                        component: () => import('@/views/userInfo/userInfo')
-                                    },
-                                    {
-                                        path: 'declarationOperate',
-                                        component: () => import('@/views/declaration/declarationOperate')
-                                    },
-                                    {
-                                        path: 'declarationSchedule',
-                                        component: () => import('@/views/declaration/declarationSchedule')
-                                    },
-                                    {
-                                        path: 'declaration',
-                                        component: () => import('@/views/declaration/declaration')
-                                    },
-                                    {
-                                        path: 'todoCenter',
-                                        component: () => import('@/views/todoCenter')
-                                    },
-                                    {
-                                        path: 'todoCenter/declaration',
-                                        component: () => import('@/views/todoCenter/declaration')
-                                    },
-                                    {
-                                        path: 'user/userAudit',
-                                        component: () => import('@/views/user/userAudit')
-                                    },
-                                    {
-                                        path: 'user/userManage',
-                                        component: () => import('@/views/user/userManage')
-                                    },
-                                    {
-                                        path: 'user/userManage/userinfo',
-                                        component: () => import('@/views/user/user-info')
-                                    }
-                                ]
-                            }
-                        ]
-                        console.log(this.$router)
-                        this.$router.addRoutes(routerList)
-                        // 前端缓存 登录成功返回给我们的令牌
-                        window.localStorage.setItem('user-token', result.data.token)
-                        this.$router.push('/home')
+                        // crossDomain: true,
+                        // xhrFields: { withCredentials: true },
+                        data: params
                     })
+                        .then(data => {
+                            if (data.returnCode === 200) {
+                                window.localStorage.setItem('user-token', data.returnData.token)
+                                if (data.returnData.userInfo.authority === 'A001') {
+                                    window.localStorage.setItem('level', '1')
+                                } else if (data.returnData.userInfo.authority === 'A002') {
+                                    window.localStorage.setItem('level', '2')
+                                } else if (data.returnData.userInfo.authority === 'A003') {
+                                    window.localStorage.setItem('level', '3')
+                                }
+                                // eventBus.$emit('userInfo', data.returnData.userInfo)
+                                window.localStorage.setItem('userInfo', JSON.stringify(data.returnData.userInfo))
+                                // 后台返回账户对应权限的菜单列表
+                                // let routerList = [
+                                //     {
+                                //         path: '/home',
+                                //         component: Home,
+                                //         children: [
+                                //             {
+                                //                 path: '', // 二级路由地址什么都不写  代表二级路由默认的组件
+                                //                 component: Home2
+                                //             },
+                                //             {
+                                //                 path: 'account',
+                                //                 component: () => import('@/views/account')
+                                //             },
+                                //             {
+                                //                 path: 'userInfo',
+                                //                 component: () => import('@/views/userInfo/userInfo')
+                                //             },
+                                //             {
+                                //                 path: 'declarationOperate',
+                                //                 component: () => import('@/views/declaration/declarationOperate')
+                                //             },
+                                //             {
+                                //                 path: 'declarationSchedule',
+                                //                 component: () => import('@/views/declaration/declarationSchedule')
+                                //             },
+                                //             {
+                                //                 path: 'declaration',
+                                //                 component: () => import('@/views/declaration/declaration')
+                                //             },
+                                //             {
+                                //                 path: 'todoCenter',
+                                //                 component: () => import('@/views/todoCenter')
+                                //             },
+                                //             {
+                                //                 path: 'todoCenter/declaration',
+                                //                 component: () => import('@/views/todoCenter/declaration')
+                                //             },
+                                //             {
+                                //                 path: 'user/userAudit',
+                                //                 component: () => import('@/views/user/userAudit')
+                                //             },
+                                //             {
+                                //                 path: 'user/userManage',
+                                //                 component: () => import('@/views/user/userManage')
+                                //             },
+                                //             {
+                                //                 path: 'user/userManage/userinfo',
+                                //                 component: () => import('@/views/user/user-info')
+                                //             }
+                                //         ]
+                                //     },
+                                //     {
+                                //         path: '*',
+                                //         component: () => import('@/views/404')
+                                //     }
+                                // ]
+                                // window.localStorage.setItem('routerList', JSON.stringify(routerList))
+                                // this.$router.addRoutes(routerList)
+                                // this.$router.options.routes.push(...routerList)
+                                // this.$router.addRoutes(nothing)
+                                // this.$router.options.routes.pop()
+                                // this.$router.options.routes.push(...routerList)
+                                // this.$router.options.routes.push(...nothing)
+                                // console.log(this.$router)
+                                this.$message({
+                                    type: 'success',
+                                    message: '登录成功'
+                                })
+                                this.$router.push('/home')
+                            } else if (data.returnCode === 400) {
+                                _this.loginForm.code = ''
+                                _this.getKey()
+                                this.$message({
+                                    type: 'error',
+                                    message: data.returnMsg
+                                })
+                            } else {
+                                this.$message({
+                                    type: 'error',
+                                    message: data.returnMsg
+                                })
+                            }
+                        })
+                        .catch(res => {
+                            console.log('res 66', res)
+                        })
                 }
             })
+            // let _this = this
+            // this.$refs.form.validate(isOK => {
+            //     if (isOK) {
+            //         let passwordUpperCase = md5(_this.loginForm.password).toUpperCase() //eslint-disable-line
+            //         this.$axios({
+            //             url: '/authorizations',
+            //             method: 'post',
+            //             data: {
+            //                 mobile: '15110514010',
+            //                 code: '246810'
+            //             }
+            //         }).then(result => {
+            //             if (this.loginForm.company === 'admin') {
+            //                 window.sessionStorage.setItem('level', '1')
+            //             } else {
+            //                 window.sessionStorage.setItem('level', '0')
+            //             }
+            //             // 后台返回账户对应权限的菜单列表
+            //             let routerList = [
+            //                 {
+            //                     path: '/home',
+            //                     component: Home,
+            //                     children: [
+            //                         {
+            //                             path: '', // 二级路由地址什么都不写  代表二级路由默认的组件
+            //                             component: Home2
+            //                         },
+            //                         {
+            //                             path: 'account',
+            //                             component: () => import('@/views/account')
+            //                         },
+            //                         {
+            //                             path: 'userInfo',
+            //                             component: () => import('@/views/userInfo/userInfo')
+            //                         },
+            //                         {
+            //                             path: 'declarationOperate',
+            //                             component: () => import('@/views/declaration/declarationOperate')
+            //                         },
+            //                         {
+            //                             path: 'declarationSchedule',
+            //                             component: () => import('@/views/declaration/declarationSchedule')
+            //                         },
+            //                         {
+            //                             path: 'declaration',
+            //                             component: () => import('@/views/declaration/declaration')
+            //                         },
+            //                         {
+            //                             path: 'todoCenter',
+            //                             component: () => import('@/views/todoCenter')
+            //                         },
+            //                         {
+            //                             path: 'todoCenter/declaration',
+            //                             component: () => import('@/views/todoCenter/declaration')
+            //                         },
+            //                         {
+            //                             path: 'user/userAudit',
+            //                             component: () => import('@/views/user/userAudit')
+            //                         },
+            //                         {
+            //                             path: 'user/userManage',
+            //                             component: () => import('@/views/user/userManage')
+            //                         },
+            //                         {
+            //                             path: 'user/userManage/userinfo',
+            //                             component: () => import('@/views/user/user-info')
+            //                         }
+            //                     ]
+            //                 }
+            //             ]
+            //             console.log(this.$router)
+            //             this.$router.addRoutes(routerList)
+
+            //             // 前端缓存 登录成功返回给我们的令牌
+            //             window.localStorage.setItem('user-token', result.data.token)
+            //             this.$router.push('/home')
+            //         })
+            //     }
+            // })
         },
         register_btn() {
             this.flag = 'register'
         }
+    },
+    created() {
+        this.getKey()
     }
 }
 </script>

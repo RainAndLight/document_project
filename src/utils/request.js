@@ -5,10 +5,12 @@ import {
     Message
 } from 'element-ui'
 import JSONBig from 'json-bigint' // 引入第三方的包
-axios.defaults.baseURL = 'http://ttapi.research.itcast.cn/mp/v1_0'
-// axios.defaults.baseURL = 'http://192.168.89.220'
+// axios.defaults.baseURL = 'http://ttapi.research.itcast.cn/mp/v1_0'
+axios.defaults.baseURL = 'http://192.168.1.111:8090'
 
-// 请求拦截器
+// 开启携带session
+axios.defaults.withCredentials = true
+
 axios.interceptors.request.use(function (config) {
     // 执行请求ok
     // config 请求参数配置

@@ -46,7 +46,7 @@
                             clearable
                             placeholder="请输入用户名"
                             prefix-icon="el-icon-user-solid"
-                            v-model="loginForm.user"
+                            v-model="loginForm.userName"
                         ></el-input>
                     </el-tooltip>
                 </el-form-item>
@@ -73,7 +73,7 @@
                     >
                     </el-input>
                 </el-form-item>
-                <el-form-item prop="code" label="验证码">
+                <!-- <el-form-item prop="code" label="验证码">
                     <el-row :gutter="20">
                         <el-col :span="13">
                             <el-input
@@ -88,7 +88,7 @@
                             <el-image style="width: 100%; height: 40px" :src="url"></el-image>
                         </el-col>
                     </el-row>
-                </el-form-item>
+                </el-form-item> -->
                 <el-button @click="register" type="primary" style="width:100%;margin-top:20px">注册</el-button>
             </el-form>
         </el-card>
@@ -97,6 +97,7 @@
 
 <script>
 // import api from '@/api/login'
+import md5 from 'md5'
 export default {
     name: 'register',
     props: {},
@@ -157,22 +158,14 @@ export default {
             url: 'http://img5.imgtn.bdimg.com/it/u=1320441599,4127074888&fm=26&gp=0.jpg',
             loginForm: {
                 company: '',
-                user: '',
-                password: '',
-                affirmPassword: '',
-                code: '',
-                captchaIdentity: ''
-                // company: '001',
-                // user: 'admin',
-                // password: '123456',
-                // affirmPassword: '123456',
-                // code: 'KDQU'
+                userName: '',
+                password: ''
             },
             loginRules: {
                 company: [{ required: true, message: '请输入公司名', trigger: 'blur' }],
-                user: [
+                userName: [
                     { required: true, message: '请输入用户名', trigger: 'blur' },
-                    { min: 3, max: 16, message: '长度在 3 到 16 个字符', trigger: 'blur' }
+                    { min: 1, max: 16, message: '长度在 1 到 16 个字符', trigger: 'blur' }
                 ],
                 password: [{ validator: validatePass, trigger: 'blur' }],
                 password1: [{ required: true, message: '请输入密码', trigger: 'blur' }],
@@ -191,36 +184,38 @@ export default {
     mounted() {},
     watch: {},
     methods: {
-        getKey() {
-            // api.getImgSrc().then(({ data }) => {
-            //     this.imgSrc = data.captchaBase64
-            //     this.form.captchaIdentity = data.captchaIdentity
-            // })
-        },
         goBack() {
             this.$parent.flag = 'login'
         },
         register() {
-            let _this = this
             this.$refs.form.validate(isOK => {
                 if (isOK) {
-                    /* let passwordUpperCase = md5(_this.loginForm.password).toUpperCase()
+                    let passwordUpperCase = md5(this.loginForm.password).toUpperCase()
                     let params = {
-                        company:_this.loginForm.company,
-                        user:_this.loginForm.user,
-                        password:passwordUpperCase,
-                        code:_this.loginForm.code,
-                        captchaIdentity:_this.loginForm.captchaIdentity
+                        company: this.loginForm.company,
+                        userName: this.loginForm.userName,
+                        password: passwordUpperCase
                     }
-                    api.register(data).then(({data})=>{
-                    })
-                     */
-                    this.$message({
-                        type: 'success',
-                        message: '注册成功'
+
+                    this.$axios({
+                        url: '/api/user/registered',
+                        method: 'post',
+                        data: params
+                    }).then(data => {
+                        if (data.returnCode === 200) {
+                            this.$message({
+                                type: 'success',
+                                message: '注册成功'
+                            })
+                        } else {
+                            this.$message({
+                                type: 'success',
+                                message: data.returnMsg
+                            })
+                        }
                     })
                     this.$parent.flag = 'login'
-                    // let passwordUpperCase = md5(_this.loginForm.password).toUpperCase() //eslint-disable-line
+                    // let passwordUpperCase = md5(this.loginForm.password).toUpperCase() //eslint-disable-line
                     // this.$axios({
                     //     url: '/authorizations',
                     //     method: 'post',
@@ -266,7 +261,7 @@ export default {
         right: 100px;
         top: 5vh;
         width: 350px;
-        height: 560px;
+        height: 480px;
         z-index: 2;
         background-color: rgba(255, 255, 255, 0.7);
         & /deep/ .el-form-item {

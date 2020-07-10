@@ -30,9 +30,9 @@
                 </el-form-item>
             </el-form>
             <!-- 上传组件 -->
-            <el-upload :http-request="uploadImg" class="head-upload" action="" :show-file-list="false">
+            <!-- <el-upload :http-request="uploadImg" class="head-upload" action="" :show-file-list="false">
                 <img :src="formData.photo ? formData.photo : defaultImg" alt="" />
-            </el-upload>
+            </el-upload> -->
             <!-- <el-upload
                 class="avatar-uploader head-upload"
                 action="https://jsonplaceholder.typicode.com/posts/"
@@ -55,11 +55,9 @@ export default {
             // imageUrl: '',
             loading: false,
             formData: {
-                companyName: '中创物流股份有限公司',
-                companyAccount: 'sys_admin',
-                companyPassword: '123456',
-                audit: false,
-                audit1: false
+                companyName: '',
+                companyAccount: '',
+                audit: false
             },
             defaultImg: require('../../assets/img/saber.jpg'),
             rules: {
@@ -126,7 +124,7 @@ export default {
                     eventBus.$emit('updateUserInfo')
                 })
             })
-        }
+        },
         // handleAvatarSuccess(res, file) {
         //     this.imageUrl = URL.createObjectURL(file.raw)
         // },
@@ -141,10 +139,23 @@ export default {
         //         this.$message.error('上传头像图片大小不能超过 2MB!')
         //     }
         //     return isJPG && isLt2M
-        // }
+        // },
+        watchRes() {}
     },
     created() {
-        // this.getUserInfo()
+        if (window.localStorage.getItem('userInfo')) {
+            let obj = JSON.parse(window.localStorage.getItem('userInfo'))
+            this.formData = {
+                companyName: obj.company,
+                companyAccount: obj.userName
+            }
+            if (this.obj.audit) {
+                this.formData.audit = true
+            } else {
+                this.formData.audit = false
+            }
+        }
+        this.watchRes()
     }
 }
 </script>

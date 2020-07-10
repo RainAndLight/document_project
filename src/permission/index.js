@@ -17,6 +17,28 @@ router.beforeEach(function (to, from, next) {
     } else {
         next() // 直接放过
     }
+    let go = window.localStorage.getItem('level')
+    if (go === '1') {
+        if (to.path === '/home/todoCenter' ||
+            to.path === '/home/user/userAudit' ||
+            to.path === '/home/user/userManage' ||
+            to.path === '/home/declarationSchedule' ||
+            to.path === '/home/declarationOperate') {
+            next({
+                path: from.path
+            })
+        }
+    }
+    if (go === '2') {
+        if (to.path === '/home/declarationOperate' ||
+            to.path === '/home/declarationSchedule' ||
+            to.path === '/home/user/userAudit' ||
+            to.path === '/home/user/userManage') {
+            next({
+                path: from.path
+            })
+        }
+    }
 })
 router.afterEach(() => {
     // setTimeout(() => progresss.done(), 1000)

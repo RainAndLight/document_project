@@ -16,7 +16,7 @@
             active-text-color="#ffd04b"
             :default-openeds="menuDefaultList"
         >
-            <!-- <template v-for="(item, index) in routes">
+            <template v-for="(item, index) in routes">
                 <component
                     class="menu-item"
                     v-if="!item.hidden"
@@ -42,9 +42,9 @@
                     </template>
                 </component>
             </template>
-        </el-menu> -->
+        </el-menu>
 
-            <el-menu-item index="/home">
+        <!-- <el-menu-item index="/home">
                 <i class="el-icon-s-home"></i>
                 <span>首页</span>
             </el-menu-item>
@@ -76,7 +76,7 @@
                 <i class="el-icon-edit-outline"></i>
                 <span>待办</span>
             </el-menu-item>
-        </el-menu>
+        </el-menu> -->
     </div>
 </template>
 
@@ -86,9 +86,7 @@ export default {
     props: ['collapse'],
     data() {
         return {
-            menuDefaultList: ['1', '3', '2'],
-            bigImg: require('../../assets/img/logo_admin.png'),
-            smallImg: require('../../assets/img/toutiao.png'),
+            menuDefaultList: ['1', '2', '3'],
             routes: [
                 {
                     index: '/home',
@@ -155,8 +153,8 @@ export default {
     },
     methods: {
         getLevel() {
-            const level = sessionStorage.getItem('level')
-            if (level === '0') {
+            const level = window.localStorage.getItem('level')
+            if (level === '1') {
                 this.routes.forEach(item => {
                     if (item.title === '申报') {
                         item.hidden = true
@@ -168,7 +166,7 @@ export default {
                         item.hidden = true
                     }
                 })
-            } else if (level === '1') {
+            } else if (level === '2') {
                 this.routes.forEach(item => {
                     if (item.title === '申报') {
                         item.hidden = true
@@ -177,7 +175,7 @@ export default {
                         item.hidden = true
                     }
                 })
-            } else if (level === '2') {
+            } else if (level === '3') {
                 this.routes.forEach(item => {
                     if (item.title === '企业信息') {
                         item.hidden = true
@@ -190,7 +188,7 @@ export default {
         }
     },
     created() {
-        // this.getLevel()
+        this.getLevel()
     }
 }
 </script>

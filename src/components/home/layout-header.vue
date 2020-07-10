@@ -8,11 +8,11 @@
         </el-col>
         <el-col class="right" :span="12">
             <el-row type="flex" justify="end" align="middle">
-                <img :src="userInfo.photo ? userInfo.photo : defaultImg" alt="" />
+                <!-- <img :src="userInfo.photo ? userInfo.photo : defaultImg" alt="" /> -->
                 <!-- 下拉菜单 -->
                 <el-dropdown @command="clickMenu">
                     <!-- 匿名插槽  下拉菜单显示的元素内容 -->
-                    <span>{{ userInfo.name }}</span>
+                    <span>{{ userInfo.company }}</span>
                     <el-dropdown-menu slot="dropdown">
                         <el-dropdown-item command="info">个人信息</el-dropdown-item>
                         <el-dropdown-item command="lgout">退出</el-dropdown-item>
@@ -29,19 +29,19 @@ export default {
     data() {
         return {
             collapse: false, // 默认是展开
-            userInfo: {
-                name: '管理员'
-            }, // 定义一个用户对象
+            userInfo: {}, // 定义一个用户对象
             defaultImg: require('@/assets/img/saber.jpg') // 先将图片转化成了一个变量
         }
     },
     created() {
-        this.getUserInfo()
+        // this.getUserInfo()
         // 开启监听
-        eventBus.$on('updateUserInfo', () => {
+        eventBus.$on('userInfo', userInfo => {
             // 认为别人更新了数据 自己也应该更新
-            this.getUserInfo()
+            this.userInfo = userInfo
+            console.log(userInfo, 'userInfo')
         })
+        this.userInfo = JSON.parse(window.localStorage.getItem('userInfo'))
     },
     methods: {
         // 折叠或者 展开
@@ -49,13 +49,15 @@ export default {
             this.collapse = !this.collapse // 不是展开就是折叠
             eventBus.$emit('changeCollapse') // 触发一个事件
         },
-        getUserInfo() {
-            // this.$axios({
-            //     url: '/user/profile'
-            // }).then(result => {
-            //     this.userInfo = result.data
-            // })
-        },
+        // getUserInfo() {
+        // let userName =
+        // this.$axios({
+        //     url: '/api/user/get',
+        //     data
+        // }).then(data => {
+        //     this.userInfo = data
+        // })
+        // },
         //   点击菜单项时触发
         clickMenu(command) {
             if (command === 'info') {
@@ -63,6 +65,7 @@ export default {
             } else {
                 //    退出
                 window.localStorage.removeItem('user-token') // 删除令牌
+                window.sessionStorage.removeItem('routerList')
                 this.$router.push('/login') // 回到登录页
             }
         }
