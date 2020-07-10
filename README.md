@@ -1061,6 +1061,9 @@ let routerList = [
             {
                 path: 'todoCenter',
                 component: () => import('@/views/todoCenter')
+            }{
+                path: 'todoCenter/declaration',
+                component: () => import('@/views/todoCenter/declaration')
             }
         ]
     }
