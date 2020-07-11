@@ -5,16 +5,26 @@
                 <template slot="title">账号列表</template>
             </bread-crumb>
             <div style="height:calc(80vh - 50px);overflow:auto">
+                <el-select
+                    v-model="selectType"
+                    placeholder="请选择过滤选项"
+                    clearable
+                    size="mini"
+                    @change="selectChange"
+                >
+                    <el-option label="已同意" value="pass"></el-option>
+                    <el-option label="已拒绝" value="no"></el-option>
+                </el-select>
                 <el-table
                     :data="tableData.list"
                     border
-                    height="calc(89vh - 150px)"
+                    height="calc(89vh - 190px)"
                     highlight-current-row
                     oncontextmenu="return false;"
                     ref="table"
                     size="mini"
                     sortable="custom"
-                    style="width: 100%"
+                    style="width: 100% ; marginTop:10px"
                 >
                     <!-- <el-table-column type="selection" width="40" fixed></el-table-column> -->
                     <el-table-column align="center" type="index" width="50" label="序号" fixed> </el-table-column>
@@ -27,6 +37,12 @@
                         :width="item.width || 150"
                     >
                         <template slot-scope="scope">{{ $util.tableRowFormat(scope.row, item) }}</template>
+                    </el-table-column>
+                    <el-table-column label="账号审核状态" align="center" width="100px">
+                        <template slot-scope="scope">
+                            <el-tag type="success" v-show="scope.row.accountFlag === 2">已同意</el-tag>
+                            <el-tag type="danger" v-show="scope.row.accountFlag === 3">已拒绝</el-tag>
+                        </template>
                     </el-table-column>
                     <el-table-column label="企业单位基本情况" align="center" width="200px">
                         <template slot-scope="scope">
@@ -83,16 +99,17 @@ export default {
     props: {},
     data() {
         return {
+            selectType: '',
             row: null,
             page: {
                 pageNum: 1,
-                pageSize: 10
-                // filterList: [
-                //     {
-                //         filterKey: '',
-                //         filterValue: 1
-                //     }
-                // ]
+                pageSize: 10,
+                filterList: [
+                    {
+                        filterKey: 'accountFlag',
+                        filterValue: '2,3'
+                    }
+                ]
             },
             form: {
                 company: '',
@@ -116,12 +133,13 @@ export default {
                     {
                         title: '申请时间',
                         prop: 'createdTime',
-                        width: '200',
+                        width: '150',
                         type: 'dateTime'
                     },
                     {
                         title: '审核通过时间',
                         prop: 'passTime',
+                        width: '150',
                         type: 'dateTime'
                     }
                 ],
@@ -158,6 +176,18 @@ export default {
     mounted() {},
     watch: {},
     methods: {
+        selectChange(value) {
+            if (value === 'pass') {
+                this.page.filterList[0].filterValue = '2'
+                this.getData()
+            } else if (value === 'no') {
+                this.page.filterList[0].filterValue = '3'
+                this.getData()
+            } else {
+                this.page.filterList[0].filterValue = '2,3'
+                this.getData()
+            }
+        },
         handleSizeChange(value) {
             this.page.pageSize = value
             this.getData()
@@ -256,10 +286,12 @@ export default {
         lookHistory(row) {
             this.$refs.userInfoTimeLine.modalIsShow()
         },
-        look() {
+        look(row) {
             this.$router.push({
                 path: '/home/user/userManage/userinfo',
-                query: {},
+                query: {
+                    id: row.id
+                },
                 params: { op: 'refresh' }
             })
         }

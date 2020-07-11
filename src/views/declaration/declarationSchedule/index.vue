@@ -5,7 +5,7 @@
                 <template slot="title">申报 <span style="color:#C0C4CC;margin:0 5px">></span> 申报进度</template>
             </bread-crumb>
             <div style="height:calc(80vh - 50px);over:hidden">
-                <split-pane @resize="resize" :min-percent="0" :default-percent="50" split="vertical" ref="splitPane">
+                <split-pane @resize="resize" :min-percent="0" :default-percent="64" split="vertical" ref="splitPane">
                     <template slot="paneL">
                         <el-card>
                             <el-tabs v-model="activeName" @tab-click="handleClick" stretch>
@@ -221,7 +221,7 @@ export default {
             // api.getScheduleDeclartion()
         },
         setWidth() {
-            this.$refs.splitPane.percent = 0
+            this.$refs.splitPane.percent = 20
         },
         resize() {
             console.log('resize')

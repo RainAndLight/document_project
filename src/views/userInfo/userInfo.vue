@@ -67,7 +67,7 @@
                     <el-date-picker
                         clearable
                         v-model="Form.openingTime"
-                        type="month"
+                        type="date"
                         placeholder="选择时间"
                         style="width:193px"
                     >
@@ -98,37 +98,37 @@
                 <p>企业登记注册资本</p>
                 <hr class="hr" />
                 <el-form-item label="登记注册资本合计">
-                    <el-input v-model="Form.login_total">
+                    <el-input v-model="Form.loginTotal">
                         <template slot="append">万元</template>
                     </el-input>
                 </el-form-item>
                 <el-form-item label="国家资本">
-                    <el-input v-model="Form.county_total">
+                    <el-input v-model="Form.countyTotal">
                         <template slot="append">万元</template>
                     </el-input>
                 </el-form-item>
                 <el-form-item label="集体资本">
-                    <el-input v-model="Form.collective_total">
+                    <el-input v-model="Form.collectiveTotal">
                         <template slot="append">万元</template>
                     </el-input>
                 </el-form-item>
                 <el-form-item label="法人资本">
-                    <el-input v-model="Form.legalPerson_total">
+                    <el-input v-model="Form.legalPersonTotal">
                         <template slot="append">万元</template>
                     </el-input>
                 </el-form-item>
                 <el-form-item label="个人资本">
-                    <el-input v-model="Form.self_total">
+                    <el-input v-model="Form.selfTotal">
                         <template slot="append">万元</template>
                     </el-input>
                 </el-form-item>
                 <el-form-item label="港澳台资本">
-                    <el-input v-model="Form.HMT_total">
+                    <el-input v-model="Form.hmtTotal">
                         <template slot="append">万元</template>
                     </el-input>
                 </el-form-item>
                 <el-form-item label="外商资本">
-                    <el-input v-model="Form.foreign_total">
+                    <el-input v-model="Form.foreignTotal">
                         <template slot="append">万元</template>
                     </el-input>
                 </el-form-item>
@@ -229,9 +229,6 @@
                 <div class="footer">
                     <el-row :gutter="20">
                         <el-col :span="6">
-                            <!-- <el-form-item label="单位负责人">
-                                <el-input size="mini" v-model="Form.uscCode"></el-input>
-                            </el-form-item> -->
                             <span style="width: 100px">单位负责人</span
                             ><el-input
                                 size="mini"
@@ -291,13 +288,13 @@ export default {
                 openingTime: '', // 开业时间
                 companyLoginTypeCode: '', // 企业登记注册类型code
                 companyLoginTypeName: '', // 企业登记注册类型code
-                login_total: '', // 登记注册资本合计
-                county_total: '', // 国家合计
-                collective_total: '', // 集体合计
-                legalPerson_total: '', // 法人合计
-                self_total: '', // 个人合计
-                HMT_total: '', // 港澳台合计
-                foreign_total: '', // 外商资本合计
+                loginTotal: '', // 登记注册资本合计
+                countyTotal: '', // 国家合计
+                collectiveTotal: '', // 集体合计
+                legalPersonTotal: '', // 法人合计
+                selfTotal: '', // 个人合计
+                hmtTotal: '', // 港澳台合计
+                foreignTotal: '', // 外商资本合计
                 // 基础设施
                 theirOwn: '', // 自有仓储面积
                 rent: '', // 租用仓储面积
@@ -314,7 +311,7 @@ export default {
                 companyPrincipal: '', // 单位负责人
                 preparer: '', // 填表人
                 phone: '', // 电话
-                list: null
+                companyPersonList: []
             },
             enrollOptions: [
                 {
@@ -465,7 +462,7 @@ export default {
     computed: {},
     created() {
         // this.renderForm()
-        // this.getData()
+        this.getData()
     },
     mounted() {},
     watch: {},
@@ -478,10 +475,10 @@ export default {
         //     }
         // },
         save() {
-            this.Form.list = this.tableData.list
+            this.Form.companyPersonList = this.tableData.list
             // window.localStorage.setItem('company-information', JSON.stringify(obj))
             this.$axios({
-                url: '/api/authenticate',
+                url: '/api/company/save',
                 method: 'post',
                 data: this.Form
             }).then(data => {
@@ -497,19 +494,17 @@ export default {
                     })
                 }
             })
-            this.$message({
-                message: '保存成功',
-                type: 'success'
-            })
         },
         getData() {
             let id = JSON.parse(window.localStorage.getItem('userInfo')).id
             this.$axios({
-                url: '/api/authenticate',
-                method: 'post',
-                data: id
+                url: '/api/company/get?id=' + id
             }).then(data => {
                 if (data.returnCode === 200) {
+                    if (data.returnData) {
+                        this.Form = data.returnData
+                        this.tableData.list = data.returnData.companyPersonList
+                    }
                 } else {
                     this.$message({
                         type: 'error',

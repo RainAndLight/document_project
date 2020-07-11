@@ -1,11 +1,5 @@
 <template>
     <div>
-        <!-- <el-card> -->
-        <!-- <el-breadcrumb separator-class="el-icon-arrow-right">
-                <el-breadcrumb-item :to="{ path: '/' }">首页</el-breadcrumb-item>
-                <el-breadcrumb-item :to="{ path: '/home/user/userManage' }">账号管理</el-breadcrumb-item>
-                <el-breadcrumb-item>企业单位基本情况表</el-breadcrumb-item>
-            </el-breadcrumb> -->
         <el-form class="form" ref="form" :model="Form" size="mini" label-width="auto" :inline="true">
             <p>基本信息</p>
             <hr class="hr" />
@@ -243,14 +237,13 @@
                 </el-row>
             </div>
         </el-form>
-        <!-- </el-card> -->
     </div>
 </template>
 
 <script>
 export default {
     name: 'modal-userInfo',
-    props: {},
+    props: ['id'],
     data() {
         return {
             Form: {
@@ -438,18 +431,28 @@ export default {
     },
     computed: {},
     created() {
-        // this.renderForm()
+        this.renderForm()
     },
     mounted() {},
     watch: {},
     methods: {
-        // renderForm() {
-        //     let data = window.localStorage.getItem('company-information')
-        //     if (data) {
-        //         this.Form = JSON.parse(data).Form
-        //         this.tableData = JSON.parse(data).tableData
-        //     }
-        // }
+        renderForm() {
+            this.$axios({
+                url: '/api/company/get?id=' + this.id
+            }).then(data => {
+                if (data.returnCode === 200) {
+                    if (data.returnData) {
+                        this.Form = data.returnData
+                        this.tableData.list = data.returnData.companyPersonList
+                    }
+                } else {
+                    this.$message({
+                        type: 'error',
+                        message: data.returnMsg
+                    })
+                }
+            })
+        }
     },
     components: {}
 }

@@ -142,7 +142,7 @@ export default {
                     //     prop: 'declartionStartTime'
                     // },
                     {
-                        title: '申报内容时间',
+                        title: '报表周期',
                         prop: 'declartionStartEndTime',
                         width: '200',
                         type: 'listDateTime'
@@ -163,10 +163,6 @@ export default {
                             '1': '申报正在进行中',
                             '2': '申报已结束'
                         }
-                    },
-                    {
-                        title: '申报发起人',
-                        prop: 'originPerson'
                     }
                 ],
                 list: [

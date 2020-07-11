@@ -445,6 +445,23 @@ export default {
     watch: {},
     methods: {
         renderForm() {
+            // console.log(this.$route.query.id)
+            // let id = JSON.parse(window.localStorage.getItem('userInfo')).id
+            this.$axios({
+                url: '/api/company/get?id=' + this.$route.query.id
+            }).then(data => {
+                if (data.returnCode === 200) {
+                    if (data.returnData) {
+                        this.Form = data.returnData
+                        this.tableData.list = data.returnData.companyPersonList
+                    }
+                } else {
+                    this.$message({
+                        type: 'error',
+                        message: data.returnMsg
+                    })
+                }
+            })
             let data = window.localStorage.getItem('company-information')
             if (data) {
                 this.Form = JSON.parse(data).Form

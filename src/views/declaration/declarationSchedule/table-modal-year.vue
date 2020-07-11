@@ -33,7 +33,7 @@
                     <el-tag v-show="scoped.row.declarationStatus === 2" type="success">申报已结束</el-tag>
                 </template>
             </el-table-column>
-            <el-table-column align="center" width="100" label="操作">
+            <el-table-column align="center" width="100" label="操作" fixed="right">
                 <template slot-scope="scoped">
                     <el-button @click="look(scoped.row)" size="mini" type="primary">查看</el-button>
                 </template>

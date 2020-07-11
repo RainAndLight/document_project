@@ -149,10 +149,10 @@ export default {
                 companyName: obj.company,
                 companyAccount: obj.userName
             }
-            if (this.obj.audit) {
-                this.formData.audit = true
-            } else {
+            if (this.formData.accountFlag === 1 || this.formData.accountFlag === 2) {
                 this.formData.audit = false
+            } else if (this.formData.accountFlag === 2) {
+                this.formData.audit = true
             }
         }
         this.watchRes()
