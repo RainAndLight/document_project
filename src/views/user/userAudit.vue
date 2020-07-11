@@ -35,6 +35,7 @@
                         <template slot-scope="scope">
                             <el-button type="success" size="small" @click="confirm(scope.row)">同意</el-button>
                             <el-button type="danger" size="small" @click="del(scope.row)">拒绝</el-button>
+                            <el-button type="primary" size="small" @click="lookInfo(scope.row)">查看</el-button>
                         </template>
                     </el-table-column>
                 </el-table>
@@ -51,15 +52,25 @@
                 </el-pagination>
             </div>
         </el-card>
+        <!-- <el-drawer size="80%" title="企业单位基本情况表" :visible.sync="drawer" direction="ltr"> -->
+        <el-dialog title="企业单位基本情况表" :visible.sync="drawer" width="80%">
+            <modalUserInfo></modalUserInfo>
+            <span slot="footer">
+                <el-button type="primary" @click="drawer = false">确 定</el-button>
+            </span>
+        </el-dialog>
+        <!-- </el-drawer> -->
     </div>
 </template>
 
 <script>
+import modalUserInfo from './modal-userInfo'
 export default {
     name: 'userAudit',
     props: {},
     data() {
         return {
+            drawer: false,
             page: {
                 currentPage: 1, // 默认请求页码
                 pageSize: 8,
@@ -113,9 +124,14 @@ export default {
             this.selection = value
         },
         confirm() {},
-        del() {}
+        del() {},
+        lookInfo() {
+            this.drawer = true
+        }
     },
-    components: {}
+    components: {
+        modalUserInfo
+    }
 }
 </script>
 

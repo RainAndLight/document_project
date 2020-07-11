@@ -78,10 +78,11 @@
                 <el-form-item label="企业登记注册类型">
                     <el-select
                         clearable
-                        v-model="Form.companyLoginType"
+                        v-model="Form.companyLoginTypeCode"
                         placeholder="请选择"
                         filterable
                         style="width:193px"
+                        @change="setName"
                     >
                         <el-option
                             clearable
@@ -262,9 +263,9 @@
                 </div>
             </el-form>
             <div class="footerBtn">
-                <el-button type="success" @click="save">暂存</el-button>
+                <!-- <el-button type="success" @click="save">暂存</el-button> -->
                 <!-- <el-button type="success" @click="returnExcel">导出Excel</el-button> -->
-                <el-button type="primary" @click="submit">提交</el-button>
+                <el-button type="primary" @click="save">保存</el-button>
             </div>
         </el-card>
     </div>
@@ -288,7 +289,8 @@ export default {
                 operational: '', // 主要业务活动
                 industryCode: '', // 行业代码
                 openingTime: '', // 开业时间
-                companyLoginType: '', // 企业登记注册类型
+                companyLoginTypeCode: '', // 企业登记注册类型code
+                companyLoginTypeName: '', // 企业登记注册类型code
                 login_total: '', // 登记注册资本合计
                 county_total: '', // 国家合计
                 collective_total: '', // 集体合计
@@ -312,7 +314,7 @@ export default {
                 companyPrincipal: '', // 单位负责人
                 preparer: '', // 填表人
                 phone: '', // 电话
-                list: ''
+                list: null
             },
             enrollOptions: [
                 {
@@ -462,27 +464,58 @@ export default {
     },
     computed: {},
     created() {
-        this.renderForm()
+        // this.renderForm()
+        // this.getData()
     },
     mounted() {},
     watch: {},
     methods: {
-        renderForm() {
-            let data = window.localStorage.getItem('company-information')
-            if (data) {
-                this.Form = JSON.parse(data).Form
-                this.tableData = JSON.parse(data).tableData
-            }
-        },
+        // renderForm() {
+        //     let data = window.localStorage.getItem('company-information')
+        //     if (data) {
+        //         this.Form = JSON.parse(data).Form
+        //         this.tableData = JSON.parse(data).tableData
+        //     }
+        // },
         save() {
-            let obj = {
-                Form: this.Form,
-                tableData: this.tableData
-            }
-            window.localStorage.setItem('company-information', JSON.stringify(obj))
+            this.Form.list = this.tableData.list
+            // window.localStorage.setItem('company-information', JSON.stringify(obj))
+            this.$axios({
+                url: '/api/authenticate',
+                method: 'post',
+                data: this.Form
+            }).then(data => {
+                if (data.returnCode === 200) {
+                    this.$message({
+                        message: '保存成功',
+                        type: 'success'
+                    })
+                } else {
+                    this.$message({
+                        type: 'error',
+                        message: data.returnMsg
+                    })
+                }
+            })
             this.$message({
                 message: '保存成功',
                 type: 'success'
+            })
+        },
+        getData() {
+            let id = JSON.parse(window.localStorage.getItem('userInfo')).id
+            this.$axios({
+                url: '/api/authenticate',
+                method: 'post',
+                data: id
+            }).then(data => {
+                if (data.returnCode === 200) {
+                } else {
+                    this.$message({
+                        type: 'error',
+                        message: data.returnMsg
+                    })
+                }
             })
         },
         submit() {
@@ -496,6 +529,10 @@ export default {
             //         this.$message.success('保存成功')
             //     }
             // })
+        },
+        setName(value) {
+            console.log(value)
+            this.companyLoginTypeName = value
         }
     },
     components: {}

@@ -65,7 +65,9 @@ export default {
             } else {
                 //    退出
                 window.localStorage.removeItem('user-token') // 删除令牌
-                window.sessionStorage.removeItem('routerList')
+                // window.sessionStorage.removeItem('routerList')
+                window.localStorage.removeItem('userInfo')
+                window.localStorage.removeItem('level')
                 this.$router.push('/login') // 回到登录页
             }
         }
