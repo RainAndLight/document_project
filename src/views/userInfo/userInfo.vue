@@ -531,8 +531,11 @@ export default {
             // })
         },
         setName(value) {
-            console.log(value)
-            this.companyLoginTypeName = value
+            this.enrollOptions.forEach(item => {
+                if (item.value === value) {
+                    this.companyLoginTypeName = item.label
+                }
+            })
         }
     },
     components: {}

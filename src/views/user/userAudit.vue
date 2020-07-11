@@ -120,7 +120,6 @@ export default {
             this.getData()
         },
         tableSelectionChange(value) {
-            console.log(value)
             this.selection = value
         },
         confirm() {},

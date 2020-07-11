@@ -22,7 +22,7 @@
             <el-button size="mini" @click="reset">擦除</el-button>
             <el-button size="mini" @click="saveHeader">变成头像</el-button>
         </div>
-        <img ref="myBall" style="display:none" src="../../assets/img/ball.jpg" alt="" />
+        <!-- <img ref="myBall" style="display:none" src="../../assets/img/ball.jpg" alt="" /> -->
     </el-row>
 </template>
 
@@ -136,7 +136,7 @@ export default {
         },
         // 开始下笔
         beginDraw(event) {
-            console.log('开始画画')
+            // console.log('开始画画')
             this.isDraw = true
             this.CanvasObj.beginPath() // 开始画了
             this.CanvasObj.lineWidth = 1
@@ -146,15 +146,15 @@ export default {
             this.list.push({ x: this.pointX, y: this.pointY, begin: true })
 
             var bbox = this.$refs.myCanvas.getBoundingClientRect()
-            console.log(bbox)
-            console.log(this.$refs.myCanvas.width)
-            console.log(this.$refs.myCanvas.height)
+            // console.log(bbox)
+            // console.log(this.$refs.myCanvas.width)
+            // console.log(this.$refs.myCanvas.height)
         },
         // 移动点
         movePoint(event) {
             if (this.isDraw) {
-                console.log(event)
-                console.log('画画中')
+                // console.log(event)
+                // console.log('画画中')
                 //  只有开始画了 才在移动的时候做点
                 this.CanvasObj.moveTo(this.pointX, this.pointY)
                 this.CanvasObj.lineTo(event.offsetX, event.offsetY)
@@ -169,7 +169,7 @@ export default {
             this.isDraw = false
             this.list.push({ x: event.offsetX, y: event.offsetY, close: true })
 
-            console.log('结束画画')
+            // console.log('结束画画')
         },
         review() {
             this.clearCanvas()

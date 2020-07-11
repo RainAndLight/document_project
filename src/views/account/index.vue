@@ -59,7 +59,7 @@ export default {
                 companyAccount: '',
                 audit: false
             },
-            defaultImg: require('../../assets/img/saber.jpg'),
+            // defaultImg: require('../../assets/img/saber.jpg'),
             rules: {
                 //   用户名 邮箱
                 // name: [

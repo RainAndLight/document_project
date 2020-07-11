@@ -39,7 +39,7 @@ export default {
         eventBus.$on('userInfo', userInfo => {
             // 认为别人更新了数据 自己也应该更新
             this.userInfo = userInfo
-            console.log(userInfo, 'userInfo')
+            // console.log(userInfo, 'userInfo')
         })
         this.userInfo = JSON.parse(window.localStorage.getItem('userInfo'))
     },

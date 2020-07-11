@@ -238,8 +238,7 @@ export default {
             })
         },
         handleEdit(index, row) {
-            console.log(row, 'row')
-
+            // console.log(row, 'row')
             this.modalIsShow = true
             this.form.declartionType = row.declartionType
             this.form.declartionStartEndTime = row.declartionStartEndTime

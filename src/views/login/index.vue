@@ -202,7 +202,7 @@ export default {
                             }
                         })
                         .catch(res => {
-                            console.log('res 66', res)
+                            // console.log('res 66', res)
                         })
                 }
             })
