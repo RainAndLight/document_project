@@ -44,14 +44,23 @@
                             <el-tag type="danger" v-show="scope.row.accountFlag === 3">已拒绝</el-tag>
                         </template>
                     </el-table-column>
-                    <el-table-column label="企业单位基本情况" align="center" width="200px">
+                    <!-- <el-table-column label="企业单位基本情况" align="center" width="200px">
                         <template slot-scope="scope">
-                            <el-button type="text" size="small" @click="look(scope.row)">查看</el-button>
-                            <el-button type="text" size="small" @click="lookHistory(scope.row)">修改历史</el-button>
-                        </template>
-                    </el-table-column>
+                            <el-button type="text" size="small" @click="look(scope.row)">查看</el-button> -->
+                    <!-- <el-button type="text" size="small" @click="lookHistory(scope.row)">修改历史</el-button> -->
+                    <!-- </template>
+                    </el-table-column> -->
                     <el-table-column label="操作" align="center">
                         <template slot-scope="scope">
+                            <el-button
+                                type="text"
+                                style="color:#f56c6c"
+                                v-if="scope.row.accountFlag === 3"
+                                size="small"
+                                @click="anew(scope.row)"
+                                >重审</el-button
+                            >
+                            <el-button type="text" size="small" @click="look(scope.row)">查看</el-button>
                             <el-button type="text" size="small" @click="edit(scope.row)">编辑</el-button>
                             <el-button type="text" size="small" @click="del(scope.row)">删除</el-button>
                         </template>
@@ -293,6 +302,28 @@ export default {
                     id: row.id
                 },
                 params: { op: 'refresh' }
+            })
+        },
+        anew(row) {
+            this.row = row
+            this.row.accountFlag = 1
+            this.$axios({
+                url: '/api/user/update',
+                method: 'post',
+                data: this.row
+            }).then(data => {
+                if (data.returnCode === 200) {
+                    this.getData()
+                    this.$message({
+                        type: 'success',
+                        message: '操作成功'
+                    })
+                } else {
+                    this.$message({
+                        type: 'error',
+                        message: data.returnMsg
+                    })
+                }
             })
         }
     },

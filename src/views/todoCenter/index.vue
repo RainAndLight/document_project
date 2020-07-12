@@ -7,64 +7,47 @@
             <div style="height:calc(80vh - 50px);overflow:auto">
                 <div class="header">
                     <el-button type="primary" size="mini" @click="submit">申报</el-button>
-                    <el-button type="primary" size="mini" @click="look">查看</el-button>
+                    <!-- <el-button type="primary" size="mini" @click="look">查看</el-button> -->
                 </div>
                 <el-table
                     @selection-change="tableSelectionChange"
                     :data="tableData.list"
+                    height="calc(89vh - 190px)"
                     border
                     size="mini"
-                    height="calc(100vh - 260px)"
-                    style="width: 100%;marginTop:10px "
+                    style="width:100% ;marginTop:10px"
                 >
-                    <el-table-column type="index" width="50"> </el-table-column>
                     <el-table-column type="selection" width="55"> </el-table-column>
-                    <!-- <el-table-column align="center" width="100" label="ID" prop="id"></el-table-column> -->
-                    <!-- <el-table-column align="center" width="100" label="流水号" prop="orderNo"></el-table-column> -->
+                    <el-table-column type="index" width="50"> </el-table-column>
                     <el-table-column
-                        align="center"
-                        width="100"
-                        label="发起申报人"
-                        prop="originPerson"
-                    ></el-table-column>
-                    <el-table-column
-                        align="center"
-                        width="100"
-                        label="申报类型"
-                        prop="declarationType"
-                        :formatter="declarationTypeFormatter"
-                    ></el-table-column>
-                    <el-table-column
-                        align="center"
-                        width="200"
-                        label="申报周期"
-                        prop="declartionStartEndTime"
-                    ></el-table-column>
-                    <el-table-column
-                        align="center"
-                        width="200"
-                        label="申报起止日期"
-                        prop="declarationDate"
-                    ></el-table-column>
-                    <el-table-column align="center" width="150" label="申报状态" prop="declarationStatus">
-                        <template slot-scope="scoped">
-                            <el-tag v-show="scoped.row.declarationStatus === 0" type="info">未申报</el-tag>
-                            <!-- <el-tag v-show="scoped.row.declarationStatus === 1">申报中</el-tag> -->
-                            <el-tag v-show="scoped.row.declarationStatus === 1">申报已提交</el-tag>
-                            <el-tag v-show="scoped.row.declarationStatus === 2" type="success">审核完成</el-tag>
-                            <el-tag v-show="scoped.row.declarationStatus === 3" type="danger">申报超时</el-tag>
-                            <!-- <el-tag v-show="scoped.row.declarationStatus === 4" type="danger">申报驳回</el-tag> -->
+                        v-for="(item, index) in tableData.columnList"
+                        :key="index"
+                        :align="item.center || 'center'"
+                        :width="item.width"
+                        :label="item.title"
+                        :prop="item.prop"
+                    >
+                        <template slot-scope="scope">
+                            <template v-if="item.prop === 'declarationStatus'">
+                                <el-tag v-if="scope.row.declarationStatus === 1" type="info">
+                                    {{ $util.tableRowFormat(scope.row, item) }}
+                                </el-tag>
+                                <el-tag v-if="scope.row.declarationStatus === 2">
+                                    {{ $util.tableRowFormat(scope.row, item) }}
+                                </el-tag>
+                            </template>
+                            <template v-else>{{ $util.tableRowFormat(scope.row, item) }}</template>
                         </template>
                     </el-table-column>
                 </el-table>
                 <el-pagination
                     style="position: relative;bottom: 5px;marginTop:10px"
                     @size-change="handleSizeChange"
-                    :page-sizes="[10, 20, 50]"
+                    :page-sizes="[5, 10, 20]"
                     layout="total, sizes, prev, pager, next, jumper"
-                    :current-page="page.currentPage"
+                    :current-page="page.pageNum"
                     :page-size="page.pageSize"
-                    :total="page.total"
+                    :total="tableData.total"
                     @current-change="changePage"
                 >
                 </el-pagination>
@@ -80,46 +63,52 @@ export default {
     data() {
         return {
             page: {
-                currentPage: 1, // 默认请求页码
-                pageSize: 8,
-                total: 100 // 总页码
+                pageNum: 1,
+                pageSize: 10
             },
             selection: [],
             tableData: {
-                list: [
+                pageNum: 1,
+                pageSize: 10,
+                total: 20,
+                columnList: [
                     {
-                        id: '0',
-                        originPerson: 'admin',
-                        orderNo: '001',
-                        declarationType: 'quarter',
-                        declarationDate: '2020-6-1 至 2020-9-1',
-                        declarationStatus: 0
+                        title: '发起申报人',
+                        prop: 'createdBy'
                     },
                     {
-                        id: '1',
-                        originPerson: 'admin',
-                        orderNo: '002',
-                        declarationType: 'year',
-                        declarationDate: '2020-6-1 至 2020-9-1',
-                        declarationStatus: 1
+                        title: '申报类型',
+                        prop: 'declarationTypeCode',
+                        type: 'format',
+                        format: {
+                            quarter: '季度',
+                            year: '年度'
+                        }
                     },
                     {
-                        id: '2',
-                        originPerson: 'admin',
-                        orderNo: '003',
-                        declarationType: 'quarter',
-                        declarationDate: '2020-6-1 至 2020-9-1',
-                        declarationStatus: 2
+                        title: '报表周期',
+                        prop: 'declarationDate',
+                        width: '250',
+                        type: 'listDateTime'
                     },
                     {
-                        id: '3',
-                        originPerson: 'admin',
-                        orderNo: '004',
-                        declarationType: 'quarter',
-                        declarationDate: '2020-6-1 至 2020-9-1',
-                        declarationStatus: 3
+                        title: '申报填写时间',
+                        prop: 'declareDate',
+                        width: '250',
+                        type: 'listDateTime'
+                    },
+                    {
+                        title: '申报状态',
+                        prop: 'declarationStatus',
+                        type: 'format',
+                        width: '200',
+                        format: {
+                            '1': '未申报',
+                            '2': '已提交'
+                        }
                     }
-                ]
+                ],
+                list: []
             }
         }
     },
@@ -128,15 +117,23 @@ export default {
     },
     methods: {
         getData() {
-            // this.$axios({
-            //     url: '/user/photo',
-            //     method: 'patch',
-            //     data:this.page
-            // }).then(({data}) => {
-            //     if (data.status === 200) {
-            //         this.tableData.list = data.returnData
-            //     }
-            // })
+            this.$axios({
+                url: '/api/declaration/page',
+                method: 'post',
+                data: this.page
+            }).then(data => {
+                if (data.returnCode === 200) {
+                    this.tableData.total = data.returnData.total
+                    this.tableData.pageNum = data.returnData.pageNum
+                    this.tableData.pageSize = data.returnData.pageSize
+                    this.tableData.list = data.returnData.list
+                } else {
+                    this.$message({
+                        type: 'error',
+                        message: data.returnMsg
+                    })
+                }
+            })
         },
         changePage(value) {
             this.page.currentPage = value
@@ -147,31 +144,32 @@ export default {
             this.getData()
         },
         tableSelectionChange(value) {
-            console.log(value)
             this.selection = value
         },
         submit() {
             if (this.selection.length > 0 && this.selection.length < 2) {
-                if (this.selection[0].declarationStatus === 2) {
-                    this.$message({
-                        message: '审核完成不可修改',
-                        type: 'warning'
-                    })
-                    return
-                }
-                if (this.selection[0].declarationStatus === 4) {
-                    this.$message({
-                        message: '该申报已结束，不可再提交申报',
-                        type: 'warning'
-                    })
-                    return
-                }
+                let now = new Date()
+                let time = new Date(this.selection[0].declareEndDate)
+                // if (now > time) {
+                //     this.$message({
+                //         message: '提交申报时间已截止，不可再申报',
+                //         type: 'warning'
+                //     })
+                //     return
+                // } else if (now < time) {
+                //     this.$message({
+                //         message: '申报暂未开始',
+                //         type: 'warning'
+                //     })
+                //     return
+                // }
                 this.$router.push({
                     path: '/home/todoCenter/declaration',
                     query: {
-                        id: this.selection[0].id,
-                        declarationType: this.selection[0].declarationType,
-                        entrance: 'declaration'
+                        declarationId: this.selection[0].id,
+                        // userID: JSON.parse(window.localStorage.getItem('userInfo')).id,
+                        declarationType: this.selection[0].declarationTypeCode
+                        // entrance: 'declaration'
                     },
                     params: { op: 'refresh' }
                 })
@@ -199,14 +197,14 @@ export default {
                     type: 'warning'
                 })
             }
-        },
-        declarationTypeFormatter(row) {
-            if (row.declarationType === 'quarter') {
-                return '季度'
-            } else {
-                return '年度'
-            }
         }
+        // declarationTypeFormatter(row) {
+        //     if (row.declarationType === 'quarter') {
+        //         return '季度'
+        //     } else {
+        //         return '年度'
+        //     }
+        // }
     },
     components: {}
 }

@@ -5,7 +5,7 @@
                 <template slot="title">申报 <span style="color:#C0C4CC;margin:0 5px">></span> 申报进度</template>
             </bread-crumb>
             <div style="height:calc(80vh - 50px);over:hidden">
-                <split-pane @resize="resize" :min-percent="0" :default-percent="64" split="vertical" ref="splitPane">
+                <split-pane @resize="resize" :min-percent="0" :default-percent="80" split="vertical" ref="splitPane">
                     <template slot="paneL">
                         <el-card>
                             <el-tabs v-model="activeName" @tab-click="handleClick" stretch>
@@ -34,7 +34,12 @@
                                     <el-option clearable value="1" label="已提交"></el-option>
                                     <el-option clearable value="2" label="超时"></el-option>
                                 </el-select>
-                                <el-button style="margin-left:10px" type="primary" size="mini" @click="exportAllExcel"
+                                <el-button
+                                    style="margin-left:10px"
+                                    v-show="exportAllExcelShow"
+                                    type="primary"
+                                    size="mini"
+                                    @click="exportAllExcel"
                                     >合并导出为Excel</el-button
                                 >
                             </div>
@@ -56,14 +61,11 @@
                                     :prop="item.prop"
                                 >
                                     <template slot-scope="scope">
-                                        <template v-if="item.prop === 'declartionStatus'">
-                                            <el-tag v-if="scope.row.declartionStatus === '0'" type="info">
+                                        <template v-if="item.prop === 'declarationStatus'">
+                                            <el-tag v-if="scope.row.declarationStatus === 1" type="info">
                                                 {{ $util.tableRowFormat(scope.row, item) }}
                                             </el-tag>
-                                            <el-tag v-if="scope.row.declartionStatus === '1'" type="success">
-                                                {{ $util.tableRowFormat(scope.row, item) }}
-                                            </el-tag>
-                                            <el-tag v-if="scope.row.declartionStatus === '2'" type="danger">
+                                            <el-tag v-if="scope.row.declarationStatus === 2" type="success">
                                                 {{ $util.tableRowFormat(scope.row, item) }}
                                             </el-tag>
                                         </template>
@@ -96,6 +98,8 @@
 </template>
 
 <script>
+import XLSX from 'xlsx'
+import eventBus from '@/utils/eventBus'
 import tableModalQuarter from './table-modal-quarter'
 import tableModalYear from './table-modal-year'
 import splitPane from 'vue-splitpane'
@@ -106,12 +110,18 @@ export default {
     props: {},
     data() {
         return {
+            exportAllExcelShow: false,
             activeName: 'quarter',
             loading: false, // 默认不打开进度条
             page: {
-                total: 0,
-                pageSize: 10, // 默认每页条数为10
-                currentPage: 1 // 默认页码为1
+                pageNum: 1,
+                pageSize: 10,
+                filterList: [
+                    {
+                        filterKey: 'declarationId',
+                        filterValue: ''
+                    }
+                ]
             },
             form: {
                 type: '',
@@ -123,32 +133,31 @@ export default {
                         title: '企业单位',
                         prop: 'company'
                     },
-                    {
-                        title: '申报类型',
-                        prop: 'declartionType'
-                    },
+                    // {
+                    //     title: '申报类型',
+                    //     prop: 'declartionType'
+                    // },
                     {
                         title: '申报状态',
-                        prop: 'declartionStatus',
+                        prop: 'declarationStatus',
                         type: 'format',
                         format: {
-                            '0': '未申报',
-                            '1': '已提交',
-                            '2': '超时'
+                            1: '未申报',
+                            2: '已提交'
                         }
                     },
-                    {
-                        title: '报表周期',
-                        prop: 'declartionStartEndTime',
-                        width: '200',
-                        type: 'listDateTime'
-                    },
-                    {
-                        title: '申报起止日期',
-                        prop: 'declartionWriteTime',
-                        width: '200',
-                        type: 'dateTime'
-                    },
+                    // {
+                    //     title: '报表周期',
+                    //     prop: 'declartionStartEndTime',
+                    //     width: '200',
+                    //     type: 'listDateTime'
+                    // },
+                    // {
+                    //     title: '申报起止日期',
+                    //     prop: 'declartionWriteTime',
+                    //     width: '200',
+                    //     type: 'dateTime'
+                    // },
                     {
                         title: '操作',
                         prop: 'returnExcel',
@@ -156,66 +165,83 @@ export default {
                     }
                 ],
                 list: [
-                    {
-                        company: '中创物流',
-                        declartionType: '季度',
-                        declartionStatus: '0',
-                        declartionStartEndTime: [
-                            'Thu Jun 18 2020 16:00:55 GMT+0800 (中国标准时间)',
-                            'Thu Jun 18 2020 16:00:55 GMT+0800 (中国标准时间)'
-                        ],
-                        declartionWriteTime: 'Thu Jun 18 2020 16:00:55 GMT+0800 (中国标准时间)'
-                    },
-                    {
-                        company: '申通物流',
-                        declartionType: '季度',
-                        declartionStatus: '1',
-                        declartionStartEndTime: [
-                            'Thu Jun 18 2020 16:00:55 GMT+0800 (中国标准时间)',
-                            'Thu Jun 18 2020 16:00:55 GMT+0800 (中国标准时间)'
-                        ],
-                        declartionWriteTime: 'Thu Jun 18 2020 16:00:55 GMT+0800 (中国标准时间)'
-                    },
-                    {
-                        company: '京东物流',
-                        declartionType: '季度',
-                        declartionStatus: '2',
-                        declartionStartEndTime: [
-                            'Thu Jun 18 2020 16:00:55 GMT+0800 (中国标准时间)',
-                            'Thu Jun 18 2020 16:00:55 GMT+0800 (中国标准时间)'
-                        ],
-                        declartionWriteTime: 'Thu Jun 18 2020 16:00:55 GMT+0800 (中国标准时间)'
-                    },
-                    {
-                        company: '韵达物流',
-                        declartionType: '季度',
-                        declartionStatus: '1',
-                        declartionStartEndTime: [
-                            'Thu Jun 18 2020 16:00:55 GMT+0800 (中国标准时间)',
-                            'Thu Jun 18 2020 16:00:55 GMT+0800 (中国标准时间)'
-                        ],
-                        declartionWriteTime: 'Thu Jun 18 2020 16:00:55 GMT+0800 (中国标准时间)'
-                    }
+                    // {
+                    //     company: '中创物流',
+                    //     declartionType: '季度',
+                    //     declarationStatus: '0',
+                    //     declartionStartEndTime: [
+                    //         'Thu Jun 18 2020 16:00:55 GMT+0800 (中国标准时间)',
+                    //         'Thu Jun 18 2020 16:00:55 GMT+0800 (中国标准时间)'
+                    //     ],
+                    //     declartionWriteTime: 'Thu Jun 18 2020 16:00:55 GMT+0800 (中国标准时间)'
+                    // },
+                    // {
+                    //     company: '申通物流',
+                    //     declartionType: '季度',
+                    //     declarationStatus: '1',
+                    //     declartionStartEndTime: [
+                    //         'Thu Jun 18 2020 16:00:55 GMT+0800 (中国标准时间)',
+                    //         'Thu Jun 18 2020 16:00:55 GMT+0800 (中国标准时间)'
+                    //     ],
+                    //     declartionWriteTime: 'Thu Jun 18 2020 16:00:55 GMT+0800 (中国标准时间)'
+                    // },
+                    // {
+                    //     company: '京东物流',
+                    //     declartionType: '季度',
+                    //     declarationStatus: '2',
+                    //     declartionStartEndTime: [
+                    //         'Thu Jun 18 2020 16:00:55 GMT+0800 (中国标准时间)',
+                    //         'Thu Jun 18 2020 16:00:55 GMT+0800 (中国标准时间)'
+                    //     ],
+                    //     declartionWriteTime: 'Thu Jun 18 2020 16:00:55 GMT+0800 (中国标准时间)'
+                    // },
+                    // {
+                    //     company: '韵达物流',
+                    //     declartionType: '季度',
+                    //     declarationStatus: '1',
+                    //     declartionStartEndTime: [
+                    //         'Thu Jun 18 2020 16:00:55 GMT+0800 (中国标准时间)',
+                    //         'Thu Jun 18 2020 16:00:55 GMT+0800 (中国标准时间)'
+                    //     ],
+                    //     declartionWriteTime: 'Thu Jun 18 2020 16:00:55 GMT+0800 (中国标准时间)'
+                    // }
                 ]
             }
         }
     },
     computed: {},
     created() {
-        // this.getData()
+        eventBus.$on('declarationId', (declarationId, declarationTypeCode) => {
+            if (declarationId) {
+                this.page.filterList[0].filterValue = declarationId
+                this.getData()
+            }
+            if (declarationTypeCode) {
+                declarationTypeCode === 'quarter' ? (this.exportAllExcelShow = true) : (this.exportAllExcelShow = false)
+            }
+        })
     },
     mounted() {},
     watch: {},
     methods: {
         getData() {
-            // api.getData(this.page).then(({ data }) => {
-            //     console.log(data)
-            //     if(data.Status === 200){
-            //         let arr = data.returnData
-            //         let yearList = arr.find(item => item.declarationType === 'year')
-            //         let quarterList = arr.find(item => item.declarationType === 'quarter')
-            //     }
-            // })
+            this.$axios({
+                url: '/api/declaration_related_user/page',
+                method: 'post',
+                data: this.page
+            }).then(data => {
+                if (data.returnCode === 200) {
+                    this.tableData.total = data.returnData.total
+                    this.tableData.pageNum = data.returnData.pageNum
+                    this.tableData.pageSize = data.returnData.pageSize
+                    this.tableData.list = data.returnData.list
+                } else {
+                    this.$message({
+                        type: 'error',
+                        message: data.returnMsg
+                    })
+                }
+            })
         },
         getScheduleData() {
             // api.getScheduleDeclartion()
@@ -251,8 +277,446 @@ export default {
         look() {
             this.$refs.tableModal.modalIsShow()
         },
-        exportExcel() {},
-        exportAllExcel() {},
+        exportExcel(row) {
+            this.$axios({
+                url:
+                    '/api/declaration_related_user/fetch_declare_detail?declarationId=' +
+                    row.declarationId +
+                    '&userId=' +
+                    row.createdBy
+            }).then(data => {
+                if (data.returnCode === 200) {
+                    let aoa = [
+                        [`物流企业经营状况表`, null, null, null, null, null],
+                        ['指标名称', '计量单位', '代码', '本期', '上年同期']
+                    ]
+                    data.returnData.declareDetailList.forEach(item => {
+                        let declareDetailArr = [5]
+                        declareDetailArr[0] = item.targetName
+                        declareDetailArr[1] = item.measureUnit
+                        declareDetailArr[2] = item.code
+                        declareDetailArr[3] = item.current
+                        declareDetailArr[4] = item.yoy
+                        aoa.push(declareDetailArr)
+                        // aoa.push(Object.values(item))
+                    })
+                    let sheet = XLSX.utils.aoa_to_sheet(aoa)
+                    sheet['!merges'] = [
+                        // 设置A1-C1的单元格合并
+                        { s: { r: 0, c: 0 }, e: { r: 0, c: 5 } }
+                    ]
+                    sheet['!cols'] = [{ wch: 25 }, { wch: 20 }]
+                    // console.log('sheet', sheet)
+
+                    this.$util.openDownloadDialog(
+                        this.$util.sheetblob(sheet),
+                        `${this.headlineCompany}物流经营状况表（${this.headline}）.xlsx`
+                    )
+                } else {
+                    this.$message({
+                        type: 'error',
+                        message: data.returnMsg
+                    })
+                }
+            })
+        },
+        exportAllExcel() {
+            this.$axios({
+                url: '/api/declaration_related_user/page',
+                method: 'post',
+                data: this.page
+            }).then(data => {
+                let aoa = [
+                    [
+                        '报告日期',
+                        '单位名称',
+                        '运货量 （本期）',
+                        '运货量 （同期）',
+                        '同比',
+                        '周转量 （本期）',
+                        '周转量 （同期）',
+                        '同比',
+                        '配送量 （本期）',
+                        '配送量 （同期）',
+                        '同比',
+                        '流通加工量 （本期）',
+                        '流通加工量 （同期）',
+                        '同比',
+                        '包装量 （本期）',
+                        '包装量 （同期）',
+                        '同比',
+                        '装卸搬运量 （本期）',
+                        '装卸搬运量 （同期）',
+                        '同比',
+                        '吞吐量 （本期）',
+                        '吞吐量 （同期）',
+                        '同比',
+                        '货代业务量 （本期）',
+                        '货代业务量 （同期）',
+                        '同比',
+                        '一体化物流业务量 （本期）',
+                        '一体化物流业务量 （同期）',
+                        '同比',
+                        '年末库存额 （本期）',
+                        '年末库存额 （同期）',
+                        '同比',
+                        '自运货物平均运价 （本期）',
+                        '自运货物平均运价 （同期）',
+                        '同比',
+                        '委托代理货物平均运价 （本期）',
+                        '委托代理货物平均运价 （同期）',
+                        '同比',
+                        '平均货物配送费率 （本期）',
+                        '平均货物配送费率 （同期）',
+                        '同比',
+                        '平均货物流通加工费率 （本期）',
+                        '平均货物流通加工费率 （同期）',
+                        '同比',
+                        '平均货物包装费率 （本期）',
+                        '平均货物包装费率 （同期）',
+                        '同比',
+                        '平均货物仓储费率 （本期）',
+                        '平均货物仓储费率 （同期）',
+                        '同比',
+                        '平均货物装卸搬运费率 （本期）',
+                        '平均货物装卸搬运费率 （同期）',
+                        '同比',
+                        '主营业务收入 （本期）',
+                        '主营业务收入 （同期）',
+                        '同比',
+                        '其中:保管收入 （本期）',
+                        '其中:保管收入 （同期）',
+                        '同比',
+                        '其中:仓储收入 （本期）',
+                        '其中:仓储收入 （同期）',
+                        '同比',
+                        '保险收入 （本期）',
+                        '保险收入 （同期）',
+                        '同比',
+                        '信息及相关服务收入 （本期）',
+                        '信息及相关服务收入 （同期）',
+                        '同比',
+                        '配送收入 （本期）',
+                        '配送收入 （同期）',
+                        '同比',
+                        '流通加工收入 （本期）',
+                        '流通加工收入 （同期）',
+                        '同比',
+                        '包装收入 （本期）',
+                        '包装收入 （同期）',
+                        '同比',
+                        '其他保管收入 （本期）',
+                        '其他保管收入 （同期）',
+                        '同比',
+                        '运输收入 （本期）',
+                        '运输收入 （同期）',
+                        '同比',
+                        '其中：运输收入 （本期）',
+                        '其中：运输收入 （同期）',
+                        '同比',
+                        '装卸搬运等辅助收入 （本期）',
+                        '装卸搬运等辅助收入 （同期）',
+                        '同比',
+                        '货运业务收入 （本期）',
+                        '货运业务收入 （同期）',
+                        '同比',
+                        '运输附加收入 （本期）',
+                        '运输附加收入 （同期）',
+                        '同比',
+                        '其他收入 （本期）',
+                        '其他收入 （同期）',
+                        '同比',
+                        '其中：一体化物流业务收入 （本期）',
+                        '其中：一体化物流业务收入 （同期）',
+                        '同比',
+                        '主营业务成本 （本期）',
+                        '主营业务成本 （同期）',
+                        '同比',
+                        '其中：保管成本 （本期）',
+                        '其中：保管成本 （同期）',
+                        '同比',
+                        '其中：利息成本 （本期）',
+                        '其中：利息成本 （同期）',
+                        '同比',
+                        '仓储成本 （本期）',
+                        '仓储成本 （同期）',
+                        '同比',
+                        '保险成本 （本期）',
+                        '保险成本 （同期）',
+                        '同比',
+                        '货物损耗成本 （本期）',
+                        '货物损耗成本 （同期）',
+                        '同比',
+                        '信息及相关服务成本 （本期）',
+                        '信息及相关服务成本 （同期）',
+                        '同比',
+                        '配送成本 （本期）',
+                        '配送成本 （同期）',
+                        '同比',
+                        '流通加工成本 （本期）',
+                        '流通加工成本 （同期）',
+                        '同比',
+                        '包装成本 （本期）',
+                        '包装成本 （同期）',
+                        '同比',
+                        '其他保管成本 （本期）',
+                        '其他保管成本 （同期）',
+                        '同比',
+                        '管理成本 （本期）',
+                        '管理成本 （同期）',
+                        '同比',
+                        '其中：管理人员报酬 （本期）',
+                        '其中：管理人员报酬 （同期）',
+                        '同比',
+                        '办公成本 （本期）',
+                        '办公成本 （同期）',
+                        '同比',
+                        '教育培训成本 （本期）',
+                        '教育培训成本 （同期）',
+                        '同比',
+                        '劳动保险成本 （本期）',
+                        '劳动保险成本 （同期）',
+                        '同比',
+                        '车船使用成本 （本期）',
+                        '车船使用成本 （同期）',
+                        '同比',
+                        '运输成本 （本期）',
+                        '运输成本 （同期）',
+                        '同比',
+                        '其中：运输成本 （本期）',
+                        '其中：运输成本 （同期）',
+                        '同比',
+                        '装卸搬运等辅助成本 （本期）',
+                        '装卸搬运等辅助成本 （同期）',
+                        '同比',
+                        '货运业务成本 （本期）',
+                        '货运业务成本 （同期）',
+                        '同比',
+                        '运输附加费 （本期）',
+                        '运输附加费 （同期）',
+                        '同比',
+                        '其他成本 （本期）',
+                        '其他成本 （同期）',
+                        '同比',
+                        '其中：一体化物流业务成本 （本期）',
+                        '其中：一体化物流业务成本 （同期）',
+                        '同比',
+                        '主营业务利润额 （本期）',
+                        '主营业务利润额 （同期）',
+                        '同比',
+                        '主营业务营业税金 （本期）',
+                        '主营业务营业税金 （同期）',
+                        '同比',
+                        '资产总计 （本期）',
+                        '资产总计 （同期）',
+                        '同比',
+                        '固定资产折旧 （本期）',
+                        '固定资产折旧 （同期）',
+                        '同比',
+                        '固定资产投资完成额 （本期）',
+                        '固定资产投资完成额 （同期）',
+                        '同比'
+                    ]
+                ]
+                let optionWidth = [
+                    { wch: 20 },
+                    { wch: 40 },
+                    { wch: 20 },
+                    { wch: 20 },
+                    { wch: 20 },
+                    { wch: 20 },
+                    { wch: 20 },
+                    { wch: 20 },
+                    { wch: 20 },
+                    { wch: 20 },
+                    { wch: 20 },
+                    { wch: 20 },
+                    { wch: 20 },
+                    { wch: 20 },
+                    { wch: 20 },
+                    { wch: 20 },
+                    { wch: 20 },
+                    { wch: 20 },
+                    { wch: 20 },
+                    { wch: 20 },
+                    { wch: 20 },
+                    { wch: 20 },
+                    { wch: 20 },
+                    { wch: 20 },
+                    { wch: 20 },
+                    { wch: 20 },
+                    { wch: 20 },
+                    { wch: 20 },
+                    { wch: 20 },
+                    { wch: 20 },
+                    { wch: 20 },
+                    { wch: 20 },
+                    { wch: 20 },
+                    { wch: 20 },
+                    { wch: 20 },
+                    { wch: 20 },
+                    { wch: 20 },
+                    { wch: 20 },
+                    { wch: 20 },
+                    { wch: 20 },
+                    { wch: 20 },
+                    { wch: 20 },
+                    { wch: 20 },
+                    { wch: 20 },
+                    { wch: 20 },
+                    { wch: 20 },
+                    { wch: 20 },
+                    { wch: 20 },
+                    { wch: 20 },
+                    { wch: 20 },
+                    { wch: 20 },
+                    { wch: 20 },
+                    { wch: 20 },
+                    { wch: 20 },
+                    { wch: 20 },
+                    { wch: 20 },
+                    { wch: 20 },
+                    { wch: 20 },
+                    { wch: 20 },
+                    { wch: 20 },
+                    { wch: 20 },
+                    { wch: 20 },
+                    { wch: 20 },
+                    { wch: 20 },
+                    { wch: 20 },
+                    { wch: 20 },
+                    { wch: 20 },
+                    { wch: 20 },
+                    { wch: 20 },
+                    { wch: 20 },
+                    { wch: 20 },
+                    { wch: 20 },
+                    { wch: 20 },
+                    { wch: 20 },
+                    { wch: 20 },
+                    { wch: 20 },
+                    { wch: 20 },
+                    { wch: 20 },
+                    { wch: 20 },
+                    { wch: 20 },
+                    { wch: 20 },
+                    { wch: 20 },
+                    { wch: 20 },
+                    { wch: 20 },
+                    { wch: 20 },
+                    { wch: 20 },
+                    { wch: 20 },
+                    { wch: 20 },
+                    { wch: 20 },
+                    { wch: 20 },
+                    { wch: 20 },
+                    { wch: 20 },
+                    { wch: 20 },
+                    { wch: 20 },
+                    { wch: 20 },
+                    { wch: 20 },
+                    { wch: 20 },
+                    { wch: 20 },
+                    { wch: 20 },
+                    { wch: 20 },
+                    { wch: 20 },
+                    { wch: 20 },
+                    { wch: 20 },
+                    { wch: 20 },
+                    { wch: 20 },
+                    { wch: 20 },
+                    { wch: 20 },
+                    { wch: 20 },
+                    { wch: 20 },
+                    { wch: 20 },
+                    { wch: 20 },
+                    { wch: 20 },
+                    { wch: 20 },
+                    { wch: 20 },
+                    { wch: 20 },
+                    { wch: 20 },
+                    { wch: 20 },
+                    { wch: 20 },
+                    { wch: 20 },
+                    { wch: 20 },
+                    { wch: 20 },
+                    { wch: 20 },
+                    { wch: 20 },
+                    { wch: 20 },
+                    { wch: 20 },
+                    { wch: 20 },
+                    { wch: 20 },
+                    { wch: 20 },
+                    { wch: 20 },
+                    { wch: 20 },
+                    { wch: 20 },
+                    { wch: 20 },
+                    { wch: 20 },
+                    { wch: 20 },
+                    { wch: 20 },
+                    { wch: 20 },
+                    { wch: 20 },
+                    { wch: 20 },
+                    { wch: 20 },
+                    { wch: 20 },
+                    { wch: 20 },
+                    { wch: 20 },
+                    { wch: 20 },
+                    { wch: 20 },
+                    { wch: 20 },
+                    { wch: 20 },
+                    { wch: 20 },
+                    { wch: 20 },
+                    { wch: 20 },
+                    { wch: 20 },
+                    { wch: 20 },
+                    { wch: 20 },
+                    { wch: 20 },
+                    { wch: 20 },
+                    { wch: 20 },
+                    { wch: 20 },
+                    { wch: 20 },
+                    { wch: 20 },
+                    { wch: 20 },
+                    { wch: 20 },
+                    { wch: 20 },
+                    { wch: 20 },
+                    { wch: 20 },
+                    { wch: 20 },
+                    { wch: 20 },
+                    { wch: 20 },
+                    { wch: 20 },
+                    { wch: 20 },
+                    { wch: 20 },
+                    { wch: 20 },
+                    { wch: 20 },
+                    { wch: 20 },
+                    { wch: 20 },
+                    { wch: 20 },
+                    { wch: 20 },
+                    { wch: 20 },
+                    { wch: 20 },
+                    { wch: 20 },
+                    { wch: 20 },
+                    { wch: 20 },
+                    { wch: 20 },
+                    { wch: 20 },
+                    { wch: 20 },
+                    { wch: 20 },
+                    { wch: 20 },
+                    { wch: 20 },
+                    { wch: 20 },
+                    { wch: 20 },
+                    { wch: 20 },
+                    { wch: 20 },
+                    { wch: 20 }
+                ]
+                // api.getSheetMergeData().then()
+                let sheet = XLSX.utils.aoa_to_sheet(aoa)
+                sheet['!cols'] = optionWidth
+                this.$util.openDownloadDialog(this.$util.sheetblob(sheet), `物流101.xlsx`)
+            })
+        },
         timeSelectChange() {},
         statusSelectChange() {},
         tableSelectionChange() {},

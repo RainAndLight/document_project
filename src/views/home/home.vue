@@ -1,8 +1,8 @@
 <template>
     <div>
-        <el-button @click="btn">测试导出年度</el-button>
+        <!-- <el-button @click="btn">测试导出年度</el-button>
         <el-button @click="btnQuarter">测试导出季度</el-button>
-        <el-button @click="btn2">测试导出合并（季度）</el-button>
+        <el-button @click="btn2">测试导出合并（季度）</el-button> -->
         <!-- <div class="content">
             <p>
                 欢迎使用物流企业申报系统
@@ -25,13 +25,13 @@
 </template>
 
 <script>
-import { exportExcel } from 'xlsx-oc'
 import _ from 'lodash'
 import XLSX from 'xlsx'
 
 export default {
     data() {
         return {
+            // flag: true,
             value: new Date(),
             excelData: [
                 {
@@ -1556,6 +1556,19 @@ export default {
             sheet['!cols'] = optionWidth
             this.$util.openDownloadDialog(this.$util.sheetblob(sheet), `物流101.xlsx`)
         }
+    },
+    created() {
+        // const h = this.$createElement
+        // if (this.flag) {
+        //     this.flag = false
+        //     this.$notify({
+        //         title: '提示',
+        //         // message: h('i', { style: 'color: teal' }, '欢迎使用物流企业申报系统'),
+        //         message: '欢迎使用物流企业申报系统',
+        //         showClose: false,
+        //         type: 'success'
+        //     })
+        // }
     }
 }
 </script>

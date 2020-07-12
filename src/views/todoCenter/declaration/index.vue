@@ -9,10 +9,6 @@
             </el-breadcrumb>
             <declarationQuarter v-if="selectType === 'quarter'" ref="declarationQuarter"></declarationQuarter>
             <declarationYear v-if="selectType === 'year'" ref="declarationYear"></declarationYear>
-            <div class="footerBtn">
-                <!-- <el-button type="success" @click="webSave">暂存</el-button> -->
-                <el-button type="primary" @click="submit">提交</el-button>
-            </div>
         </el-card>
     </div>
 </template>
@@ -77,11 +73,4 @@ export default {
 }
 </script>
 
-<style scoped lang="less">
-.footerBtn {
-    margin-top: 20px;
-    width: 100%;
-    display: flex;
-    justify-content: flex-end;
-}
-</style>
+<style scoped lang="less"></style>

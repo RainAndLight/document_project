@@ -37,6 +37,25 @@ export default {
             // 头部组件告诉折叠相关的所有组件 要改变了
             this.collapse = !this.collapse
         })
+        this.sound()
+    },
+    methods: {
+        sound() {
+            // setTimeout(() => {
+            //     this.$axios({
+            //         url: '/api/declaration_related_user/page',
+            //         method: 'post',
+            //         data: JSON.parse(window.localStorage.getItem('userInfo')).id
+            //     }).then(data => {
+            //         if(data.returnCode === 200){
+            //                                         this.$message({
+            //                     type: 'success',
+            //                     message: '设定成功'
+            //                 })
+            //         }
+            //     })
+            // }, 60000);
+        }
     }
 }
 </script>
