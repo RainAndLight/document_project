@@ -28,11 +28,11 @@
                         :prop="item.prop"
                     >
                         <template slot-scope="scope">
-                            <template v-if="item.prop === 'declarationStatus'">
-                                <el-tag v-if="scope.row.declarationStatus === 1" type="info">
+                            <template v-if="item.prop === 'declarationUserStatus'">
+                                <el-tag v-if="scope.row.declarationUserStatus === 1" type="info">
                                     {{ $util.tableRowFormat(scope.row, item) }}
                                 </el-tag>
-                                <el-tag v-if="scope.row.declarationStatus === 2">
+                                <el-tag v-if="scope.row.declarationUserStatus === 2" type="success">
                                     {{ $util.tableRowFormat(scope.row, item) }}
                                 </el-tag>
                             </template>
@@ -99,7 +99,7 @@ export default {
                     },
                     {
                         title: '申报状态',
-                        prop: 'declarationStatus',
+                        prop: 'declarationUserStatus',
                         type: 'format',
                         width: '200',
                         format: {
@@ -136,7 +136,7 @@ export default {
             })
         },
         changePage(value) {
-            this.page.currentPage = value
+            this.page.pageNum = value
             this.getData()
         },
         handleSizeChange(value) {
@@ -145,6 +145,7 @@ export default {
         },
         tableSelectionChange(value) {
             this.selection = value
+            // this.getData()
         },
         submit() {
             if (this.selection.length > 0 && this.selection.length < 2) {

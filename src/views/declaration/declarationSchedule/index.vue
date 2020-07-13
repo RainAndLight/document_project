@@ -260,6 +260,8 @@ export default {
                 this.getData()
             } else if (this.form.status === '2') {
                 this.getResidueData()
+            } else {
+                this.getData()
             }
         },
         look() {
@@ -299,6 +301,11 @@ export default {
                         this.$util.sheetblob(sheet),
                         `${data.returnData.company}物流经营状况表.xlsx`
                     )
+                } else if (data.returnCode === 400) {
+                    this.$message({
+                        type: 'error',
+                        message: '暂无数据'
+                    })
                 } else {
                     this.$message({
                         type: 'error',

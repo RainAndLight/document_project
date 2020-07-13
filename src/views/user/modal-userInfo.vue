@@ -54,7 +54,7 @@
             <el-form-item label="企业登记注册类型">
                 <el-select
                     clearable
-                    v-model="Form.companyLoginType"
+                    v-model="Form.companyLoginTypeCode"
                     placeholder="请选择"
                     filterable
                     style="width:193px"
@@ -73,37 +73,37 @@
             <p>企业登记注册资本</p>
             <hr class="hr" />
             <el-form-item label="登记注册资本合计">
-                <el-input v-model="Form.login_total">
+                <el-input v-model="Form.loginTotal">
                     <template slot="append">万元</template>
                 </el-input>
             </el-form-item>
             <el-form-item label="国家资本">
-                <el-input v-model="Form.county_total">
+                <el-input v-model="Form.countyTotal">
                     <template slot="append">万元</template>
                 </el-input>
             </el-form-item>
             <el-form-item label="集体资本">
-                <el-input v-model="Form.collective_total">
+                <el-input v-model="Form.collectiveTotal">
                     <template slot="append">万元</template>
                 </el-input>
             </el-form-item>
             <el-form-item label="法人资本">
-                <el-input v-model="Form.legalPerson_total">
+                <el-input v-model="Form.legalPersonTotal">
                     <template slot="append">万元</template>
                 </el-input>
             </el-form-item>
             <el-form-item label="个人资本">
-                <el-input v-model="Form.self_total">
+                <el-input v-model="Form.selfTotal">
                     <template slot="append">万元</template>
                 </el-input>
             </el-form-item>
             <el-form-item label="港澳台资本">
-                <el-input v-model="Form.HMT_total">
+                <el-input v-model="Form.hmtTotal">
                     <template slot="append">万元</template>
                 </el-input>
             </el-form-item>
             <el-form-item label="外商资本">
-                <el-input v-model="Form.foreign_total">
+                <el-input v-model="Form.foreignTotal">
                     <template slot="append">万元</template>
                 </el-input>
             </el-form-item>
@@ -258,14 +258,14 @@ export default {
                 operational: '', // 主要业务活动
                 industryCode: '', // 行业代码
                 openingTime: '', // 开业时间
-                companyLoginType: '', // 企业登记注册类型
-                login_total: '', // 登记注册资本合计
-                county_total: '', // 国家合计
-                collective_total: '', // 集体合计
-                legalPerson_total: '', // 法人合计
-                self_total: '', // 个人合计
-                HMT_total: '', // 港澳台合计
-                foreign_total: '', // 外商资本合计
+                companyLoginTypeCode: '', // 企业登记注册类型
+                loginTotal: '', // 登记注册资本合计
+                countyTotal: '', // 国家合计
+                collectiveTotal: '', // 集体合计
+                legalPersonTotal: '', // 法人合计
+                selfTotal: '', // 个人合计
+                hmtTotal: '', // 港澳台合计
+                foreignTotal: '', // 外商资本合计
                 // 基础设施
                 theirOwn: '', // 自有仓储面积
                 rent: '', // 租用仓储面积

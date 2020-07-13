@@ -54,7 +54,7 @@
         </el-card>
         <!-- <el-drawer size="80%" title="企业单位基本情况表" :visible.sync="drawer" direction="ltr"> -->
         <el-dialog title="企业单位基本情况表" :visible.sync="drawer" width="80%">
-            <modalUserInfo :id="id"></modalUserInfo>
+            <modalUserInfo ref="modalUserInfo" :id="id"></modalUserInfo>
             <span slot="footer">
                 <el-button type="primary" @click="drawer = false">确 定</el-button>
             </span>
@@ -204,6 +204,9 @@ export default {
         lookInfo(row) {
             this.id = row.id
             this.drawer = true
+            setTimeout(() => {
+                this.$refs.modalUserInfo.renderForm()
+            }, 0)
         }
     },
     components: {

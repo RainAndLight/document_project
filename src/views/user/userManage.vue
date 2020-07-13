@@ -147,7 +147,7 @@ export default {
                     },
                     {
                         title: '审核通过时间',
-                        prop: 'passTime',
+                        prop: 'approveTime',
                         width: '150',
                         type: 'dateTime'
                     }
@@ -158,21 +158,21 @@ export default {
                     //     user: 'admin',
                     //     password: '123456',
                     //     applyTime: 'Fri Jun 05 2020 00:00:00 GMT+0800 (中国标准时间)',
-                    //     passTime: 'Fri Jun 05 2020 00:00:00 GMT+0800 (中国标准时间)'
+                    //     approveTime: 'Fri Jun 05 2020 00:00:00 GMT+0800 (中国标准时间)'
                     // },
                     // {
                     //     company: '京东物流有限公司',
                     //     user: 'jdadmin',
                     //     password: '123456',
                     //     applyTime: 'Fri Jun 05 2020 00:00:00 GMT+0800 (中国标准时间)',
-                    //     passTime: 'Fri Jun 05 2020 00:00:00 GMT+0800 (中国标准时间)'
+                    //     approveTime: 'Fri Jun 05 2020 00:00:00 GMT+0800 (中国标准时间)'
                     // },
                     // {
                     //     company: '顺丰物流有限公司',
                     //     user: 'sfadmin',
                     //     password: '123456',
                     //     applyTime: 'Fri Jun 05 2020 00:00:00 GMT+0800 (中国标准时间)',
-                    //     passTime: 'Fri Jun 05 2020 00:00:00 GMT+0800 (中国标准时间)'
+                    //     approveTime: 'Fri Jun 05 2020 00:00:00 GMT+0800 (中国标准时间)'
                     // }
                 ]
             }
