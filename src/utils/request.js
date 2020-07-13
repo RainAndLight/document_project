@@ -7,6 +7,7 @@ import {
 import JSONBig from 'json-bigint' // 引入第三方的包
 // axios.defaults.baseURL = 'http://ttapi.research.itcast.cn/mp/v1_0'
 axios.defaults.baseURL = 'http://192.168.1.111:8090'
+// axios.defaults.baseURL = 'http://192.168.43.151:8090'
 
 // 开启携带session
 axios.defaults.withCredentials = true

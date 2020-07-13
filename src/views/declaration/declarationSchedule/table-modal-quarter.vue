@@ -31,7 +31,8 @@
                     <template v-else>{{ $util.tableRowFormat(scope.row, item) }}</template>
                 </template>
             </el-table-column>
-            <el-table-column label="操作" align="center">
+            <el-table-column label="操作" align="center" fixed="right"
+                >>
                 <template slot-scope="scope">
                     <el-button @click="look(scope.row)" size="mini" type="primary">查看</el-button>
                 </template>
