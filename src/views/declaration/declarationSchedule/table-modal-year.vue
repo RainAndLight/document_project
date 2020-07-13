@@ -120,7 +120,19 @@ export default {
             },
             page: {
                 pageNum: 1,
-                pageSize: 10
+                pageSize: 10,
+                sortList: [
+                    {
+                        sortKey: 'createdTime',
+                        sortValue: 'desc'
+                    }
+                ],
+                filterList: [
+                    {
+                        filterKey: 'declarationTypeCode',
+                        filterValue: 'year'
+                    }
+                ]
             }
         }
     },
@@ -150,14 +162,14 @@ export default {
                     this.tableData.total = data.returnData.total
                     this.tableData.pageNum = data.returnData.pageNum
                     this.tableData.pageSize = data.returnData.pageSize
-                    // this.tableData.list = data.returnData.list.find(item => item.declarationTypeCode === 'quarter')
-                    let arr = []
-                    data.returnData.list.forEach(item => {
-                        if (item.declarationTypeCode === 'year') {
-                            arr.push(item)
-                        }
-                    })
-                    this.tableData.list = arr
+                    this.tableData.list = data.returnData.list
+                    // let arr = []
+                    // data.returnData.list.forEach(item => {
+                    //     if (item.declarationTypeCode === 'year') {
+                    //         arr.push(item)
+                    //     }
+                    // })
+                    // this.tableData.list = arr
                 } else {
                     this.$message({
                         type: 'error',

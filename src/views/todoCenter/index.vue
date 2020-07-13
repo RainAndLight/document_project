@@ -5,19 +5,20 @@
                 <template slot="title">待办</template>
             </bread-crumb>
             <div style="height:calc(80vh - 50px);overflow:auto">
-                <div class="header">
-                    <el-button type="primary" size="mini" @click="submit">申报</el-button>
-                    <!-- <el-button type="primary" size="mini" @click="look">查看</el-button> -->
-                </div>
+                <!-- <div class="header"> -->
+                <span
+                    >注：在申报截止日期前，您可以随时修改申报内容，如有驳回，需要您修改后重新提交，如有问题请及时与管理员联系</span
+                >
+                <!-- <el-button type="primary" size="mini" @click="submit">申报</el-button> -->
+                <!-- </div> -->
                 <el-table
-                    @selection-change="tableSelectionChange"
                     :data="tableData.list"
                     height="calc(89vh - 190px)"
                     border
                     size="mini"
                     style="width:100% ;marginTop:10px"
                 >
-                    <el-table-column type="selection" width="55"> </el-table-column>
+                    <!-- <el-table-column type="selection" width="55"> </el-table-column> -->
                     <el-table-column type="index" width="50"> </el-table-column>
                     <el-table-column
                         v-for="(item, index) in tableData.columnList"
@@ -35,8 +36,30 @@
                                 <el-tag v-if="scope.row.declarationUserStatus === 2" type="success">
                                     {{ $util.tableRowFormat(scope.row, item) }}
                                 </el-tag>
+                                <el-tag v-if="scope.row.declarationUserStatus === 3" type="danger">
+                                    {{ $util.tableRowFormat(scope.row, item) }}
+                                </el-tag>
                             </template>
                             <template v-else>{{ $util.tableRowFormat(scope.row, item) }}</template>
+                        </template>
+                    </el-table-column>
+                    <el-table-column label="操作" width="100" align="center">
+                        <template slot-scope="scope">
+                            <el-button
+                                v-if="scope.row.declarationUserStatus === 1"
+                                type="primary"
+                                size="mini"
+                                @click="submit(scope.row)"
+                            >
+                                <span>申报</span>
+                            </el-button>
+                            <el-button
+                                v-if="scope.row.declarationUserStatus === 2 || scope.row.declarationUserStatus === 3"
+                                type="primary"
+                                size="mini"
+                                @click="submit(scope.row)"
+                                >编辑
+                            </el-button>
                         </template>
                     </el-table-column>
                 </el-table>
@@ -64,7 +87,13 @@ export default {
         return {
             page: {
                 pageNum: 1,
-                pageSize: 10
+                pageSize: 10,
+                sortList: [
+                    {
+                        sortKey: 'createdTime',
+                        sortValue: 'desc'
+                    }
+                ]
             },
             selection: [],
             tableData: {
@@ -103,8 +132,9 @@ export default {
                         type: 'format',
                         width: '200',
                         format: {
-                            '1': '未申报',
-                            '2': '已提交'
+                            1: '未申报',
+                            2: '已提交',
+                            3: '已驳回'
                         }
                     }
                 ],
@@ -147,39 +177,31 @@ export default {
             this.selection = value
             // this.getData()
         },
-        submit() {
-            if (this.selection.length > 0 && this.selection.length < 2) {
-                let now = new Date()
-                let time = new Date(this.selection[0].declareEndDate)
-                // if (now > time) {
-                //     this.$message({
-                //         message: '提交申报时间已截止，不可再申报',
-                //         type: 'warning'
-                //     })
-                //     return
-                // } else if (now < time) {
-                //     this.$message({
-                //         message: '申报暂未开始',
-                //         type: 'warning'
-                //     })
-                //     return
-                // }
-                this.$router.push({
-                    path: '/home/todoCenter/declaration',
-                    query: {
-                        declarationId: this.selection[0].id,
-                        // userID: JSON.parse(window.localStorage.getItem('userInfo')).id,
-                        declarationType: this.selection[0].declarationTypeCode
-                        // entrance: 'declaration'
-                    },
-                    params: { op: 'refresh' }
-                })
-            } else {
-                this.$message({
-                    message: '请选择一条数据数据申报',
-                    type: 'warning'
-                })
-            }
+        submit(row) {
+            // console.log(row)
+            let now = new Date()
+            let time = new Date(row.declareEndDate)
+            // if (now > time) {
+            //     this.$message({
+            //         message: '提交申报时间已截止，不可再申报',
+            //         type: 'warning'
+            //     })
+            //     return
+            // } else if (now < time) {
+            //     this.$message({
+            //         message: '申报暂未开始',
+            //         type: 'warning'
+            //     })
+            //     return
+            // }
+            this.$router.push({
+                path: '/home/todoCenter/declaration',
+                query: {
+                    declarationId: row.id,
+                    declarationType: row.declarationTypeCode
+                },
+                params: { op: 'refresh' }
+            })
         },
         look() {
             if (this.selection.length > 0 && this.selection.length < 2) {
@@ -199,13 +221,6 @@ export default {
                 })
             }
         }
-        // declarationTypeFormatter(row) {
-        //     if (row.declarationType === 'quarter') {
-        //         return '季度'
-        //     } else {
-        //         return '年度'
-        //     }
-        // }
     },
     components: {}
 }
@@ -213,7 +228,6 @@ export default {
 
 <style scoped lang="less">
 .card {
-    // height: 85vh;
     position: relative;
     .header {
         display: flex;

@@ -72,6 +72,16 @@
                         <el-option label="年度" value="year"></el-option>
                     </el-select>
                 </el-form-item>
+                <!-- <el-form-item label="该申报为" prop="declarationPeriod">
+                    <el-date-picker v-model="form.declarationPeriod" type="year" placeholder="选择年"> </el-date-picker>
+                    <el-select v-model="form.declarationPeriodSelect" placeholder="请选择季度">
+                        <el-option label="第一季度" value="第一季度"></el-option>
+                        <el-option label="第二季度" value="第二季度"></el-option>
+                        <el-option label="第三季度" value="第三季度"></el-option>
+                        <el-option label="第四季度" value="第四季度"></el-option>
+                    </el-select>
+                    {{ new Date(form.declarationPeriod) + '-' + form.declarationPeriodSelect }}
+                </el-form-item> -->
                 <el-form-item label="报表周期" prop="declarationDate">
                     <el-date-picker
                         v-model="form.declarationDate"
@@ -148,6 +158,8 @@ export default {
             handleDeleteMoadl: false,
             modalIsShow: false,
             form: {
+                declarationPeriod: '',
+                declarationPeriodSelect: '',
                 declarationTypeCode: '',
                 declarationTypeName: '',
                 declarationDate: [

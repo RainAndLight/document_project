@@ -5,7 +5,7 @@
                 <template slot="title">申报 <span style="color:#C0C4CC;margin:0 5px">></span> 申报进度</template>
             </bread-crumb>
             <div style="height:calc(80vh - 50px);over:hidden">
-                <split-pane @resize="resize" :min-percent="0" :default-percent="80" split="vertical" ref="splitPane">
+                <split-pane @resize="resize" :min-percent="0" :default-percent="50" split="vertical" ref="splitPane">
                     <template slot="paneL">
                         <el-card>
                             <el-tabs v-model="activeName" @tab-click="handleClick" stretch>
@@ -67,10 +67,34 @@
                                             <el-tag v-if="scope.row.declarationStatus === 2" type="success">
                                                 {{ $util.tableRowFormat(scope.row, item) }}
                                             </el-tag>
+                                            <el-tag v-if="scope.row.declarationStatus === 3" type="danger">
+                                                {{ $util.tableRowFormat(scope.row, item) }}
+                                            </el-tag>
                                         </template>
                                         <template v-else-if="item.prop === 'returnExcel'">
-                                            <el-button type="primary" size="mini" @click="exportExcel(scope.row)"
-                                                >导出为Excel</el-button
+                                            <!-- <el-popconfirm title="是否确认此操作？">
+                                                <el-button
+                                                    slot="reference"
+                                                    type="text"
+                                                    style="color:#F56C6C;margin-right:10px"
+                                                    size="mini"
+                                                    :onConfirm="reject(scope.row)"
+                                                    >驳回</el-button
+                                                > -->
+                                            <!-- @click="reject(scope.row)" -->
+                                            <!-- </el-popconfirm> -->
+                                            <el-button
+                                                type="text"
+                                                style="color:#F56C6C"
+                                                size="mini"
+                                                @click="reject(scope.row)"
+                                                >驳回</el-button
+                                            >
+                                            <el-button type="text" size="mini" @click="examine(scope.row)"
+                                                >查看</el-button
+                                            >
+                                            <el-button type="text" size="mini" @click="exportExcel(scope.row)"
+                                                >导出</el-button
                                             >
                                         </template>
                                         <template v-else>{{ $util.tableRowFormat(scope.row, item) }}</template>
@@ -93,6 +117,7 @@
                 </split-pane>
             </div>
         </el-card>
+        <modalDeclaration ref="modalDeclaration" :userId="userId" :declarationId="declarationId"></modalDeclaration>
     </div>
 </template>
 
@@ -102,6 +127,7 @@ import eventBus from '@/utils/eventBus'
 import tableModalQuarter from './table-modal-quarter'
 import tableModalYear from './table-modal-year'
 import splitPane from 'vue-splitpane'
+import modalDeclaration from './modalDeclaration'
 // import api from '@/api/declartion'
 
 export default {
@@ -109,6 +135,9 @@ export default {
     props: {},
     data() {
         return {
+            userId: null,
+            declarationId: null,
+            flag: false,
             exportAllExcelShow: false,
             activeName: 'quarter',
             loading: false, // 默认不打开进度条
@@ -142,7 +171,8 @@ export default {
                         type: 'format',
                         format: {
                             1: '未申报',
-                            2: '已提交'
+                            2: '已提交',
+                            3: '已驳回'
                         }
                     },
                     // {
@@ -160,7 +190,7 @@ export default {
                     {
                         title: '操作',
                         prop: 'returnExcel',
-                        width: '150'
+                        width: '200'
                     }
                 ],
                 list: []
@@ -177,11 +207,39 @@ export default {
             if (declarationTypeCode) {
                 declarationTypeCode === 'quarter' ? (this.exportAllExcelShow = true) : (this.exportAllExcelShow = false)
             }
+            this.flag = true
         })
     },
     mounted() {},
     watch: {},
     methods: {
+        // 驳回
+        reject(row) {
+            this.$confirm('确认操作吗？').then(_ => {
+                this.$axios({
+                    url: '/api/declaration_related_user/update_declaration_status?id=' + row.id + '&declarationStatus=3'
+                }).then(data => {
+                    if (data.returnCode === 200) {
+                        this.$message({
+                            type: 'success',
+                            message: '操作成功'
+                        })
+                        this.getData()
+                    } else {
+                        this.$message({
+                            type: 'error',
+                            message: data.returnMsg
+                        })
+                    }
+                })
+            })
+        },
+        // 查看用户申报信息
+        examine(row) {
+            this.userId = row.createdBy
+            this.declarationId = row.declarationId
+            this.$refs.modalDeclaration.dialogIsShow()
+        },
         getData() {
             this.$axios({
                 url: '/api/declaration_related_user/page',
@@ -224,7 +282,7 @@ export default {
             // api.getScheduleDeclartion()
         },
         setWidth() {
-            this.$refs.splitPane.percent = 20
+            // this.$refs.splitPane.percent = 20
         },
         resize() {
             console.log('resize')
@@ -315,6 +373,13 @@ export default {
             })
         },
         exportAllExcel() {
+            if (this.form.status === '1') {
+                this.$message({
+                    type: 'error',
+                    message: '暂无数据'
+                })
+                return
+            }
             this.$axios({
                 url: '/api/declaration/merge_declare_detail'
             }).then(data => {
@@ -534,6 +599,13 @@ export default {
         },
         timeSelectChange() {},
         statusSelectChange(value) {
+            if (!this.flag) {
+                this.$message({
+                    type: 'warning',
+                    message: '请先选择一条申报数据'
+                })
+                return
+            }
             if (value === '1') {
                 this.getData()
             } else if (value === '2') {
@@ -543,7 +615,7 @@ export default {
         tableSelectionChange() {},
         handleClick() {}
     },
-    components: { tableModalQuarter, tableModalYear, splitPane },
+    components: { tableModalQuarter, tableModalYear, splitPane, modalDeclaration },
     filters: {
         // filterStatus(value) {
         //     //  文章状态 0-草稿，1-待审核，2-审核通过，3-审核失败，4-已删除

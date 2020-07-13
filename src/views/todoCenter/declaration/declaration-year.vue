@@ -323,6 +323,7 @@ export default {
                     // }
                 }).then(data => {
                     if (data.returnCode === 200) {
+                        this.$router.push('/home/todoCenter')
                         this.$message({
                             type: 'success',
                             message: '提交成功'
@@ -345,6 +346,7 @@ export default {
                     }
                 }).then(data => {
                     if (data.returnCode === 200) {
+                        this.$router.push('/home/todoCenter')
                         this.$message({
                             type: 'success',
                             message: '提交成功'
