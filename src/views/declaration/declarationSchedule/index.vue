@@ -30,9 +30,8 @@
                                     filterable
                                     style="width:193px"
                                 >
-                                    <el-option clearable value="0" label="未申报"></el-option>
+                                    <el-option clearable value="2" label="未申报"></el-option>
                                     <el-option clearable value="1" label="已提交"></el-option>
-                                    <el-option clearable value="2" label="超时"></el-option>
                                 </el-select>
                                 <el-button
                                     style="margin-left:10px"
@@ -164,48 +163,7 @@ export default {
                         width: '150'
                     }
                 ],
-                list: [
-                    // {
-                    //     company: '中创物流',
-                    //     declartionType: '季度',
-                    //     declarationStatus: '0',
-                    //     declartionStartEndTime: [
-                    //         'Thu Jun 18 2020 16:00:55 GMT+0800 (中国标准时间)',
-                    //         'Thu Jun 18 2020 16:00:55 GMT+0800 (中国标准时间)'
-                    //     ],
-                    //     declartionWriteTime: 'Thu Jun 18 2020 16:00:55 GMT+0800 (中国标准时间)'
-                    // },
-                    // {
-                    //     company: '申通物流',
-                    //     declartionType: '季度',
-                    //     declarationStatus: '1',
-                    //     declartionStartEndTime: [
-                    //         'Thu Jun 18 2020 16:00:55 GMT+0800 (中国标准时间)',
-                    //         'Thu Jun 18 2020 16:00:55 GMT+0800 (中国标准时间)'
-                    //     ],
-                    //     declartionWriteTime: 'Thu Jun 18 2020 16:00:55 GMT+0800 (中国标准时间)'
-                    // },
-                    // {
-                    //     company: '京东物流',
-                    //     declartionType: '季度',
-                    //     declarationStatus: '2',
-                    //     declartionStartEndTime: [
-                    //         'Thu Jun 18 2020 16:00:55 GMT+0800 (中国标准时间)',
-                    //         'Thu Jun 18 2020 16:00:55 GMT+0800 (中国标准时间)'
-                    //     ],
-                    //     declartionWriteTime: 'Thu Jun 18 2020 16:00:55 GMT+0800 (中国标准时间)'
-                    // },
-                    // {
-                    //     company: '韵达物流',
-                    //     declartionType: '季度',
-                    //     declarationStatus: '1',
-                    //     declartionStartEndTime: [
-                    //         'Thu Jun 18 2020 16:00:55 GMT+0800 (中国标准时间)',
-                    //         'Thu Jun 18 2020 16:00:55 GMT+0800 (中国标准时间)'
-                    //     ],
-                    //     declartionWriteTime: 'Thu Jun 18 2020 16:00:55 GMT+0800 (中国标准时间)'
-                    // }
-                ]
+                list: []
             }
         }
     },
@@ -243,6 +201,25 @@ export default {
                 }
             })
         },
+        getResidueData() {
+            this.$axios({
+                url: '/api/declaration_related_user/page_no_declaration',
+                method: 'post',
+                data: this.page
+            }).then(data => {
+                if (data.returnCode === 200) {
+                    this.tableData.total = data.returnData.total
+                    this.tableData.pageNum = data.returnData.pageNum
+                    this.tableData.pageSize = data.returnData.pageSize
+                    this.tableData.list = data.returnData.list
+                } else {
+                    this.$message({
+                        type: 'error',
+                        message: data.returnMsg
+                    })
+                }
+            })
+        },
         getScheduleData() {
             // api.getScheduleDeclartion()
         },
@@ -259,7 +236,14 @@ export default {
         //         return row[item.prop]
         //     }
         // },
-        handleSizeChange() {},
+        handleSizeChange(value) {
+            this.page.pageSize = value
+            if (this.form.status === '1') {
+                this.getData()
+            } else if (this.form.status === '2') {
+                this.getResidueData()
+            }
+        },
         //   async getData () {
         //   this.loading = true // 打开进度条
         //   let result = await this.$axios({
@@ -270,9 +254,13 @@ export default {
         //   this.page.total = result.data.total_count // 总条数
         //   this.loading = false
         // },
-        changePage(newPage) {
-            this.page.currentPage = newPage // 最新的页码
-            //   this.getData()
+        changePage(value) {
+            this.page.currentPage = value
+            if (this.form.status === '1') {
+                this.getData()
+            } else if (this.form.status === '2') {
+                this.getResidueData()
+            }
         },
         look() {
             this.$refs.tableModal.modalIsShow()
@@ -298,7 +286,6 @@ export default {
                         declareDetailArr[3] = item.current
                         declareDetailArr[4] = item.yoy
                         aoa.push(declareDetailArr)
-                        // aoa.push(Object.values(item))
                     })
                     let sheet = XLSX.utils.aoa_to_sheet(aoa)
                     sheet['!merges'] = [
@@ -310,7 +297,7 @@ export default {
 
                     this.$util.openDownloadDialog(
                         this.$util.sheetblob(sheet),
-                        `${this.headlineCompany}物流经营状况表（${this.headline}）.xlsx`
+                        `${data.returnData.company}物流经营状况表.xlsx`
                     )
                 } else {
                     this.$message({
@@ -322,9 +309,7 @@ export default {
         },
         exportAllExcel() {
             this.$axios({
-                url: '/api/declaration_related_user/page',
-                method: 'post',
-                data: this.page
+                url: '/api/declaration/merge_declare_detail'
             }).then(data => {
                 let aoa = [
                     [
@@ -518,207 +503,36 @@ export default {
                         '同比'
                     ]
                 ]
-                let optionWidth = [
-                    { wch: 20 },
-                    { wch: 40 },
-                    { wch: 20 },
-                    { wch: 20 },
-                    { wch: 20 },
-                    { wch: 20 },
-                    { wch: 20 },
-                    { wch: 20 },
-                    { wch: 20 },
-                    { wch: 20 },
-                    { wch: 20 },
-                    { wch: 20 },
-                    { wch: 20 },
-                    { wch: 20 },
-                    { wch: 20 },
-                    { wch: 20 },
-                    { wch: 20 },
-                    { wch: 20 },
-                    { wch: 20 },
-                    { wch: 20 },
-                    { wch: 20 },
-                    { wch: 20 },
-                    { wch: 20 },
-                    { wch: 20 },
-                    { wch: 20 },
-                    { wch: 20 },
-                    { wch: 20 },
-                    { wch: 20 },
-                    { wch: 20 },
-                    { wch: 20 },
-                    { wch: 20 },
-                    { wch: 20 },
-                    { wch: 20 },
-                    { wch: 20 },
-                    { wch: 20 },
-                    { wch: 20 },
-                    { wch: 20 },
-                    { wch: 20 },
-                    { wch: 20 },
-                    { wch: 20 },
-                    { wch: 20 },
-                    { wch: 20 },
-                    { wch: 20 },
-                    { wch: 20 },
-                    { wch: 20 },
-                    { wch: 20 },
-                    { wch: 20 },
-                    { wch: 20 },
-                    { wch: 20 },
-                    { wch: 20 },
-                    { wch: 20 },
-                    { wch: 20 },
-                    { wch: 20 },
-                    { wch: 20 },
-                    { wch: 20 },
-                    { wch: 20 },
-                    { wch: 20 },
-                    { wch: 20 },
-                    { wch: 20 },
-                    { wch: 20 },
-                    { wch: 20 },
-                    { wch: 20 },
-                    { wch: 20 },
-                    { wch: 20 },
-                    { wch: 20 },
-                    { wch: 20 },
-                    { wch: 20 },
-                    { wch: 20 },
-                    { wch: 20 },
-                    { wch: 20 },
-                    { wch: 20 },
-                    { wch: 20 },
-                    { wch: 20 },
-                    { wch: 20 },
-                    { wch: 20 },
-                    { wch: 20 },
-                    { wch: 20 },
-                    { wch: 20 },
-                    { wch: 20 },
-                    { wch: 20 },
-                    { wch: 20 },
-                    { wch: 20 },
-                    { wch: 20 },
-                    { wch: 20 },
-                    { wch: 20 },
-                    { wch: 20 },
-                    { wch: 20 },
-                    { wch: 20 },
-                    { wch: 20 },
-                    { wch: 20 },
-                    { wch: 20 },
-                    { wch: 20 },
-                    { wch: 20 },
-                    { wch: 20 },
-                    { wch: 20 },
-                    { wch: 20 },
-                    { wch: 20 },
-                    { wch: 20 },
-                    { wch: 20 },
-                    { wch: 20 },
-                    { wch: 20 },
-                    { wch: 20 },
-                    { wch: 20 },
-                    { wch: 20 },
-                    { wch: 20 },
-                    { wch: 20 },
-                    { wch: 20 },
-                    { wch: 20 },
-                    { wch: 20 },
-                    { wch: 20 },
-                    { wch: 20 },
-                    { wch: 20 },
-                    { wch: 20 },
-                    { wch: 20 },
-                    { wch: 20 },
-                    { wch: 20 },
-                    { wch: 20 },
-                    { wch: 20 },
-                    { wch: 20 },
-                    { wch: 20 },
-                    { wch: 20 },
-                    { wch: 20 },
-                    { wch: 20 },
-                    { wch: 20 },
-                    { wch: 20 },
-                    { wch: 20 },
-                    { wch: 20 },
-                    { wch: 20 },
-                    { wch: 20 },
-                    { wch: 20 },
-                    { wch: 20 },
-                    { wch: 20 },
-                    { wch: 20 },
-                    { wch: 20 },
-                    { wch: 20 },
-                    { wch: 20 },
-                    { wch: 20 },
-                    { wch: 20 },
-                    { wch: 20 },
-                    { wch: 20 },
-                    { wch: 20 },
-                    { wch: 20 },
-                    { wch: 20 },
-                    { wch: 20 },
-                    { wch: 20 },
-                    { wch: 20 },
-                    { wch: 20 },
-                    { wch: 20 },
-                    { wch: 20 },
-                    { wch: 20 },
-                    { wch: 20 },
-                    { wch: 20 },
-                    { wch: 20 },
-                    { wch: 20 },
-                    { wch: 20 },
-                    { wch: 20 },
-                    { wch: 20 },
-                    { wch: 20 },
-                    { wch: 20 },
-                    { wch: 20 },
-                    { wch: 20 },
-                    { wch: 20 },
-                    { wch: 20 },
-                    { wch: 20 },
-                    { wch: 20 },
-                    { wch: 20 },
-                    { wch: 20 },
-                    { wch: 20 },
-                    { wch: 20 },
-                    { wch: 20 },
-                    { wch: 20 },
-                    { wch: 20 },
-                    { wch: 20 },
-                    { wch: 20 },
-                    { wch: 20 },
-                    { wch: 20 },
-                    { wch: 20 },
-                    { wch: 20 },
-                    { wch: 20 },
-                    { wch: 20 },
-                    { wch: 20 },
-                    { wch: 20 },
-                    { wch: 20 },
-                    { wch: 20 },
-                    { wch: 20 },
-                    { wch: 20 },
-                    { wch: 20 },
-                    { wch: 20 },
-                    { wch: 20 },
-                    { wch: 20 },
-                    { wch: 20 }
-                ]
-                // api.getSheetMergeData().then()
+                let optionWidth = []
+                for (let i = 0; i < 191; i++) {
+                    optionWidth.push({ wch: 20 })
+                }
+                data.returnData.forEach(item => {
+                    let arr = []
+                    let date = this.$util.timestampToDateTime(item.createdTime)
+                    let company = item.company
+                    arr.push(date)
+                    arr.push(company)
+                    item.declareDetailList.forEach(i => {
+                        arr.push(i.current)
+                        arr.push(i.yoy)
+                        arr.push(i.last)
+                    })
+                    aoa.push(arr)
+                })
                 let sheet = XLSX.utils.aoa_to_sheet(aoa)
                 sheet['!cols'] = optionWidth
                 this.$util.openDownloadDialog(this.$util.sheetblob(sheet), `物流101.xlsx`)
             })
         },
         timeSelectChange() {},
-        statusSelectChange() {},
+        statusSelectChange(value) {
+            if (value === '1') {
+                this.getData()
+            } else if (value === '2') {
+                this.getResidueData()
+            }
+        },
         tableSelectionChange() {},
         handleClick() {}
     },
