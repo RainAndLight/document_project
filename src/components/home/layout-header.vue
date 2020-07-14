@@ -29,8 +29,8 @@ export default {
     data() {
         return {
             collapse: false, // 默认是展开
-            userInfo: {}, // 定义一个用户对象
-            defaultImg: require('@/assets/img/saber.jpg') // 先将图片转化成了一个变量
+            userInfo: {} // 定义一个用户对象
+            // defaultImg: require('@/assets/img/saber.jpg') // 先将图片转化成了一个变量
         }
     },
     created() {

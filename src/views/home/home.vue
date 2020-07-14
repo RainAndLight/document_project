@@ -756,8 +756,6 @@ export default {
                 { s: { r: 0, c: 0 }, e: { r: 0, c: 5 } }
             ]
             sheet['!cols'] = [{ wch: 25 }, { wch: 20 }]
-            console.log('sheet', sheet)
-
             this.$util.openDownloadDialog(
                 this.$util.sheetblob(sheet),
                 `${this.headlineCompany}物流经营状况表（${this.headline}）.xlsx`
@@ -778,7 +776,6 @@ export default {
                 { s: { r: 0, c: 0 }, e: { r: 0, c: 5 } }
             ]
             sheet['!cols'] = [{ wch: 25 }, { wch: 20 }]
-            // console.log('sheet', sheet)
 
             this.$util.openDownloadDialog(
                 this.$util.sheetblob(sheet),
