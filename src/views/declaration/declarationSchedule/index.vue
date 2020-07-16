@@ -4,7 +4,7 @@
             <bread-crumb slot="header">
                 <template slot="title">申报 <span style="color:#C0C4CC;margin:0 5px">></span> 申报进度</template>
             </bread-crumb>
-            <div style="height:calc(80vh - 50px);over:hidden">
+            <div style="height:calc(72vh);over:hidden">
                 <split-pane @resize="resize" :min-percent="0" :default-percent="50" split="vertical" ref="splitPane">
                     <template slot="paneL">
                         <el-card>
@@ -30,8 +30,9 @@
                                     filterable
                                     style="width:193px"
                                 >
-                                    <el-option clearable value="2" label="未申报"></el-option>
-                                    <el-option clearable value="1" label="已提交"></el-option>
+                                    <el-option clearable value="1" label="未申报"></el-option>
+                                    <el-option clearable value="2" label="已提交"></el-option>
+                                    <el-option clearable value="3" label="已驳回"></el-option>
                                 </el-select>
                                 <el-button
                                     style="margin-left:10px"
@@ -43,12 +44,12 @@
                                 >
                             </div>
                             <el-table
-                                height="57vh"
+                                height="52vh"
                                 @selection-change="tableSelectionChange"
                                 :data="tableData.list"
                                 border
                                 size="mini"
-                                style="width:100%;margin-top:14px"
+                                style="width:100%;margin-top:23px"
                             >
                                 <el-table-column type="index" width="50"> </el-table-column>
                                 <el-table-column
@@ -104,11 +105,11 @@
                             <el-pagination
                                 style="position: relative;bottom: 5px;marginTop:10px"
                                 @size-change="handleSizeChange"
-                                :page-sizes="[10, 20, 50]"
+                                :page-sizes="[5, 10, 20]"
                                 layout="total, sizes, prev, pager, next, jumper"
-                                :current-page="page.currentPage"
+                                :current-page="page.pageNum"
                                 :page-size="page.pageSize"
-                                :total="page.total"
+                                :total="tableData.total"
                                 @current-change="changePage"
                             >
                             </el-pagination>
@@ -148,14 +149,31 @@ export default {
                     {
                         filterKey: 'declarationId',
                         filterValue: ''
+                    },
+                    {
+                        filterKey: 'declarationStatus',
+                        filterValue: ''
                     }
                 ]
             },
+            // page2: {
+            //     pageNum: 1,
+            //     pageSize: 10,
+            //     filterList: [
+            //         {
+            //             filterKey: 'declarationStatus',
+            //             filterValue: 2
+            //         }
+            //     ]
+            // },
             form: {
                 type: '',
                 status: ''
             },
             tableData: {
+                pageNum: 1,
+                pageSize: 10,
+                total: 0,
                 columnList: [
                     {
                         title: '企业单位',
@@ -202,6 +220,8 @@ export default {
         eventBus.$on('declarationId', (declarationId, declarationTypeCode) => {
             if (declarationId) {
                 this.page.filterList[0].filterValue = declarationId
+                // this.page.filterList[1].filterValue = 2
+                this.form.status = '1'
                 this.getData()
             }
             if (declarationTypeCode) {
@@ -241,8 +261,9 @@ export default {
             this.$refs.modalDeclaration.dialogIsShow()
         },
         getData() {
+            this.page.filterList[1].filterValue = ''
             this.$axios({
-                url: '/api/declaration_related_user/page',
+                url: '/api/declaration_related_user/page_no_declaration',
                 method: 'post',
                 data: this.page
             }).then(data => {
@@ -261,7 +282,7 @@ export default {
         },
         getResidueData() {
             this.$axios({
-                url: '/api/declaration_related_user/page_no_declaration',
+                url: '/api/declaration_related_user/page',
                 method: 'post',
                 data: this.page
             }).then(data => {
@@ -285,7 +306,7 @@ export default {
             // this.$refs.splitPane.percent = 20
         },
         resize() {
-            console.log('resize')
+            // console.log('resize')
         },
         // tableRowFormat(row, item) {
         //     if (item.type === 'format') {
@@ -295,31 +316,29 @@ export default {
         //     }
         // },
         handleSizeChange(value) {
+            // console.log('切换一页显示')
             this.page.pageSize = value
             if (this.form.status === '1') {
                 this.getData()
             } else if (this.form.status === '2') {
+                this.page.filterList[1].filterValue = 2
+                this.getResidueData()
+            } else if (this.form.status === '3') {
+                this.page.filterList[1].filterValue = 3
                 this.getResidueData()
             }
         },
-        //   async getData () {
-        //   this.loading = true // 打开进度条
-        //   let result = await this.$axios({
-        //     url: '/articles',
-        //     params: { response_type: 'comment', page: this.page.currentPage, per_page: this.page.pageSize }
-        //   })
-        //   this.list = result.data.results
-        //   this.page.total = result.data.total_count // 总条数
-        //   this.loading = false
-        // },
         changePage(value) {
-            this.page.currentPage = value
+            // console.log(111)
+            this.page.pageNum = value
             if (this.form.status === '1') {
                 this.getData()
             } else if (this.form.status === '2') {
+                this.page.filterList[1].filterValue = 2
                 this.getResidueData()
-            } else {
-                this.getData()
+            } else if (this.form.status === '3') {
+                this.page.filterList[1].filterValue = 3
+                this.getResidueData()
             }
         },
         look() {
@@ -609,6 +628,10 @@ export default {
             if (value === '1') {
                 this.getData()
             } else if (value === '2') {
+                this.page.filterList[1].filterValue = 2
+                this.getResidueData()
+            } else if (value === '3') {
+                this.page.filterList[1].filterValue = 3
                 this.getResidueData()
             }
         },

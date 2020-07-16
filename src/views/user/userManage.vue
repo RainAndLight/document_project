@@ -1,10 +1,10 @@
 <template>
     <div>
-        <el-card>
+        <el-card style="height:85vh">
             <bread-crumb slot="header">
                 <template slot="title">账号列表</template>
             </bread-crumb>
-            <div style="height:calc(80vh - 50px);overflow:auto">
+            <div style="overflow:auto">
                 <el-select
                     v-model="selectType"
                     placeholder="请选择过滤选项"
@@ -18,7 +18,7 @@
                 <el-table
                     :data="tableData.list"
                     border
-                    height="calc(89vh - 190px)"
+                    height="calc(60vh)"
                     highlight-current-row
                     oncontextmenu="return false;"
                     ref="table"
@@ -34,7 +34,7 @@
                         :key="item.prop"
                         :label="item.title"
                         :prop="item.prop"
-                        :width="item.width || 150"
+                        :width="item.width"
                     >
                         <template slot-scope="scope">{{ $util.tableRowFormat(scope.row, item) }}</template>
                     </el-table-column>
@@ -86,7 +86,7 @@
                 <el-pagination
                     style="position: relative;bottom: 5px;marginTop:10px"
                     @size-change="handleSizeChange"
-                    :page-sizes="[5, 10, 20]"
+                    :page-sizes="[5, 10, 20, 50]"
                     layout="total, sizes, prev, pager, next, jumper"
                     :current-page="page.pageNum"
                     :page-size="page.pageSize"
@@ -142,39 +142,17 @@ export default {
                     {
                         title: '申请时间',
                         prop: 'createdTime',
-                        width: '150',
+                        // width: '150',
                         type: 'dateTime'
                     },
                     {
                         title: '审核通过时间',
                         prop: 'approveTime',
-                        width: '150',
+                        // width: '150',
                         type: 'dateTime'
                     }
                 ],
-                list: [
-                    // {
-                    //     company: '中创物流股份有限公司',
-                    //     user: 'admin',
-                    //     password: '123456',
-                    //     applyTime: 'Fri Jun 05 2020 00:00:00 GMT+0800 (中国标准时间)',
-                    //     approveTime: 'Fri Jun 05 2020 00:00:00 GMT+0800 (中国标准时间)'
-                    // },
-                    // {
-                    //     company: '京东物流有限公司',
-                    //     user: 'jdadmin',
-                    //     password: '123456',
-                    //     applyTime: 'Fri Jun 05 2020 00:00:00 GMT+0800 (中国标准时间)',
-                    //     approveTime: 'Fri Jun 05 2020 00:00:00 GMT+0800 (中国标准时间)'
-                    // },
-                    // {
-                    //     company: '顺丰物流有限公司',
-                    //     user: 'sfadmin',
-                    //     password: '123456',
-                    //     applyTime: 'Fri Jun 05 2020 00:00:00 GMT+0800 (中国标准时间)',
-                    //     approveTime: 'Fri Jun 05 2020 00:00:00 GMT+0800 (中国标准时间)'
-                    // }
-                ]
+                list: []
             }
         }
     },

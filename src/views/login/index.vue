@@ -67,8 +67,8 @@ export default {
             flag: 'login',
             url: '',
             loginForm: {
-                user: 'sys_admin',
-                password: '123456',
+                user: '',
+                password: '',
                 code: ''
             },
             loginRules: {
@@ -80,6 +80,9 @@ export default {
         }
     },
     methods: {
+        /*  author：gongzheng
+            createdTime： 2020-4-15
+        */
         getKey() {
             this.$axios({
                 url: '/api/captcha/fetch_captcha'
@@ -101,8 +104,6 @@ export default {
                     this.$axios({
                         url: '/api/authenticate',
                         method: 'post',
-                        // crossDomain: true,
-                        // xhrFields: { withCredentials: true },
                         data: params
                     })
                         .then(data => {

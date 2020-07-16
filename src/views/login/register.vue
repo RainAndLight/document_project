@@ -70,6 +70,7 @@
                         placeholder="请输入密码"
                         prefix-icon="el-icon-lock"
                         v-model="loginForm.affirmPassword"
+                        @keyup.enter.native="register"
                     >
                     </el-input>
                 </el-form-item>

@@ -4,36 +4,36 @@
             <template slot="title">账户信息</template>
         </bread-crumb>
         <!-- 表单 => 表单容器 -->
-        <div style="height:calc(80vh - 50px);overflow:auto">
-            <el-form ref="myForm" :model="formData" :rules="rules" style="margin-left:100px" label-width="100px">
-                <el-form-item prop="companyName" label="公司名称">
-                    <el-input v-model="formData.companyName" style="width:40%" readonly></el-input>
-                </el-form-item>
-                <el-form-item prop="companyAccount" label="企业账号">
-                    <el-input v-model="formData.companyAccount" style="width:40%" readonly></el-input>
-                </el-form-item>
-                <!-- <el-form-item prop="companyPassword" label="密码">
+        <!-- <div style="height:calc(80vh - 50px);overflow:auto"> -->
+        <el-form ref="myForm" :model="formData" :rules="rules" style="margin-left:100px" label-width="100px">
+            <el-form-item prop="companyName" label="公司名称">
+                <el-input v-model="formData.companyName" style="width:40%" readonly></el-input>
+            </el-form-item>
+            <el-form-item prop="companyAccount" label="企业账号">
+                <el-input v-model="formData.companyAccount" style="width:40%" readonly></el-input>
+            </el-form-item>
+            <!-- <el-form-item prop="companyPassword" label="密码">
                     <el-input v-model="formData.companyPassword" show-password style="width:40%"></el-input>
                 </el-form-item> -->
-                <el-form-item prop="audit" label="账号审核">
-                    <!-- <el-checkbox v-model="formData.audit" disabled>已通过</el-checkbox>
+            <el-form-item prop="audit" label="账号审核">
+                <!-- <el-checkbox v-model="formData.audit" disabled>已通过</el-checkbox>
                     <el-checkbox v-model="formData.audit1" disabled>未通过</el-checkbox> -->
-                    <el-switch
-                        inactive-text="暂未通过"
-                        active-text="已通过"
-                        disabled
-                        v-model="formData.audit"
-                        active-color="#13ce66"
-                        inactive-color="#ff4949"
-                    >
-                    </el-switch>
-                </el-form-item>
-            </el-form>
-            <!-- 上传组件 -->
-            <!-- <el-upload :http-request="uploadImg" class="head-upload" action="" :show-file-list="false">
+                <el-switch
+                    inactive-text="暂未通过"
+                    active-text="已通过"
+                    disabled
+                    v-model="formData.audit"
+                    active-color="#13ce66"
+                    inactive-color="#ff4949"
+                >
+                </el-switch>
+            </el-form-item>
+        </el-form>
+        <!-- 上传组件 -->
+        <!-- <el-upload :http-request="uploadImg" class="head-upload" action="" :show-file-list="false">
                 <img :src="formData.photo ? formData.photo : defaultImg" alt="" />
             </el-upload> -->
-            <!-- <el-upload
+        <!-- <el-upload
                 class="avatar-uploader head-upload"
                 action="https://jsonplaceholder.typicode.com/posts/"
                 :show-file-list="false"
@@ -43,7 +43,7 @@
                 <img v-if="imageUrl" :src="imageUrl" class="avatar" />
                 <i v-else class="el-icon-plus avatar-uploader-icon"></i>
             </el-upload> -->
-        </div>
+        <!-- </div> -->
     </el-card>
 </template>
 

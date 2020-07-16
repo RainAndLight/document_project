@@ -1,10 +1,10 @@
 <template>
     <div>
-        <el-card class="card">
+        <el-card class="card" style="height:85vh">
             <bread-crumb slot="header">
                 <template slot="title">待办</template>
             </bread-crumb>
-            <div style="height:calc(80vh - 50px);overflow:auto">
+            <div style="overflow:auto">
                 <!-- <div class="header"> -->
                 <span
                     >注：在申报截止日期前，您可以随时修改申报内容，如有驳回，需要您修改后重新提交，如有问题请及时与管理员联系</span
@@ -13,7 +13,7 @@
                 <!-- </div> -->
                 <el-table
                     :data="tableData.list"
-                    height="calc(89vh - 190px)"
+                    height="calc(61vh)"
                     border
                     size="mini"
                     style="width:100% ;marginTop:10px"

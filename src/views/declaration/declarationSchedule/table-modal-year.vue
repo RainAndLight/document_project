@@ -1,12 +1,6 @@
 <template>
     <div>
-        <el-table
-            :data="tableData.list"
-            height="calc(89vh - 220px)"
-            border
-            size="mini"
-            style="width:100% ;marginTop:10px"
-        >
+        <el-table :data="tableData.list" height="calc(52vh)" border size="mini" style="width:100% ;marginTop:10px">
             <el-table-column type="index" width="50"> </el-table-column>
             <el-table-column
                 v-for="(item, index) in tableData.columnList"

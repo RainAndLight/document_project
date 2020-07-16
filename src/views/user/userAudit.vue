@@ -1,56 +1,56 @@
 <template>
     <div>
-        <el-card>
+        <el-card style="height:85vh">
             <bread-crumb slot="header">
                 <template slot="title">账号审核</template>
             </bread-crumb>
-            <div style="height:calc(80vh - 50px);overflow:auto">
-                <el-table
-                    :data="tableData.list"
-                    border
-                    height="calc(89vh - 150px)"
-                    highlight-current-row
-                    oncontextmenu="return false;"
-                    ref="table"
-                    size="mini"
-                    sortable="custom"
-                    style="width: 100%"
+            <!-- <div style="height:calc(75vh);overflow:auto"> -->
+            <el-table
+                :data="tableData.list"
+                border
+                height="calc(66vh)"
+                highlight-current-row
+                oncontextmenu="return false;"
+                ref="table"
+                size="mini"
+                sortable="custom"
+                style="width: 100%"
+            >
+                <!-- <el-table-column type="selection" width="40" fixed></el-table-column> -->
+                <el-table-column align="center" type="index" width="50" label="序号" fixed> </el-table-column>
+                <el-table-column
+                    v-for="item in tableData.columnList"
+                    :align="item.align || 'center'"
+                    :key="item.prop"
+                    :label="item.title"
+                    :prop="item.prop"
+                    :width="item.width"
                 >
-                    <!-- <el-table-column type="selection" width="40" fixed></el-table-column> -->
-                    <el-table-column align="center" type="index" width="50" label="序号" fixed> </el-table-column>
-                    <el-table-column
-                        v-for="item in tableData.columnList"
-                        :align="item.align || 'center'"
-                        :key="item.prop"
-                        :label="item.title"
-                        :prop="item.prop"
-                        :width="item.width || '200'"
-                    >
-                        <template slot-scope="scope">
-                            <!-- <template v-if="item.prop === 'declartionStatus'"></template> -->
-                            <template>{{ $util.tableRowFormat(scope.row, item) }}</template>
-                        </template>
-                    </el-table-column>
-                    <el-table-column label="操作" align="center">
-                        <template slot-scope="scope">
-                            <el-button type="success" size="small" @click="confirm(scope.row)">同意</el-button>
-                            <el-button type="danger" size="small" @click="refuse(scope.row)">拒绝</el-button>
-                            <el-button type="primary" size="small" @click="lookInfo(scope.row)">查看</el-button>
-                        </template>
-                    </el-table-column>
-                </el-table>
-                <el-pagination
-                    style="position: relative;bottom: 5px;marginTop:10px"
-                    @size-change="handleSizeChange"
-                    :page-sizes="[10, 20, 50]"
-                    layout="total, sizes, prev, pager, next, jumper"
-                    :current-page="page.currentPage"
-                    :page-size="page.pageSize"
-                    :total="tableData.total"
-                    @current-change="changePage"
-                >
-                </el-pagination>
-            </div>
+                    <template slot-scope="scope">
+                        <!-- <template v-if="item.prop === 'declartionStatus'"></template> -->
+                        <template>{{ $util.tableRowFormat(scope.row, item) }}</template>
+                    </template>
+                </el-table-column>
+                <el-table-column label="操作" align="center">
+                    <template slot-scope="scope">
+                        <el-button type="success" size="small" @click="confirm(scope.row)">同意</el-button>
+                        <el-button type="danger" size="small" @click="refuse(scope.row)">拒绝</el-button>
+                        <el-button type="primary" size="small" @click="lookInfo(scope.row)">查看</el-button>
+                    </template>
+                </el-table-column>
+            </el-table>
+            <el-pagination
+                style="position: relative;bottom: 5px;marginTop:10px"
+                @size-change="handleSizeChange"
+                :page-sizes="[5, 10, 20, 50]"
+                layout="total, sizes, prev, pager, next, jumper"
+                :current-page="page.currentPage"
+                :page-size="page.pageSize"
+                :total="tableData.total"
+                @current-change="changePage"
+            >
+            </el-pagination>
+            <!-- </div> -->
         </el-card>
         <!-- <el-drawer size="80%" title="企业单位基本情况表" :visible.sync="drawer" direction="ltr"> -->
         <el-dialog title="企业单位基本情况表" :visible.sync="drawer" width="80%">
@@ -90,8 +90,8 @@ export default {
                 columnList: [
                     {
                         title: '公司全称',
-                        prop: 'company',
-                        width: '250'
+                        prop: 'company'
+                        // width: '250'
                     },
                     {
                         title: '用户申请账号',
@@ -100,7 +100,7 @@ export default {
                     {
                         title: '申请时间',
                         prop: 'createdTime',
-                        width: '200',
+                        // width: '200',
                         type: 'stampDateTime'
                     }
                 ],

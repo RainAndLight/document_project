@@ -486,6 +486,9 @@ export default {
     methods: {
         submit() {
             if (this.flag) {
+                if (this.returnData.declarationStatus === 3) {
+                    this.returnData.declarationStatus = 2
+                }
                 this.returnData.declareDetailList = this.tableData.list
                 this.$axios({
                     url: '/api/declaration_related_user/save',

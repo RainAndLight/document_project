@@ -45,7 +45,7 @@ util.standardToDateTime = function (value) {
         let d = datetime.getDate()
         let h = datetime.getHours()
         let mm = datetime.getMinutes()
-        let s = datetime.getUTCSeconds()
+        let s = datetime.getSeconds()
         return y + '-' + add0(m) + '-' + add0(d) + ' ' + add0(h) + ':' + add0(mm) + ':' + add0(s)
     }
 }

@@ -1,5 +1,5 @@
 <template>
-    <div class="box">
+    <div class="box;overflow:auto">
         <el-backtop :bottom="100"></el-backtop>
         <el-backtop :bottom="150">
             <div
@@ -396,7 +396,7 @@ export default {
                         total: ''
                     },
                     {
-                        targets: '大学本科学历人员',
+                        targets: '大学本科学历',
                         womanTotal: '',
                         total: ''
                     },

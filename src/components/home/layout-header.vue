@@ -12,7 +12,7 @@
                 <!-- 下拉菜单 -->
                 <el-dropdown @command="clickMenu">
                     <!-- 匿名插槽  下拉菜单显示的元素内容 -->
-                    <span>{{ userInfo.company }}</span>
+                    <span>{{ userInfo.company ? userInfo.company : '' }}</span>
                     <el-dropdown-menu slot="dropdown">
                         <el-dropdown-item command="info">个人信息</el-dropdown-item>
                         <el-dropdown-item command="lgout">退出</el-dropdown-item>
