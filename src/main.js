@@ -8,6 +8,7 @@ import 'element-ui/lib/theme-chalk/index.css' // 引入样式
 import './styles/index.less' // 引入初始化样式
 import axios from './utils/request'
 import util from '@/utils/util'
+import 'babel-polyfill' // 兼容ie的插件
 Vue.prototype.$axios = axios // 赋值给全局对象
 Vue.prototype.$util = util // 赋值给全局对象
 Vue.use(ElementUI) // 全局注册

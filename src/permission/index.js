@@ -4,17 +4,17 @@ import 'nprogress/nprogress.css'
 router.beforeEach(function (to, from, next) {
     progresss.start() // 开启进度条
     // 权限拦截 认为有token 让过去 没token不让过
-    // if (to.path.startsWith('/home')) {
-    //     //   确定要去检查的范围
-    //     let token = window.localStorage.getItem('user-token')
-    //     if (token) {
-    //         next() // 放过
-    //     } else {
-    //         next('/login') // 跳转到登录页
-    //     }
-    // } else {
-    next() // 直接放过
-    // }
+    if (to.path.startsWith('/home')) {
+        //   确定要去检查的范围
+        let token = window.localStorage.getItem('user-token')
+        if (token) {
+            next() // 放过
+        } else {
+            next('/login') // 跳转到登录页
+        }
+    } else {
+        next() // 直接放过
+    }
     let go = window.localStorage.getItem('level')
     if (go === '1') {
         if (

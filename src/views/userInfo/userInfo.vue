@@ -1,5 +1,5 @@
 <template>
-    <div class="box;overflow:auto">
+    <div class="box">
         <el-backtop :bottom="100"></el-backtop>
         <el-backtop :bottom="150">
             <div
@@ -135,7 +135,13 @@
                 <!-- 从业人员情况 -->
                 <p>从业人员情况</p>
                 <hr class="hr" />
-                <el-table :data="tableData.list" border size="mini" style="width: 460px;marginTop:10px">
+                <el-table
+                    highlight-current-row
+                    :data="tableData.list"
+                    border
+                    size="mini"
+                    style="width: 460px;marginTop:10px"
+                >
                     <el-table-column align="center" width="250" label="指标名称" prop="targets"> </el-table-column>
                     <el-table-column align="center" width="100" label="共计" prop="total">
                         <template slot-scope="scoped">
@@ -476,7 +482,6 @@ export default {
         // },
         save() {
             this.Form.companyPersonList = this.tableData.list
-            // window.localStorage.setItem('company-information', JSON.stringify(obj))
             this.$axios({
                 url: '/api/company/save',
                 method: 'post',
@@ -538,6 +543,15 @@ export default {
 </script>
 
 <style scoped lang="less">
+.box {
+    display: flex;
+    & /deep/ .el-card {
+        flex: 1;
+    }
+}
+// .box /deep/ .el-card {
+//     width: 100px;
+// }
 .hr {
     margin-bottom: 20px;
 }

@@ -64,6 +64,10 @@ const routes = [{
             {
                 path: 'user/userManage/userinfo',
                 component: () => import('@/views/user/user-info')
+            },
+            {
+                path: 'readme',
+                component: () => import('@/views/readme')
             }
         ]
     }

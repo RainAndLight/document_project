@@ -195,6 +195,11 @@ export default {
                                     type: 'error',
                                     message: data.returnMsg
                                 })
+                            } else if (data.returnCode === 401 && data.returnMsg === 'Bad credentials') {
+                                this.$message({
+                                    type: 'error',
+                                    message: '账号或密码错误'
+                                })
                             } else {
                                 this.$message({
                                     type: 'error',
@@ -304,15 +309,17 @@ export default {
     display: flex;
     justify-content: center;
     align-items: center;
-    &:before {
-        background-image: url('../../assets/img/loginBG.jpg');
-        background-size: cover;
-        content: '';
-        width: 100%;
-        height: 100%;
-        position: absolute;
-        background-position: bottom;
-    }
+    // &:before {
+    background-image: url('../../assets/img/loginBG.jpg');
+    background-size: cover;
+    // background: transparent url(../../assets/img/loginBG.jpg) center center no-repeat;
+    // background: none\0;
+    // content: '';
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    background-position: bottom;
+    // }
     .login-card {
         position: absolute;
         right: 100px;

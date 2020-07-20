@@ -1,5 +1,5 @@
 <template>
-    <div>
+    <div class="box">
         <!-- <el-button @click="btn">测试导出年度</el-button>
         <el-button @click="btnQuarter">测试导出季度</el-button>
         <el-button @click="btn2">测试导出合并（季度）</el-button> -->
@@ -1571,6 +1571,12 @@ export default {
 </script>
 
 <style lang="less" scoped>
+.box {
+    display: flex;
+    & /deep/ .el-calendar {
+        flex: 1;
+    }
+}
 .main {
     width: 300px;
     height: 100px;

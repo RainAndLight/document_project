@@ -7,7 +7,7 @@ import {
 import JSONBig from 'json-bigint'
 
 // 默认ip
-axios.defaults.baseURL = 'http://192.168.1.112:8090'
+axios.defaults.baseURL = 'http://192.168.1.108:8090'
 
 // 开启携带session
 axios.defaults.withCredentials = true

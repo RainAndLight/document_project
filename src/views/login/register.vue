@@ -82,6 +82,7 @@
                                 placeholder="请输入验证码"
                                 prefix-icon="el-icon-message"
                                 v-model="loginForm.code"
+                                @keyup.enter.native="register"
                             >
                             </el-input>
                         </el-col>
@@ -161,6 +162,7 @@ export default {
                 company: '',
                 userName: '',
                 password: ''
+                // code: ''
             },
             loginRules: {
                 company: [{ required: true, message: '请输入公司名', trigger: 'blur' }],
@@ -196,6 +198,7 @@ export default {
                         company: this.loginForm.company,
                         userName: this.loginForm.userName,
                         password: passwordUpperCase
+                        // code:this.loginForm.code
                     }
 
                     this.$axios({
@@ -204,6 +207,7 @@ export default {
                         data: params
                     }).then(data => {
                         if (data.returnCode === 200) {
+                            this.$parent.flag = 'login'
                             this.$message({
                                 type: 'success',
                                 message: '注册成功'
@@ -215,24 +219,6 @@ export default {
                             })
                         }
                     })
-                    this.$parent.flag = 'login'
-                    // let passwordUpperCase = md5(this.loginForm.password).toUpperCase() //eslint-disable-line
-                    // this.$axios({
-                    //     url: '/authorizations',
-                    //     method: 'post',
-                    //     data: {
-                    //         mobile: '15110514010',
-                    //         code: '246810'
-                    //     }
-                    // }).then(result => {
-                    //     if (this.loginForm.company === 'admin') {
-                    //         window.sessionStorage.setItem('level', '1')
-                    //     } else {
-                    //         window.sessionStorage.setItem('level', '0')
-                    //     }
-                    //     window.localStorage.setItem('user-token', result.data.token)
-                    //     this.$router.push('/home')
-                    // })
                 }
             })
         }
@@ -262,6 +248,7 @@ export default {
         right: 100px;
         top: 5vh;
         width: 350px;
+        // height: 570px;
         height: 480px;
         z-index: 2;
         background-color: rgba(255, 255, 255, 0.7);

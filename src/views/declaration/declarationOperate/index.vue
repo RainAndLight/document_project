@@ -8,7 +8,13 @@
             <div class="header">
                 <el-button size="mini" type="primary" @click="setClick">设置申报</el-button>
             </div>
-            <el-table :data="tableData.list" border size="mini" style="width:100%;marginTop:10px;height:59vh">
+            <el-table
+                highlight-current-row
+                :data="tableData.list"
+                border
+                size="mini"
+                style="width:100%;marginTop:10px;height:59vh"
+            >
                 <el-table-column type="index" width="50"> </el-table-column>
                 <el-table-column
                     v-for="(item, index) in tableData.columnList"
@@ -35,10 +41,19 @@
                 </el-table-column>
                 <el-table-column label="操作" align="center">
                     <template slot-scope="scope">
-                        <el-button size="mini" @click="handleEdit(scope.$index, scope.row)">编辑</el-button>
+                        <el-button
+                            :disabled="scope.row.declarationStatus !== 1"
+                            size="mini"
+                            @click="handleEdit(scope.$index, scope.row)"
+                            >编辑</el-button
+                        >
                         <!-- :disabled="scope.row.declarationStatus !== '0'" -->
                         <!-- :disabled="scope.row.declarationStatus !== '0'" -->
-                        <el-button size="mini" type="danger" @click="handleDelete(scope.$index, scope.row)"
+                        <el-button
+                            :disabled="scope.row.declarationStatus !== 1"
+                            size="mini"
+                            type="danger"
+                            @click="handleDelete(scope.$index, scope.row)"
                             >删除</el-button
                         >
                     </template>

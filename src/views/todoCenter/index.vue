@@ -13,6 +13,7 @@
                 <!-- </div> -->
                 <el-table
                     :data="tableData.list"
+                    highlight-current-row
                     height="calc(61vh)"
                     border
                     size="mini"
@@ -138,7 +139,12 @@ export default {
                         }
                     }
                 ],
-                list: []
+                list: [
+                    {
+                        declarationTypeCode: 'year',
+                        declarationUserStatus: 1
+                    }
+                ]
             }
         }
     },
@@ -181,19 +187,19 @@ export default {
             // console.log(row)
             let now = new Date()
             let time = new Date(row.declareEndDate)
-            // if (now > time) {
-            //     this.$message({
-            //         message: '提交申报时间已截止，不可再申报',
-            //         type: 'warning'
-            //     })
-            //     return
-            // } else if (now < time) {
-            //     this.$message({
-            //         message: '申报暂未开始',
-            //         type: 'warning'
-            //     })
-            //     return
-            // }
+            if (now > time) {
+                this.$message({
+                    message: '提交申报时间已截止，不可再申报',
+                    type: 'warning'
+                })
+                return
+            } else if (now < time) {
+                this.$message({
+                    message: '申报暂未开始',
+                    type: 'warning'
+                })
+                return
+            }
             this.$router.push({
                 path: '/home/todoCenter/declaration',
                 query: {

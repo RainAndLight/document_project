@@ -46,6 +46,7 @@
                             <el-table
                                 height="52vh"
                                 @selection-change="tableSelectionChange"
+                                highlight-current-row
                                 :data="tableData.list"
                                 border
                                 size="mini"
@@ -118,7 +119,12 @@
                 </split-pane>
             </div>
         </el-card>
-        <modalDeclaration ref="modalDeclaration" :userId="userId" :declarationId="declarationId"></modalDeclaration>
+        <modalDeclaration
+            ref="modalDeclaration"
+            :declarationTypeCode="declarationTypeCode"
+            :userId="userId"
+            :declarationId="declarationId"
+        ></modalDeclaration>
     </div>
 </template>
 
@@ -136,8 +142,9 @@ export default {
     props: {},
     data() {
         return {
-            userId: null,
-            declarationId: null,
+            userId: '',
+            declarationId: '',
+            declarationTypeCode: '',
             flag: false,
             exportAllExcelShow: false,
             activeName: 'quarter',
@@ -218,6 +225,7 @@ export default {
     computed: {},
     created() {
         eventBus.$on('declarationId', (declarationId, declarationTypeCode) => {
+            this.declarationTypeCode = declarationTypeCode
             if (declarationId) {
                 this.page.filterList[0].filterValue = declarationId
                 // this.page.filterList[1].filterValue = 2

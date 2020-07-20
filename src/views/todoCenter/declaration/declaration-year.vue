@@ -310,6 +310,18 @@ export default {
             })
         },
         submit() {
+            let empty = false
+            this.tableData.list.forEach(item => {
+                item.current === '' ? (empty = false) : (empty = true)
+                item.yoy === '' ? (empty = false) : (empty = true)
+            })
+            if (!empty) {
+                this.$message({
+                    type: 'warning',
+                    message: '表单不能为空'
+                })
+                return
+            }
             if (this.flag) {
                 this.returnData.declareDetailList = this.tableData.list
                 this.$axios({

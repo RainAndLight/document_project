@@ -60,21 +60,33 @@
                                 @click="anew(scope.row)"
                                 >重审</el-button
                             >
-                            <el-button type="text" size="small" @click="look(scope.row)">查看</el-button>
+                            <el-button
+                                type="text"
+                                size="small"
+                                @click="look(scope.row)"
+                                v-if="scope.row.authority !== 'A003'"
+                                >查看</el-button
+                            >
                             <el-button type="text" size="small" @click="edit(scope.row)">编辑</el-button>
-                            <el-button type="text" size="small" @click="del(scope.row)">删除</el-button>
+                            <el-button
+                                v-if="scope.row.authority !== 'A003'"
+                                type="text"
+                                size="small"
+                                @click="del(scope.row)"
+                                >删除</el-button
+                            >
                         </template>
                     </el-table-column>
                 </el-table>
                 <el-dialog title="用户账号编辑" :visible.sync="dialogFormVisible">
-                    <el-form :model="form">
-                        <el-form-item label="公司全称" label-width="auto">
+                    <el-form :model="form" ref="form" :rules="userRules">
+                        <el-form-item label="公司全称" label-width="auto" prop="company">
                             <el-input v-model="form.company"></el-input>
                         </el-form-item>
-                        <el-form-item label="用户账号" label-width="auto">
+                        <el-form-item label="用户账号" label-width="auto" prop="userName">
                             <el-input v-model="form.userName"></el-input>
                         </el-form-item>
-                        <el-form-item label="用户密码" label-width="auto">
+                        <el-form-item label="用户密码" label-width="auto" prop="password">
                             <el-input v-model="form.password"></el-input>
                         </el-form-item>
                     </el-form>
@@ -125,6 +137,14 @@ export default {
                 userName: '',
                 password: ''
             },
+            userRules: {
+                company: [{ required: true, message: '公司名不能为空', trigger: 'blur' }],
+                userName: [{ required: true, message: '用户名不能为空', trigger: 'blur' }],
+                password: [
+                    { required: true, message: '密码不能为空', trigger: 'blur' },
+                    { min: 6, max: 32, message: '密码长度在6-32位' }
+                ]
+            },
             dialogFormVisible: false,
             tableData: {
                 pageNum: 1,
@@ -152,7 +172,15 @@ export default {
                         type: 'dateTime'
                     }
                 ],
-                list: []
+                list: [
+                    // {
+                    //     company: 'test！',
+                    //     authority: 'A003'
+                    // },
+                    // {
+                    //     company: 'text1'
+                    // }
+                ]
             }
         }
     },
@@ -204,38 +232,41 @@ export default {
         },
         edit(row) {
             this.row = row
-            let obj = {
+            this.form = {
                 company: row.company,
                 userName: row.userName,
                 password: row.password
             }
-            this.form = obj
             this.dialogFormVisible = true
         },
         uploadUserInfo() {
-            // this.form.password = (this.form.password).toUpperCase()
-            this.row.company = this.form.company
-            this.row.userName = this.form.userName
-            this.row.password = md5(this.form.password)
-            this.$axios({
-                url: '/api/user/update',
-                method: 'post',
-                data: this.row
-            }).then(data => {
-                if (data.returnCode === 200) {
-                    this.getData()
-                    this.$message({
-                        type: 'success',
-                        message: '修改成功'
+            this.$refs.form.validate(isOK => {
+                if (isOK) {
+                    this.row.company = this.form.company
+                    this.row.userName = this.form.userName
+                    this.row.password = md5(this.form.password).toUpperCase()
+                    this.$axios({
+                        url: '/api/user/update',
+                        method: 'post',
+                        data: this.row
+                    }).then(data => {
+                        if (data.returnCode === 200) {
+                            this.getData()
+                            this.$message({
+                                type: 'success',
+                                message: '修改成功'
+                            })
+                            this.$refs.form.resetFields()
+                        } else {
+                            this.$message({
+                                type: 'error',
+                                message: data.returnMsg
+                            })
+                        }
                     })
-                } else {
-                    this.$message({
-                        type: 'error',
-                        message: data.returnMsg
-                    })
+                    this.dialogFormVisible = false
                 }
             })
-            this.dialogFormVisible = false
         },
         del(row) {
             this.$confirm('此操作将永久删除该用户, 是否继续?', '提示', {

@@ -485,6 +485,18 @@ export default {
     watch: {},
     methods: {
         submit() {
+            let empty = false
+            this.tableData.list.forEach(item => {
+                item.current === '' ? (empty = false) : (empty = true)
+                item.yoy === '' ? (empty = false) : (empty = true)
+            })
+            if (!empty) {
+                this.$message({
+                    type: 'warning',
+                    message: '表单不能为空'
+                })
+                return
+            }
             if (this.flag) {
                 if (this.returnData.declarationStatus === 3) {
                     this.returnData.declarationStatus = 2

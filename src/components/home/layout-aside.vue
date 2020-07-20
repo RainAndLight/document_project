@@ -147,6 +147,12 @@ export default {
                     title: '待办',
                     icon: 'el-icon-edit-outline',
                     hidden: false
+                },
+                {
+                    index: '/home/readme',
+                    title: '系统操作手册',
+                    icon: 'el-icon-notebook-2',
+                    hidden: false
                 }
             ]
         }
@@ -165,6 +171,9 @@ export default {
                     if (item.title === '待办') {
                         item.hidden = true
                     }
+                    if (item.title === '系统操作手册') {
+                        item.hidden = true
+                    }
                 })
             } else if (level === '2') {
                 this.routes.forEach(item => {
@@ -172,6 +181,9 @@ export default {
                         item.hidden = true
                     }
                     if (item.title === '账号管理') {
+                        item.hidden = true
+                    }
+                    if (item.title === '系统操作手册') {
                         item.hidden = true
                     }
                 })
